@@ -7,7 +7,7 @@ AS is a collection of [VCV Rack](https://vcvrack.com/) modules modifications by 
 
 AS is compatible with VCV Rack 0.5.0. Releases will be found on the [Release Page](https://github.com/AScustomWorks/as/releases)
 
-![AS](/AS.jpg)
+![AS](https://github.com/AScustomWorks/AS/blob/master/AS.JPG)
 
 # AS modules
 
