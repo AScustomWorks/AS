@@ -1,0 +1,91 @@
+//**************************************************************************************
+//SawOSC VCV Rack mod by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//
+//Code taken from RODENTCAT https://github.com/RODENTCAT/RODENTMODULES
+//Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
+//**************************************************************************************
+#include "AS.hpp"
+
+
+struct SawOSC : Module {
+	enum ParamIds {
+		PITCH_PARAM,
+		 PW_PARAM,
+		NUM_PARAMS
+	};
+	enum InputIds {
+		PITCH_INPUT,
+		PW_INPUT,
+		NUM_INPUTS
+	};
+	enum OutputIds {
+		OSC_OUTPUT,
+		NUM_OUTPUTS
+	};
+
+
+	float phase = 0.0;
+	float blinkPhase = 0.0;
+
+	SawOSC() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {}
+	void step() override;
+};
+
+void SawOSC::step() {
+	// Implement a simple sine oscillator
+	float deltaTime = 1.0 / engineGetSampleRate();
+	// Compute the frequency from the pitch parameter and input
+	float pitch = params[PITCH_PARAM].value;
+	pitch += inputs[PITCH_INPUT].value;
+	pitch = clampf(pitch, -4.0, 4.0);
+	float freq = 440.0 * powf(2.0, pitch);
+
+	// Accumulate the phase
+	phase += freq * deltaTime;
+	if (phase >= 1.0)
+		phase -= 1.0;
+
+   //Mod param
+    float pw = params[PW_PARAM].value*0.1+1;
+    
+    //Mod input
+    float minput = inputs[PW_INPUT].value*0.3;
+    
+    //Mod param+input
+    float pinput = (pw + minput);
+
+	// Compute the sine output
+	//float sine = sinf(2 * M_PI * phase);
+	//outputs[SINE_OUTPUT].value = 5.0 * sine;
+    
+    //SQUARE stuff, I think it sounds more like a SAW wave, hence this module name
+    float square = cos(exp(pinput * M_PI * phase));
+    outputs[OSC_OUTPUT].value = 4 * square;
+
+}
+
+SawOscWidget::SawOscWidget() {
+	SawOSC *module = new SawOSC();
+	setModule(module);
+	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+
+	{
+		SVGPanel *panel = new SVGPanel();
+		panel->box.size = box.size;
+		panel->setBackground(SVG::load(assetPlugin(plugin, "res/SawOSC.svg")));
+		addChild(panel);
+	}
+	//SCREWS
+	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	//PARAMS
+	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SawOSC::PITCH_PARAM, -3.0, 3.0, 0.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, SawOSC::PW_PARAM, -3.0, 3.0, 0.0));
+	//INPUTS
+	addInput(createInput<as_PJ301MPort>(Vec(33, 200), module, SawOSC::PITCH_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SawOSC::PW_INPUT));
+	//OUTPUTS
+	addOutput(createOutput<as_PJ301MPort>(Vec(33, 310), module, SawOSC::OSC_OUTPUT));
+}
