@@ -28,6 +28,13 @@ struct ADSRWidget : ModuleWidget {
 	ADSRWidget();
 };
 
+struct VCAWidget : ModuleWidget {
+	VCAWidget();
+};
+struct TriLFOWidget : ModuleWidget 
+{ 
+    TriLFOWidget();
+};
 struct SEQ16Widget : ModuleWidget { 
     SEQ16Widget();
 	Menu *createContextMenu() override;
@@ -68,7 +75,9 @@ struct TriggersWidget : ModuleWidget
     TriggersWidget();
 };
 
-
+//////////////////////////////////////
+//MODULE COMPONENTS
+/////////////////////////////////////
 struct as_HexScrew : SVGScrew {
 	as_HexScrew() {
 		sw->svg = SVG::load(assetPlugin(plugin, "res/as-hexscrew.svg"));
@@ -102,6 +111,13 @@ struct BigLEDBezel : SVGSwitch, MomentarySwitch {
         }
 };
 
+struct as_CKSS : SVGSwitch, ToggleSwitch {
+	as_CKSS() {
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSS_0.svg")));
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSS_1.svg")));
+	}
+};
+
 template <typename BASE>
 struct GiantLight : BASE {
         GiantLight() {
@@ -109,7 +125,6 @@ struct GiantLight : BASE {
         }
 };
 
-////////////////////////////////////
 template <typename BASE>
 struct LedLight : BASE {
 	LedLight() {
@@ -117,7 +132,6 @@ struct LedLight : BASE {
 	  this->box.size = mm2px(Vec(6.0, 6.0));
 	}
 };
-
 
 struct as_PJ301MPort : SVGPort {
 	as_PJ301MPort() {

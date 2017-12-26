@@ -8,19 +8,20 @@
 
 struct SineOSC : Module {
 	enum ParamIds {
-		PITCH_PARAM,
+		FREQ_PARAM,
 		NUM_PARAMS
 	};
 	enum InputIds {
-		PITCH_INPUT,
+		FREQ_CV,
 		NUM_INPUTS
 	};
 	enum OutputIds {
-		SINE_OUTPUT,
+		OSC_OUTPUT,
+		TRI_OUTPUT,
 		NUM_OUTPUTS
 	};
 	enum LightIds {
-		BLINK_LIGHT,
+		FREQ_LIGHT,
 		NUM_LIGHTS
 	};
 
@@ -34,30 +35,22 @@ struct SineOSC : Module {
 
 void SineOSC::step() {
 	// Implement a simple sine oscillator
-	float deltaTime = 1.0 / engineGetSampleRate();
-
 	// Compute the frequency from the pitch parameter and input
-	float pitch = params[PITCH_PARAM].value;
-	pitch += inputs[PITCH_INPUT].value;
+	float pitch = params[FREQ_PARAM].value;
+	pitch += inputs[FREQ_CV].value;
 	pitch = clampf(pitch, -4.0, 4.0);
 	float freq = 440.0 * powf(2.0, pitch);
-
 	// Accumulate the phase
-	phase += freq * deltaTime;
+	phase += freq / engineGetSampleRate();
 	if (phase >= 1.0)
 		phase -= 1.0;
-
 	// Compute the sine output
-	float sine = sinf(2 * M_PI * phase)+ sinf(2 * M_PI * phase * 2);
-	outputs[SINE_OUTPUT].value = 5.0 * sine;
+	float sine = sinf(2.0 * M_PI * (phase+1 * 0.125)) * 5.0;
+	//float sine = sinf(2.0 * M_PI * (phase * 0.125)) * 5.0; //like this it gives  a unipolar saw-ish wave
+	outputs[OSC_OUTPUT].value = sine;
+    lights[FREQ_LIGHT].value = (outputs[OSC_OUTPUT].value > 0.0) ? 1.0 : 0.0;
 
-	// Blink light at 1Hz
-	blinkPhase += deltaTime;
-	if (blinkPhase >= 1.0)
-		blinkPhase -= 1.0;
-	lights[BLINK_LIGHT].value = (blinkPhase < 0.5) ? 1.0 : 0.0;
 }
-
 
 SineOscWidget::SineOscWidget() {
 	SineOSC *module = new SineOSC();
@@ -77,9 +70,11 @@ SineOscWidget::SineOscWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SineOSC::PITCH_PARAM, -3.0, 3.0, 0.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SineOSC::FREQ_PARAM, -3.0, 3.0, 0.0));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SineOSC::PITCH_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SineOSC::FREQ_CV));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(33, 310), module, SineOSC::SINE_OUTPUT));
+	addOutput(createOutput<as_PJ301MPort>(Vec(33, 310), module, SineOSC::OSC_OUTPUT));
+
+	addChild(createLight<MediumLight<RedLight>>(Vec(40, 120), module, SineOSC::FREQ_LIGHT));
 }

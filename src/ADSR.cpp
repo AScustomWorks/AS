@@ -125,20 +125,20 @@ ADSRWidget::ADSRWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	
 	static const float posX[4] = {13,39,65,91};
-	addChild(createLight<SmallLight<RedLight>>(Vec(posX[0]+6, 73), module, ADSR::ATTACK_LIGHT));
-	addChild(createLight<SmallLight<RedLight>>(Vec(posX[1]+6, 73), module, ADSR::DECAY_LIGHT));
-	addChild(createLight<SmallLight<RedLight>>(Vec(posX[2]+6, 73), module, ADSR::SUSTAIN_LIGHT));
-	addChild(createLight<SmallLight<RedLight>>(Vec(posX[3]+6, 73), module, ADSR::RELEASE_LIGHT));
+	addChild(createLight<SmallLight<RedLight>>(Vec(posX[0]+6, 74), module, ADSR::ATTACK_LIGHT));
+	addChild(createLight<SmallLight<RedLight>>(Vec(posX[1]+6, 74), module, ADSR::DECAY_LIGHT));
+	addChild(createLight<SmallLight<RedLight>>(Vec(posX[2]+6, 74), module, ADSR::SUSTAIN_LIGHT));
+	addChild(createLight<SmallLight<RedLight>>(Vec(posX[3]+6, 74), module, ADSR::RELEASE_LIGHT));
 
-	addParam(createParam<as_SlidePot>(Vec(posX[0]-3, 100), module, ADSR::ATTACK_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(posX[1]-3, 100), module, ADSR::DECAY_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(posX[2]-3, 100), module, ADSR::SUSTAIN_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(posX[3]-3, 100), module, ADSR::RELEASE_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_SlidePot>(Vec(posX[0]-3, 90), module, ADSR::ATTACK_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_SlidePot>(Vec(posX[1]-3, 90), module, ADSR::DECAY_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_SlidePot>(Vec(posX[2]-3, 90), module, ADSR::SUSTAIN_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_SlidePot>(Vec(posX[3]-3, 90), module, ADSR::RELEASE_PARAM, 0.0, 1.0, 0.5));
 
-	addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 260), module, ADSR::ATTACK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(posX[1]-4, 260), module, ADSR::DECAY_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(posX[2]-4, 260), module, ADSR::SUSTAIN_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(posX[3]-4, 260), module, ADSR::RELEASE_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 217), module, ADSR::ATTACK_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(posX[1]-4, 217), module, ADSR::DECAY_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(posX[2]-4, 217), module, ADSR::SUSTAIN_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(posX[3]-4, 217), module, ADSR::RELEASE_INPUT));
 
 	addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 310), module, ADSR::GATE_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(48, 310), module, ADSR::TRIG_INPUT));

@@ -39,7 +39,8 @@ struct BPMClock : Module {
     RUN_SWITCH,    
 		NUM_PARAMS
 	};  
-	enum InputIds {     
+	enum InputIds { 
+    RESET_INPUT,    
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -62,6 +63,7 @@ struct BPMClock : Module {
 	SchmittTrigger quarters_trig;
   SchmittTrigger bars_trig;
   SchmittTrigger run_button_trig;
+	SchmittTrigger reset_btn_trig;
 
   const float lightLambda = 0.075;
   float resetLight = 0.0;
@@ -125,7 +127,15 @@ void BPMClock::step()
   time_sig_bottom = std::pow(2,time_sig_bottom+1);
  
   frequency = tempo/60.0;
-  if (params[RESET_SWITCH].value > 0.0) {
+  //EXTERNAL RESET TRIGGER
+	if (reset_btn_trig.process(inputs[RESET_INPUT].value)) {
+    eighths_count = 0;
+    quarters_count = 0;
+    bars_count = 0;
+    resetLight = 1.0;
+    outputs[RESET_OUTPUT].value = 1.0;
+  //INTERNAL RESET TRIGGER
+	}else  if (params[RESET_SWITCH].value > 0.0) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
@@ -340,16 +350,18 @@ BPMClockWidget::BPMClockWidget() {
   //SIG BOTTOM KNOB
   addParam(createParam<as_KnobBlack>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0, 3.0, 1.0));
   //RESET & RUN LEDS
-  addParam(createParam<LEDBezel>(Vec(33, 190), module, BPMClock::RUN_SWITCH , 0.0, 1.0, 0.0));
-  addChild(createLight<LedLight<RedLight>>(Vec(35.2, 192.3), module, BPMClock::RUN_LED));
-  addParam(createParam<LEDBezel>(Vec(10.5, 221), module, BPMClock::RESET_SWITCH , 0.0, 1.0, 0.0));
-  addChild(createLight<LedLight<RedLight>>(Vec(12.7, 223.3), module, BPMClock::RESET_LED));
+  addParam(createParam<LEDBezel>(Vec(55, 202), module, BPMClock::RUN_SWITCH , 0.0, 1.0, 0.0));
+  addChild(createLight<LedLight<RedLight>>(Vec(57.2, 204.3), module, BPMClock::RUN_LED));
+  addParam(createParam<LEDBezel>(Vec(10.5, 202), module, BPMClock::RESET_SWITCH , 0.0, 1.0, 0.0));
+  addChild(createLight<LedLight<RedLight>>(Vec(12.7, 204.3), module, BPMClock::RESET_LED));
+  //RESET INPUT
+	addInput(createInput<as_PJ301MPort>(Vec(10, 240), module, BPMClock::RESET_INPUT));
   //RESET OUTPUT
-  addOutput(createOutput<as_PJ301MPort>(Vec(55, 220), module, BPMClock::RESET_OUTPUT));
+  addOutput(createOutput<as_PJ301MPort>(Vec(55, 240), module, BPMClock::RESET_OUTPUT));
   //TEMPO OUTPUTS
-  addOutput(createOutput<as_PJ301MPort>(Vec(10, 265), module, BPMClock::BAR_OUT));
-  addOutput(createOutput<as_PJ301MPort>(Vec(55, 265), module, BPMClock::BEAT_OUT));
-  addOutput(createOutput<as_PJ301MPort>(Vec(10, 310), module, BPMClock::EIGHTHS_OUT));
-  addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, BPMClock::SIXTEENTHS_OUT));
+  addOutput(createOutput<as_PJ301MPort>(Vec(10, 280), module, BPMClock::BAR_OUT));
+  addOutput(createOutput<as_PJ301MPort>(Vec(55, 280), module, BPMClock::BEAT_OUT));
+  addOutput(createOutput<as_PJ301MPort>(Vec(10, 320), module, BPMClock::EIGHTHS_OUT));
+  addOutput(createOutput<as_PJ301MPort>(Vec(55, 320), module, BPMClock::SIXTEENTHS_OUT));
  
 }
