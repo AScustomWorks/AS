@@ -24,10 +24,10 @@ Strum's Mental VCV Master Clock. Mods: graphics, reset trigger input and output.
 Fundamental Delay module. Mods: graphics, digital display to show delay time in MS , wet signal send & return, bypass switch.
 
 ### Phaser
-Autodafe's Phaser module, Mods: graphics, bypass switch.
+Autodafe's Phaser module. Mods: graphics, bypass switch.
 
 ### WaveShaper
-HetrickCV Wave Shaper module, Mods: graphics, bypass switch.
+HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
 
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
