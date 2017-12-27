@@ -355,7 +355,7 @@ BPMClockWidget::BPMClockWidget() {
   addParam(createParam<LEDBezel>(Vec(10.5, 202), module, BPMClock::RESET_SWITCH , 0.0, 1.0, 0.0));
   addChild(createLight<LedLight<RedLight>>(Vec(12.7, 204.3), module, BPMClock::RESET_LED));
   //RESET INPUT
-	addInput(createInput<as_PJ301MPort>(Vec(10, 240), module, BPMClock::RESET_INPUT));
+  addInput(createInput<as_PJ301MPort>(Vec(10, 240), module, BPMClock::RESET_INPUT));
   //RESET OUTPUT
   addOutput(createOutput<as_PJ301MPort>(Vec(55, 240), module, BPMClock::RESET_OUTPUT));
   //TEMPO OUTPUTS
@@ -363,5 +363,5 @@ BPMClockWidget::BPMClockWidget() {
   addOutput(createOutput<as_PJ301MPort>(Vec(55, 280), module, BPMClock::BEAT_OUT));
   addOutput(createOutput<as_PJ301MPort>(Vec(10, 320), module, BPMClock::EIGHTHS_OUT));
   addOutput(createOutput<as_PJ301MPort>(Vec(55, 320), module, BPMClock::SIXTEENTHS_OUT));
- 
+
 }
