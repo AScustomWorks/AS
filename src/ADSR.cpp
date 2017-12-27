@@ -143,6 +143,5 @@ ADSRWidget::ADSRWidget() {
 	addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 310), module, ADSR::GATE_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(48, 310), module, ADSR::TRIG_INPUT));
 	addOutput(createOutput<as_PJ301MPort>(Vec(posX[3]-4, 310), module, ADSR::ENVELOPE_OUTPUT));
-
 }
 
