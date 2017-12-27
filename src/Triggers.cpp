@@ -116,7 +116,6 @@ TriggersWidget::TriggersWidget() {
     addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 120+led_offset), module, Triggers::RUN_LED));
     addParam(createParam<BigLEDBezel>(Vec(led_center, 232), module, Triggers::MOMENTARY_SWITCH, 0.0, 1.0, 0.0));
     addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 232+led_offset), module, Triggers::MOMENTARY_LED));
-
 	//PARAMS
 	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, Triggers::VOLTAGE_PARAM, 1.0, 10.0, 5.0));
 
