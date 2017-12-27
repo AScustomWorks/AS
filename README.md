@@ -1,5 +1,5 @@
 
-# AS for VCV Rack
+# AS modules for VCV Rack
 
 AS is a collection of [VCV Rack](https://vcvrack.com/) modules modifications by Alfredo Santamaria, you can find me at [Hakken.com.mx](https://www.hakken.com.mx/).
 
