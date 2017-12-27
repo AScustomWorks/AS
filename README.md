@@ -15,7 +15,7 @@ AS is compatible with VCV Rack 0.5.X. releases for Mac, Win and Linux are found 
 Fundamental ADSR module. Mods: graphics, sliders instead of knobs to provide faster visual input.
 
 ### VCA
-Fundamental VCA module. Mods: graphics, sliders instead of knobs to provide faster visual input.
+Fundamental VCA module. Mods: graphics, sliders instead of knobs to provide faster visual input, one input + lin/exp switch instead of two separate inputs.
 
 ### BPM Clock
 Strum's Mental VCV Master Clock. Mods: graphics, reset trigger input and output.
