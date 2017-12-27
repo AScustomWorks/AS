@@ -86,5 +86,5 @@ VCAWidget::VCAWidget() {
 	
 	addOutput(createOutput<as_PJ301MPort>(Vec(10, 310), module, VCA::OUT1_OUTPUT));
 	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, VCA::OUT2_OUTPUT));
-	
+
 }
