@@ -4,6 +4,7 @@
 //Based on DrumsMixer VCV Rack by Autodafe http://www.autodafe.net
 //Based on code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
+
 #include "AS.hpp"
 #include "dsp/digital.hpp"
 
