@@ -81,4 +81,5 @@ SineOscWidget::SineOscWidget() {
 	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SineOSC::FREQ_CV));
 	//OUTPUTS
 	addOutput(createOutput<as_PJ301MPort>(Vec(33, 310), module, SineOSC::OSC_OUTPUT));
+	
 }
