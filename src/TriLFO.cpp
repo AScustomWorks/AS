@@ -1,7 +1,6 @@
 #include "AS.hpp"
 #include "dsp/digital.hpp"
 
-
 struct LowFrequencyOscillator {
 	float phase = 0.0;
 	float pw = 0.5;
@@ -236,21 +235,4 @@ TriLFOWidget::TriLFOWidget() {
 	addOutput(createOutput<as_PJ301MPort>(Vec(80, 120+lfo3_y_offset), module, TriLFO::SAW3_OUTPUT));
 	addOutput(createOutput<as_PJ301MPort>(Vec(114, 120+lfo3_y_offset), module, TriLFO::SQR3_OUTPUT));
 
-    /*
-	addParam(createParam<as_KnobBlack>(Vec(23, 143), module, TriLFO::FM1_PARAM, 0.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(91, 143), module, TriLFO::PW_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_KnobBlack>(Vec(23, 208), module, TriLFO::FM2_PARAM, 0.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(91, 208), module, TriLFO::PWM_PARAM, 0.0, 1.0, 0.0));
-*/
-/*
-	addInput(createInput<as_PJ301MPort>(Vec(11, 276), module, TriLFO::FM1_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(45, 276), module, TriLFO::FM2_INPUT));
-    */
-	//addInput(createInput<as_PJ301MPort>(Vec(114, 276), module, TriLFO::PW_INPUT));
-/*
-	addOutput(createOutput<as_PJ301MPort>(Vec(11, 320), module, TriLFO::SIN3_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(45, 320), module, TriLFO::TRI3_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(80, 320), module, TriLFO::SAW3_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(114, 320), module, TriLFO::SQR3_OUTPUT));
-*/
 }
