@@ -6,7 +6,6 @@
 //**************************************************************************************
 #include "AS.hpp"
 
-
 struct SawOSC : Module {
 	enum ParamIds {
 		PITCH_PARAM,
