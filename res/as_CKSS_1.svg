@@ -15,7 +15,7 @@
    version="1.1"
    id="svg56722"
    inkscape:version="0.92.2 5c3e80d, 2017-08-06"
-   sodipodi:docname="CKSS_1.svg">
+   sodipodi:docname="as_CKSS_1.svg">
   <defs
      id="defs56716" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="12.605637"
-     inkscape:cx="6.9196959"
-     inkscape:cy="10.681853"
+     inkscape:zoom="33.139157"
+     inkscape:cx="5.7917871"
+     inkscape:cy="10.5905"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -70,14 +70,14 @@
     </g>
     <g
        id="g5839"
-       style="fill:#282828;fill-opacity:1;stroke-width:1.2817142"
+       style="fill:#1a1a1a;fill-opacity:1;stroke-width:1.2817142"
        transform="matrix(0.31455887,0,0,-0.32002822,-209.68573,438.52936)">
       <g
          id="g5841"
-         style="fill:#282828;fill-opacity:1;stroke-width:1.2817142">
+         style="fill:#1a1a1a;fill-opacity:1;stroke-width:1.2817142">
         <path
            d="m 764.617,1167.502 c -0.468,0 -0.852,-0.382 -0.852,-0.85 v 0 -15.724 c 0,-0.468 0.384,-0.851 0.852,-0.851 v 0 h 9.239 c 0.467,0 0.85,0.383 0.85,0.851 v 0 15.724 c 0,0.468 -0.383,0.85 -0.85,0.85 v 0 z"
-           style="fill:#282828;fill-opacity:1;stroke:none;stroke-width:1.2817142"
+           style="fill:#1a1a1a;fill-opacity:1;stroke:none;stroke-width:1.2817142"
            id="path5849"
            inkscape:connector-curvature="0" />
       </g>
@@ -87,11 +87,6 @@
        style="fill:#2e2e2e;fill-opacity:1;fill-rule:nonzero;stroke:#424242;stroke-width:0.13229167;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
        id="path5859"
        inkscape:connector-curvature="0" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path1406"
-       style="fill:#1a1a1a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.40666455"
-       d="m 30.563954,67.726615 h 3.441275 v 2.72152 h -3.441275 z" />
     <rect
        ry="0.033056512"
        y="66.057777"

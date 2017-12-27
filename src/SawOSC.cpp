@@ -22,12 +22,15 @@ struct SawOSC : Module {
 		OSC_OUTPUT,
 		NUM_OUTPUTS
 	};
-
+	enum LightIds {
+		FREQ_LIGHT,
+		NUM_LIGHTS
+	};
 
 	float phase = 0.0;
 	float blinkPhase = 0.0;
 
-	SawOSC() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {}
+	SawOSC() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
 };
 
@@ -47,10 +50,8 @@ void SawOSC::step() {
 
    //Mod param
     float pw = params[PW_PARAM].value*0.1+1;
-    
     //Mod input
     float minput = inputs[PW_INPUT].value*0.3;
-    
     //Mod param+input
     float pinput = (pw + minput);
 
@@ -58,10 +59,10 @@ void SawOSC::step() {
 	//float sine = sinf(2 * M_PI * phase);
 	//outputs[SINE_OUTPUT].value = 5.0 * sine;
     
-    //SQUARE stuff, I think it sounds more like a SAW wave, hence this module name
+    //SQUARE stuff, original dev says swuare, but it sounds more like a SAW wave, hence this module name hehe
     float square = cos(exp(pinput * M_PI * phase));
-    outputs[OSC_OUTPUT].value = 4 * square;
-
+    outputs[OSC_OUTPUT].value = 5 * square;
+	lights[FREQ_LIGHT].value = (outputs[OSC_OUTPUT].value > 0.0) ? 1.0 : 0.0;
 }
 
 SawOscWidget::SawOscWidget() {
@@ -80,12 +81,14 @@ SawOscWidget::SawOscWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	//LIGHT
+	addChild(createLight<SmallLight<RedLight>>(Vec(22, 57), module, SawOSC::FREQ_LIGHT));
 	//PARAMS
 	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SawOSC::PITCH_PARAM, -3.0, 3.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, SawOSC::PW_PARAM, -3.0, 3.0, 0.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, SawOSC::PW_PARAM, -5.0, 5.0, -5.0));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33, 200), module, SawOSC::PITCH_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SawOSC::PW_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(33, 200), module, SawOSC::PW_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SawOSC::PITCH_INPUT));
 	//OUTPUTS
 	addOutput(createOutput<as_PJ301MPort>(Vec(33, 310), module, SawOSC::OSC_OUTPUT));
 }

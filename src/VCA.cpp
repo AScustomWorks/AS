@@ -15,11 +15,9 @@ struct VCA : Module {
 		NUM_PARAMS
 	};
 	enum InputIds {
-		EXP1_INPUT,
-		LIN1_INPUT,
+		MODE1_INPUT,
 		IN1_INPUT,
-		EXP2_INPUT,
-		LIN2_INPUT,
+		MODE2_INPUT,
 		IN2_INPUT,
 		NUM_INPUTS
 	};
@@ -29,26 +27,32 @@ struct VCA : Module {
 		NUM_OUTPUTS
 	};
 
+	float v1= 0.0;
+	float v2= 0.0;
+	const float expBase = 50.0;
+
 	VCA() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {}
 	void step() override;
 };
 
-
-static void stepChannel(Input &in, Param &level, Input &lin, Input &exp, Output &out) {
-	float v = in.value * level.value;
-	if (lin.active)
-		v *= clampf(lin.value / 10.0, 0.0, 1.0);
-	const float expBase = 50.0;
-	if (exp.active)
-		v *= rescalef(powf(expBase, clampf(exp.value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
-	out.value = v;
-}
-
 void VCA::step() {
-	stepChannel(inputs[IN1_INPUT], params[LEVEL1_PARAM], inputs[LIN1_INPUT], inputs[EXP1_INPUT], outputs[OUT1_OUTPUT]);
-	stepChannel(inputs[IN2_INPUT], params[LEVEL2_PARAM], inputs[LIN2_INPUT], inputs[EXP2_INPUT], outputs[OUT2_OUTPUT]);
+	//VCA 1
+	v1 = inputs[IN1_INPUT].value * params[LEVEL1_PARAM].value;
+	if(params[MODE1_PARAM].value){
+		v1 *= clampf(inputs[MODE1_INPUT].value / 10.0, 0.0, 1.0);
+	}else{
+		v1 *= rescalef(powf(expBase, clampf(inputs[MODE1_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+	}
+	outputs[OUT1_OUTPUT].value = v1;
+	//VCA 2
+	v2 = inputs[IN2_INPUT].value * params[LEVEL2_PARAM].value;
+	if(params[MODE2_PARAM].value){
+		v2 *= clampf(inputs[MODE2_INPUT].value / 10.0, 0.0, 1.0);
+	}else{
+		v2 *= rescalef(powf(expBase, clampf(inputs[MODE2_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+	}
+	outputs[OUT2_OUTPUT].value = v2;
 }
-
 
 VCAWidget::VCAWidget() {
 	VCA *module = new VCA();
@@ -71,17 +75,15 @@ VCAWidget::VCAWidget() {
 	addParam(createParam<as_SlidePot>(Vec(10, 70), module, VCA::LEVEL1_PARAM, 0.0, 1.0, 0.5));
 	addParam(createParam<as_SlidePot>(Vec(55, 70), module, VCA::LEVEL2_PARAM, 0.0, 1.0, 0.5));
     //MODE SWITCHES
-    //addParam(createParam<as_CKSS>(Vec(14, 180), module, VCA::MODE1_PARAM, 0.0, 1.0, 1.0));
-	//addParam(createParam<as_CKSS>(Vec(59, 180), module, VCA::MODE2_PARAM, 0.0, 1.0, 1.0));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 190), module, VCA::LIN1_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(55, 190), module, VCA::LIN2_INPUT));
-
-	addInput(createInput<as_PJ301MPort>(Vec(10, 217), module, VCA::EXP1_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(55, 217), module, VCA::EXP2_INPUT));
+    addParam(createParam<as_CKSS>(Vec(14, 190), module, VCA::MODE1_PARAM, 0.0, 1.0, 1.0));
+	addParam(createParam<as_CKSS>(Vec(59, 190), module, VCA::MODE2_PARAM, 0.0, 1.0, 1.0));
+	//PORTS
+	addInput(createInput<as_PJ301MPort>(Vec(10, 217), module, VCA::MODE1_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(55, 217), module, VCA::MODE2_INPUT));
 
 	addInput(createInput<as_PJ301MPort>(Vec(10, 260), module, VCA::IN1_INPUT));
     addInput(createInput<as_PJ301MPort>(Vec(55, 260), module, VCA::IN2_INPUT));
-
+	
 	addOutput(createOutput<as_PJ301MPort>(Vec(10, 310), module, VCA::OUT1_OUTPUT));
 	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, VCA::OUT2_OUTPUT));
 }

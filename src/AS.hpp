@@ -118,6 +118,20 @@ struct as_CKSS : SVGSwitch, ToggleSwitch {
 	}
 };
 
+struct as_MuteBtn : SVGSwitch, ToggleSwitch {
+	as_MuteBtn() {
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_mute-off.svg")));
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_mute-on.svg")));
+	}
+};
+
+struct as_SoloBtn : SVGSwitch, ToggleSwitch {
+	as_SoloBtn() {
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_solo-off.svg")));
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_solo-on.svg")));
+	}
+};
+
 template <typename BASE>
 struct GiantLight : BASE {
         GiantLight() {
