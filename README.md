@@ -5,7 +5,7 @@ AS is a collection of [VCV Rack](https://vcvrack.com/) modules modifications by 
 
 ### Releases
 
-AS is compatible with VCV Rack 0.5.0. releases for Mac, Win and Linux are found on the [Release Page](https://github.com/AScustomWorks/as/releases)
+AS is compatible with VCV Rack 0.5.X. releases for Mac, Win and Linux are found on the [Release Page](https://github.com/AScustomWorks/as/releases)
 
 ![AS](https://github.com/AScustomWorks/AS/blob/master/AS.JPG)
 
@@ -14,8 +14,11 @@ AS is compatible with VCV Rack 0.5.0. releases for Mac, Win and Linux are found 
 ### ADSR
 Fundamental ADSR module. Mods: graphics, sliders instead of knobs to provide faster visual input.
 
+### VCA
+Fundamental VCA module. Mods: graphics, sliders instead of knobs to provide faster visual input.
+
 ### BPM Clock
-Strum's Mental VCV Master Clock. Mods: graphics, reset output trigger.
+Strum's Mental VCV Master Clock. Mods: graphics, reset trigger input and output.
 
 ### Delay Plus
 Fundamental Delay module. Mods: graphics, digital display to show delay time in MS , wet signal send & return, bypass switch.
@@ -27,7 +30,7 @@ Autodafe's Phaser module, Mods: graphics, bypass switch.
 HetrickCV Wave Shaper module, Mods: graphics, bypass switch.
 
 ### 8 Channel Mixer
-Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Beware,the default setting for each channel volume is at 70% in stead of 0%.
+Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
 
 ### 16 steps Sequencer
 Fundamental/Autodafe SEQ module. Mods: graphics, digital display to show the number of steps selected.
@@ -36,10 +39,13 @@ Fundamental/Autodafe SEQ module. Mods: graphics, digital display to show the num
 RODENTMODULES MuO. Mods: graphics, smaller panel size.
 
 ### TinySine
-VCV tutorial module: graphics only.
+VCV tutorial module. Mods: graphics.
+
+### TriLFO
+Fundamental LFO module. Mods:graphics, controls tripped to the basics but you get 3 LFOS on the same space.
 
 ### Triggers
-A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigger outputs.
+A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigger outputs, trigger volts knob going from 1 to 10 v output.
 
 ### Blank Panel
 Blank panels in 4,6 & 8 screw spacing widths.
