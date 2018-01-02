@@ -52,6 +52,7 @@ struct SEQ16 : Module {
 	SchmittTrigger gateTriggers[16];
 	float phase = 0.0;
 	int index = 0;
+	int stepIndex = index+1;
 	bool gateState[16] = {};
 	float resetLight = 0.0;
 	float stepLights[16] = {};
@@ -127,7 +128,7 @@ struct SEQ16 : Module {
 
 void SEQ16::step() {
 	numSteps = roundf(clampf(params[STEPS_PARAM].value, 1.0, 16.0)); 
-
+	stepIndex = index+1;
 	const float lightLambda = 0.075;
 	// Run
 	if (runningTrigger.process(params[RUN_PARAM].value)) {
@@ -281,12 +282,18 @@ SEQ16Widget::SEQ16Widget() {
 		panel->setBackground(SVG::load(assetPlugin(plugin, "res/SEQ16.svg")));
 		addChild(panel);
 	}
-	//LCD screen
-		StepsDisplayWidget *display = new StepsDisplayWidget();
+	//LCD STEPS SCREEN
+	StepsDisplayWidget *display = new StepsDisplayWidget();
 	display->box.pos = Vec(351,60);
 	display->box.size = Vec(40, 30);
 	display->value = &module->numSteps;
 	addChild(display);
+
+	StepsDisplayWidget *display2 = new StepsDisplayWidget();
+	display2->box.pos = Vec(401,60);
+	display2->box.size = Vec(40, 30);
+	display2->value = &module->stepIndex;
+	addChild(display2);
 
 	//SCREWS
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));

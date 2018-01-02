@@ -11,6 +11,7 @@ struct WaveShaper : Module {
 	enum ParamIds {
 		AMOUNT_PARAM,
 		SCALE_PARAM,
+		RANGE_PARAM,
 		BYPASS_SWITCH,
 		NUM_PARAMS
 	};
@@ -67,7 +68,10 @@ void WaveShaper::step() {
     lights[BYPASS_LED].value = fx_bypass ? 1.0 : 0.0;
 
 	float input = inputs[INPUT].value;
-	input = clampf(input, -5.0f, 5.0f) * 0.2f;
+
+	bool mode5V = (params[RANGE_PARAM].value == 0.0f);
+    if(mode5V) input = clampf(input, -5.0f, 5.0f) * 0.2f;
+	else input = clampf(input, -10.0f, 10.0f) * 0.1f;
 
 	float shape = params[AMOUNT_PARAM].value + (inputs[AMOUNT_INPUT].value * params[SCALE_PARAM].value);
 	shape = clampf(shape, -5.0f, 5.0f) * 0.2f;
@@ -105,16 +109,16 @@ WaveShaperWidget::WaveShaperWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//PARAMS
 	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, WaveShaper::AMOUNT_PARAM, -5.0, 5.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, WaveShaper::SCALE_PARAM, -1.0, 1.0, 0.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, WaveShaper::SCALE_PARAM, -1.0, 1.0, 1.0));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33, 200), module, WaveShaper::AMOUNT_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(33, 180), module, WaveShaper::AMOUNT_INPUT));
+	//RANGE SWITCH
+	addParam(createParam<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM, 0.0, 1.0, 0.0));
     //BYPASS SWITCH
   	addParam(createParam<LEDBezel>(Vec(33, 260), module, WaveShaper::BYPASS_SWITCH , 0.0, 1.0, 0.0));
   	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, WaveShaper::BYPASS_LED));
     //INS/OUTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, WaveShaper::INPUT));
 	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, WaveShaper::OUTPUT));
-
-
 
 }

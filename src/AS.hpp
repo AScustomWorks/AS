@@ -74,6 +74,11 @@ struct TriggersWidget : ModuleWidget
     TriggersWidget();
 };
 
+struct stereoVUmeterWidget : ModuleWidget 
+{ 
+    stereoVUmeterWidget();
+};
+
 //////////////////////////////////////
 //MODULE COMPONENTS
 /////////////////////////////////////
@@ -114,6 +119,15 @@ struct as_CKSS : SVGSwitch, ToggleSwitch {
 	as_CKSS() {
 		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSS_0.svg")));
 		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSS_1.svg")));
+	}
+};
+
+struct as_CKSSH : SVGSwitch, ToggleSwitch {
+	as_CKSSH() {
+		addFrame(SVG::load(assetPlugin(plugin, "res/as_CKSSH_0.svg")));
+		addFrame(SVG::load(assetPlugin(plugin, "res/as_CKSSH_1.svg")));
+		sw->wrap();
+		box.size = sw->box.size;
 	}
 };
 

@@ -133,14 +133,14 @@ void BPMClock::step()
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
-    outputs[RESET_OUTPUT].value = 1.0;
+    outputs[RESET_OUTPUT].value = 10.0;
   //INTERNAL RESET TRIGGER
 	}else  if (params[RESET_SWITCH].value > 0.0) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
-    outputs[RESET_OUTPUT].value = 1.0;
+    outputs[RESET_OUTPUT].value = 10.0;
   } else{
     outputs[RESET_OUTPUT].value = 0.0;
   }
@@ -184,7 +184,7 @@ void BPMClock::step()
     }
   
     clock.step(1.0 / engineGetSampleRate());
-    outputs[SIXTEENTHS_OUT].value = 5.0 * clock.sqr();
+    outputs[SIXTEENTHS_OUT].value = 10.0 * clock.sqr();
  
   if (eighths_trig.process(clock.sqr()) && eighths_count <= eighths_count_limit)
     eighths_count++;
@@ -192,7 +192,7 @@ void BPMClock::step()
   {
     eighths_count = 0;    
   }
-  if (eighths_count == 0) outputs[EIGHTHS_OUT].value = 5.0;
+  if (eighths_count == 0) outputs[EIGHTHS_OUT].value = 10.0;
   else outputs[EIGHTHS_OUT].value = 0.0;
   
   if (quarters_trig.process(clock.sqr()) && quarters_count <= quarters_count_limit)
@@ -201,7 +201,7 @@ void BPMClock::step()
   {
     quarters_count = 0;    
   }
-  if (quarters_count == 0) outputs[BEAT_OUT].value = 5.0;
+  if (quarters_count == 0) outputs[BEAT_OUT].value = 10.0;
   else outputs[BEAT_OUT].value = 0.0;
   
   if (bars_trig.process(clock.sqr()) && bars_count <= bars_count_limit)
@@ -210,7 +210,7 @@ void BPMClock::step()
   {
     bars_count = 0;    
   }
-  if (bars_count == 0) outputs[BAR_OUT].value = 5.0;
+  if (bars_count == 0) outputs[BAR_OUT].value = 10.0;
   else outputs[BAR_OUT].value = 0.0; 
   }
 }

@@ -68,11 +68,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16.331364"
-     inkscape:cx="24.079466"
-     inkscape:cy="8.5899386"
-     inkscape:document-units="mm"
-     inkscape:current-layer="g914"
+     inkscape:zoom="15.109749"
+     inkscape:cx="26.371079"
+     inkscape:cy="21.496911"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -81,8 +81,8 @@
      units="px"
      inkscape:window-width="1695"
      inkscape:window-height="1317"
-     inkscape:window-x="2"
-     inkscape:window-y="0"
+     inkscape:window-x="455"
+     inkscape:window-y="138"
      inkscape:window-maximized="0"
      inkscape:snap-global="true"
      inkscape:snap-bbox="true"
@@ -114,16 +114,6 @@
        id="path6445"
        style="fill:#191919;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2345679"
        d="m 83.534527,83.578937 c 0,2.623283 -2.126915,4.749934 -4.749934,4.749934 -2.623283,0 -4.749934,-2.126651 -4.749934,-4.749934 0,-2.623283 2.126651,-4.749934 4.749934,-4.749934 2.623019,0 4.749934,2.126651 4.749934,4.749934" />
-    <g
-       style="fill:#bcbcbc;fill-opacity:1;stroke-width:0.88890123"
-       id="g6451"
-       transform="matrix(0.33444816,0,0,-0.24690003,91.155491,78.846039)">
-      <path
-         d="M 0,0 C -0.195,0.045 -0.393,0.069 -0.598,0.069 -0.804,0.069 -1.002,0.045 -1.196,0 V -18.157 H 0 Z"
-         style="fill:#bcbcbc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.88890123"
-         id="path6453"
-         inkscape:connector-curvature="0" />
-    </g>
     <g
        id="g879">
       <path
@@ -158,7 +148,7 @@
     </g>
     <g
        id="g914"
-       transform="translate(0,-0.05861626)">
+       transform="translate(-3.1099673e-7,-0.05861626)">
       <path
          transform="matrix(0.98939574,-0.1452738,0.14639551,0.99703522,-11.408357,11.678494)"
          inkscape:transform-center-y="-0.084518611"
@@ -215,13 +205,23 @@
          sodipodi:type="star" />
     </g>
     <g
+       style="fill:#242424;fill-opacity:1;stroke-width:0.88890123"
+       id="g6631"
+       transform="matrix(0.71322466,0,0,-0.23081725,79.211164,79.170507)">
+      <path
+         d="M 0,0 C -0.195,0.045 -0.393,0.069 -0.598,0.069 -0.804,0.069 -1.002,0.045 -1.196,0 V -18.157 H 0 Z"
+         style="fill:#242424;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.88890123"
+         id="path6629"
+         inkscape:connector-curvature="0" />
+    </g>
+    <g
        transform="matrix(0.33444816,0,0,-0.21775211,78.984656,79.169606)"
        id="g900"
-       style="fill:#bcbcbc;fill-opacity:1;stroke-width:0.88890123">
+       style="fill:#bebebe;fill-opacity:1;stroke-width:0.88890123">
       <path
          inkscape:connector-curvature="0"
          id="path898"
-         style="fill:#bcbcbc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.88890123"
+         style="fill:#bebebe;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.88890123"
          d="M 0,0 C -0.195,0.045 -0.393,0.069 -0.598,0.069 -0.804,0.069 -1.002,0.045 -1.196,0 V -18.157 H 0 Z" />
     </g>
   </g>

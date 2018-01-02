@@ -24,6 +24,7 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<BPMClockWidget>("AS", "BPMClock", "BPM Clock", CLOCK_TAG));
 	p->addModel(createModel<SEQ16Widget>("AS", "SEQ16", "16 Step Sequencer", SEQUENCER_TAG));
 	p->addModel(createModel<Mixer8chWidget>("AS", "Mixer8ch", "8 CH Mixer", MIXER_TAG, AMPLIFIER_TAG));
+	//p->addModel(createModel<stereoVUmeterWidget>("AS", "stereoVUmeterWidget", "Stereo VU meter", VISUAL_TAG, UTILITY_TAG));
 	p->addModel(createModel<Multiple2_5Widget>("AS", "Multiple2_5", "Multiple 2 x 5", MULTIPLE_TAG, UTILITY_TAG));
 	p->addModel(createModel<TriggersWidget>("AS", "Triggers", "Triggers", SWITCH_TAG, UTILITY_TAG));
 	//EFFECTS

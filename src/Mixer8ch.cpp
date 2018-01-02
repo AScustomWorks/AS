@@ -75,6 +75,8 @@ struct Mixer8ch : Module {
 		CH8_CV_INPUT,
 		CH8_CV_PAN_INPUT,		
 
+		LINK_L,
+		LINK_R,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -128,16 +130,6 @@ struct Mixer8ch : Module {
 	float ch7m = false;
 	float ch8m = false;
 	float chMm = false;	
-
-	float ch1MuteLight;
-	float ch2MuteLight;
-	float ch3MuteLight;
-	float ch4MuteLight;
-	float ch5MuteLight;
-	float ch6MuteLight;
-	float ch7MuteLight;
-	float ch8MuteLight;
-	float chMMuteLight;
 
 	float mixL = 0.0;
 	float mixR = 0.0;
@@ -227,49 +219,40 @@ void Mixer8ch::step() {
 	if (ch1mute.process(params[CH1MUTE].value)) {
 		ch1m = !ch1m;	
 	}
-	ch1MuteLight = ch1m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT1].value = ch1MuteLight;
+	lights[MUTE_LIGHT1].value = ch1m ? 1.0 : 0.0;
 	if (ch2mute.process(params[CH2MUTE].value)) {
 		ch2m = !ch2m;	
 	}
-	ch2MuteLight = ch2m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT2].value = ch2MuteLight;
+	lights[MUTE_LIGHT2].value = ch2m ? 1.0 : 0.0;
 	if (ch3mute.process(params[CH3MUTE].value)) {
 		ch3m = !ch3m;
 	}
-	ch3MuteLight = ch3m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT3].value = ch3MuteLight;
+	lights[MUTE_LIGHT3].value = ch3m ? 1.0 : 0.0;
 	if (ch4mute.process(params[CH4MUTE].value)) {
 		ch4m = !ch4m;
 	}
-	ch4MuteLight = ch4m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT4].value = ch4MuteLight;
+	lights[MUTE_LIGHT4].value = ch4m ? 1.0 : 0.0;
 	if (ch5mute.process(params[CH5MUTE].value)) {
 		ch5m = !ch5m;	
 	}
-	ch5MuteLight = ch5m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT5].value = ch5MuteLight;
+	lights[MUTE_LIGHT5].value = ch5m ? 1.0 : 0.0;
 	if (ch6mute.process(params[CH6MUTE].value)) {
 		ch6m = !ch6m;
 	}
-	ch6MuteLight = ch6m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT6].value = ch6MuteLight;
+	lights[MUTE_LIGHT6].value = ch6m ? 1.0 : 0.0;
 	if (ch7mute.process(params[CH7MUTE].value)) {
 		ch7m = !ch7m;
 	}
-	ch7MuteLight = ch7m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT7].value = ch7MuteLight;
+	lights[MUTE_LIGHT7].value = ch7m ? 1.0 : 0.0;
 	if (ch8mute.process(params[CH8MUTE].value)) {
 		ch8m = !ch8m;
 	}
-	ch8MuteLight = ch8m ? 1.0 : 0.0;
-	lights[MUTE_LIGHT8].value = ch8MuteLight;
+	lights[MUTE_LIGHT8].value = ch8m ? 1.0 : 0.0;
 
 	if (chMmute.process(params[MASTER_MUTE].value)) {
 		chMm = !chMm;
 	}
-	chMMuteLight = chMm ? 1.0 : 0.0;
-	lights[MUTE_LIGHT_MASTER].value = chMMuteLight;
+	lights[MUTE_LIGHT_MASTER].value = chMm ? 1.0 : 0.0;
 	//CHANNEL RESULTS
 	float ch1L =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanL(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value))* clampf(inputs[CH1_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
 	float ch1R =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanR(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value)) * clampf(inputs[CH1_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
@@ -298,6 +281,11 @@ void Mixer8ch::step() {
 	if(!chMm){
 		mixL = (ch1L + ch2L + ch3L +ch4L + ch5L + ch6L + ch7L + ch8L) * params[MIX_PARAM].value * clampf(inputs[MIX_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
 		mixR = (ch1R + ch2R + ch3R +ch4R + ch5R + ch6R + ch7R + ch8R) * params[MIX_PARAM].value * clampf(inputs[MIX_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+		//CHECK FOR INPUT FROM ANOTHER MIXER
+		if(inputs[LINK_L].active && inputs[LINK_R].active){
+			mixL += inputs[LINK_L].value;
+			mixR += inputs[LINK_R].value;
+		}
 	}else{
 		mixL = 0.0;
 		mixR = 0.0;
@@ -312,6 +300,7 @@ void Mixer8ch::step() {
 	outputs[CH7_OUTPUT].value= ch7L+ch7R;
 	outputs[CH8_OUTPUT].value= ch8L+ch8R;
 	//check for MONO OUTPUT
+
 	if(!outputs[MIX_OUTPUTR].active){
 		outputs[MIX_OUTPUTL].value= mixL+mixR;
 		outputs[MIX_OUTPUTR].value= 0.0;
@@ -319,6 +308,9 @@ void Mixer8ch::step() {
 		outputs[MIX_OUTPUTL].value= mixL;
 		outputs[MIX_OUTPUTR].value= mixR;
 	}
+
+		//outputs[MIX_OUTPUTL].value= mixL;
+		//outputs[MIX_OUTPUTR].value= mixR;
 
 }
 
@@ -428,4 +420,9 @@ Mixer8chWidget::Mixer8chWidget() {
 	addParam(createParam<as_FaderPot>(Vec(356, volPosY), module, Mixer8ch::MIX_PARAM, 0.0, 1.0, 0.8));
 	addParam(createParam<LEDBezel>(Vec(356, mutePosY), module, Mixer8ch::MASTER_MUTE , 0.0, 1.0, 0.0));
   	addChild(createLight<LedLight<RedLight>>(Vec(356+2.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT_MASTER));
+
+	//LINK
+	addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], 30), module, Mixer8ch::LINK_L));
+	addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], 30), module, Mixer8ch::LINK_R));
+
 }

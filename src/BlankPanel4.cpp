@@ -36,6 +36,9 @@ BlankPanel4Widget::BlankPanel4Widget()
 		addChild(panel);
 	}
 
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	//SCREWS - MOD SPACING FOR RACK WIDTH*4
+	addChild(createScrew<as_HexScrew>(Vec(0, 0)));
+	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+	addChild(createScrew<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 }
