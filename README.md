@@ -54,4 +54,8 @@ A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigg
 ### Blank Panel
 Blank panels in 4,6 & 8 screw spacing widths.
 
-Have fun!
+### Donate
+
+If you enjoy those modules you can support the development by making a donation. Here's the link: [DONATE](https://www.paypal.me/frederius/)
+
+### Have fun!
