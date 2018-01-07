@@ -16,10 +16,12 @@ Fundamental ADSR module. Mods: graphics, sliders instead of knobs to provide fas
 
 ### VCA
 Fundamental VCA module. Mods: graphics, sliders instead of knobs to provide faster visual input, one input + lin/exp switch instead of two separate inputs.
+
 V 0.5.3: Code fix, now the VCA module works ok when there's no envelope input present.
 
 ### BPM Clock
 Strum's Mental VCV Master Clock. Mods: graphics, reset trigger input and output.
+
 V 0.5.2: all the trigger signals are 10v now, it seems that some other modules don't work fine with the correct voltages.
 
 ### Delay Plus
@@ -30,10 +32,12 @@ Autodafe's Phaser module. Mods: graphics, bypass switch.
 
 ### WaveShaper
 HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
+
 V 0.5.2: added back the voltage range switch.
 
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
+
 V 0.5.2: added MIX L & R input to chain mixers without giving up 2 mixer channels.
 
 ### Stereo VU Meter
@@ -41,7 +45,9 @@ V 0.5.3, New module added, Stereo VU Meter made to match the 8CH Mixer.
 
 ### 16 steps Sequencer
 Fundamental/Autodafe SEQ module. Mods: graphics, digital display to show the number of steps selected.
+
 V 0.5.2: added digital display to show current sequence step so you can run/stop the sequence and tune in the current step.
+
 V 0.5.3: added edit mode: manual trigger with current step selector buttons and blinking led light to highlight the current step. Send a row output to a NYSTHI Hot Tuna and enjoy precise step tuning!
 
 ### TinySawish
