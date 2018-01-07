@@ -16,6 +16,7 @@ Fundamental ADSR module. Mods: graphics, sliders instead of knobs to provide fas
 
 ### VCA
 Fundamental VCA module. Mods: graphics, sliders instead of knobs to provide faster visual input, one input + lin/exp switch instead of two separate inputs.
+V 0.5.3: Code fix, now the VCA module works ok when there's no envelope input present.
 
 ### BPM Clock
 Strum's Mental VCV Master Clock. Mods: graphics, reset trigger input and output.
