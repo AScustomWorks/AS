@@ -62,4 +62,8 @@ Blank panels in 4,6 & 8 screw spacing widths.
 
 If you enjoy those modules you can support the development by making a donation. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
+<<<<<<< HEAD
 ### Have fun!
+=======
+### Have fun!
+>>>>>>> 9e61d5436bf815426151fe51dd883fe5f46eb1da
