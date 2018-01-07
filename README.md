@@ -35,9 +35,13 @@ V 0.5.2: added back the voltage range switch.
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
 V 0.5.2: added MIX L & R input to chain mixers without giving up 2 mixer channels.
 
+### Stereo VU Meter
+V 0.5.3, New module added, Stereo VU Meter made to match the 8CH Mixer.
+
 ### 16 steps Sequencer
 Fundamental/Autodafe SEQ module. Mods: graphics, digital display to show the number of steps selected.
 V 0.5.2: added digital display to show current sequence step so you can run/stop the sequence and tune in the current step.
+V 0.5.3: added edit mode: manual trigger with current step selector buttons and blinking led light to highlight the current step. Send a row output to a NYSTHI Hot Tuna and enjoy precise step tuning!
 
 ### TinySawish
 RODENTMODULES MuO. Mods: graphics, smaller panel size.
@@ -54,4 +58,8 @@ A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigg
 ### Blank Panel
 Blank panels in 4,6 & 8 screw spacing widths.
 
-Have fun!
+### Donate
+
+If you enjoy those modules you can support the development by making a donation. Here's the link: [DONATE](https://www.paypal.me/frederius/)
+
+### Have fun!

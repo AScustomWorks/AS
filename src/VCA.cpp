@@ -15,9 +15,9 @@ struct VCA : Module {
 		NUM_PARAMS
 	};
 	enum InputIds {
-		MODE1_INPUT,
+		ENV1_INPUT,
 		IN1_INPUT,
-		MODE2_INPUT,
+		ENV2_INPUT,
 		IN2_INPUT,
 		NUM_INPUTS
 	};
@@ -38,18 +38,22 @@ struct VCA : Module {
 void VCA::step() {
 	//VCA 1
 	v1 = inputs[IN1_INPUT].value * params[LEVEL1_PARAM].value;
-	if(params[MODE1_PARAM].value){
-		v1 *= clampf(inputs[MODE1_INPUT].value / 10.0, 0.0, 1.0);
-	}else{
-		v1 *= rescalef(powf(expBase, clampf(inputs[MODE1_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+	if(inputs[ENV1_INPUT].active){
+		if(params[MODE1_PARAM].value==1){
+			v1 *= clampf(inputs[ENV1_INPUT].value / 10.0, 0.0, 1.0);
+		}else{
+			v1 *= rescalef(powf(expBase, clampf(inputs[ENV1_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+		}
 	}
 	outputs[OUT1_OUTPUT].value = v1;
 	//VCA 2
 	v2 = inputs[IN2_INPUT].value * params[LEVEL2_PARAM].value;
-	if(params[MODE2_PARAM].value){
-		v2 *= clampf(inputs[MODE2_INPUT].value / 10.0, 0.0, 1.0);
-	}else{
-		v2 *= rescalef(powf(expBase, clampf(inputs[MODE2_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+	if(inputs[ENV2_INPUT].active){
+		if(params[MODE2_PARAM].value){
+			v2 *= clampf(inputs[ENV2_INPUT].value / 10.0, 0.0, 1.0);
+		}else{
+			v2 *= rescalef(powf(expBase, clampf(inputs[ENV2_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+		}
 	}
 	outputs[OUT2_OUTPUT].value = v2;
 }
@@ -78,8 +82,8 @@ VCAWidget::VCAWidget() {
     addParam(createParam<as_CKSS>(Vec(14, 190), module, VCA::MODE1_PARAM, 0.0, 1.0, 1.0));
 	addParam(createParam<as_CKSS>(Vec(59, 190), module, VCA::MODE2_PARAM, 0.0, 1.0, 1.0));
 	//PORTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 217), module, VCA::MODE1_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(55, 217), module, VCA::MODE2_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(10, 217), module, VCA::ENV1_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(55, 217), module, VCA::ENV2_INPUT));
 
 	addInput(createInput<as_PJ301MPort>(Vec(10, 260), module, VCA::IN1_INPUT));
     addInput(createInput<as_PJ301MPort>(Vec(55, 260), module, VCA::IN2_INPUT));

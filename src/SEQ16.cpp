@@ -13,6 +13,9 @@ struct SEQ16 : Module {
 		RUN_PARAM,
 		RESET_PARAM,
 		STEPS_PARAM,
+		TRIGGER_PARAM,
+		PREV_STEP,
+		NEXT_STEP,
 		ROW1_PARAM,
 		ROW2_PARAM = ROW1_PARAM + 16,
 		ROW3_PARAM = ROW2_PARAM + 16,
@@ -38,19 +41,25 @@ struct SEQ16 : Module {
 		RUNNING_LIGHT,
 		RESET_LIGHT,
 		GATES_LIGHT,
+		TRIGGER_LIGHT,
 		ROW_LIGHTS,
 		GATE_LIGHTS = ROW_LIGHTS + 3,
 		NUM_LIGHTS = GATE_LIGHTS + 16
 	};
 
 	bool running = true;
+	bool triggerActive = false;
 	// for external clock
 	SchmittTrigger clockTrigger;
 	// For buttons
 	SchmittTrigger runningTrigger;
 	SchmittTrigger resetTrigger;
+	SchmittTrigger prevTrigger;
+	SchmittTrigger nextTrigger;
+	SchmittTrigger manualTrigger;
 	SchmittTrigger gateTriggers[16];
 	float phase = 0.0;
+	float blinkPhase = 0.0;
 	int index = 0;
 	int stepIndex = index+1;
 	bool gateState[16] = {};
@@ -207,15 +216,66 @@ void SEQ16::step() {
 		gatesOn = gatesOn && !pulse;
 
 	// Outputs
-	outputs[ROW1_OUTPUT].value = row1;
-	outputs[ROW2_OUTPUT].value = row2;
-	outputs[ROW3_OUTPUT].value = row3;
-	outputs[GATES_OUTPUT].value = gatesOn ? 10.0 : 0.0;
-	lights[RESET_LIGHT].value = resetLight;
-	lights[GATES_LIGHT].value = gatesOn ? 1.0 : 0.0;
-	lights[ROW_LIGHTS].value = row1;
-	lights[ROW_LIGHTS + 1].value = row2;
-	lights[ROW_LIGHTS + 2].value = row3;
+		outputs[ROW1_OUTPUT].value = row1;
+		outputs[ROW2_OUTPUT].value = row2;
+		outputs[ROW3_OUTPUT].value = row3;
+		lights[RESET_LIGHT].value = resetLight;
+		lights[GATES_LIGHT].value = gatesOn ? 1.0 : 0.0;
+		lights[ROW_LIGHTS].value = row1;
+		lights[ROW_LIGHTS + 1].value = row2;
+		lights[ROW_LIGHTS + 2].value = row3;
+	//mod to make the manual trigger work
+	if (running) {
+		outputs[GATES_OUTPUT].value = gatesOn ? 10.0 : 0.0;
+		lights[TRIGGER_LIGHT].value = 0;
+		//disable manual trigger
+		triggerActive = false;
+	}
+
+	//Edit mode
+	if(manualTrigger.process(params[TRIGGER_PARAM].value)){
+		triggerActive = !triggerActive;
+	}
+	lights[TRIGGER_LIGHT].value = triggerActive ? 1.0 : 0.0;
+	// Manual trigger/manual step, only when the seq is not running
+	if (triggerActive) {
+		running=false;
+		outputs[GATES_OUTPUT].value = 10.0;
+
+		// Blink light at 1Hz
+		float deltaTime = 5.0 / engineGetSampleRate();
+		blinkPhase += deltaTime;
+		if (blinkPhase >= 1.0){
+			blinkPhase -= 1.0;
+		}
+		// step edit light indicator
+		for (int i = 0; i < 16; i++) {
+			if(i==index){
+				lights[GATE_LIGHTS + i].value = (blinkPhase < 0.5) ? 1.0 : 0.0;
+			}else{
+				lights[GATES_LIGHT].value = gatesOn ? 1.0 : 0.0;
+			}
+		}
+
+	}else{
+		outputs[GATES_OUTPUT].value = gatesOn ? 10.0 : 0.0;
+		lights[GATES_LIGHT].value = gatesOn ? 1.0 : 0.0;
+	}
+	//Prev/next step buttons only work when seq is not running
+	if(!running){
+		if (prevTrigger.process(params[PREV_STEP].value)) {
+			index -= 1;
+			if(index<0){
+			index = numSteps-1;	
+			}
+		}
+		if (nextTrigger.process(params[NEXT_STEP].value)) {
+			index += 1;
+			if(index>numSteps-1){
+			index = 0;	
+			}
+		}
+	}
 }
 
 struct StepsDisplayWidget : TransparentWidget {
@@ -284,11 +344,11 @@ SEQ16Widget::SEQ16Widget() {
 	}
 	//LCD STEPS SCREEN
 	StepsDisplayWidget *display = new StepsDisplayWidget();
-	display->box.pos = Vec(351,60);
+	display->box.pos = Vec(341,60);
 	display->box.size = Vec(40, 30);
 	display->value = &module->numSteps;
 	addChild(display);
-
+	//LCD CURRENT STEP SCREEN
 	StepsDisplayWidget *display2 = new StepsDisplayWidget();
 	display2->box.pos = Vec(401,60);
 	display2->box.size = Vec(40, 30);
@@ -309,8 +369,14 @@ SEQ16Widget::SEQ16Widget() {
 	//RUN RESET SWITCHES & LEDS
 	addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RUN_PARAM , 0.0, 1.0, 0.0));
 	addChild(createLight<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
-	addParam(createParam<LEDBezel>(Vec(portX[5], main_lds_y), module, SEQ16::RESET_PARAM , 0.0, 1.0, 0.0));
-	addChild(createLight<MuteLight<RedLight>>(Vec(portX[5]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
+	addParam(createParam<LEDBezel>(Vec(portX[4], main_lds_y), module, SEQ16::RESET_PARAM , 0.0, 1.0, 0.0));
+	addChild(createLight<MuteLight<RedLight>>(Vec(portX[4]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
+	//STEP TRIGGER
+	addParam(createParam<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM , 0.0, 1.0, 0.0));
+	addChild(createLight<MuteLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT));
+		addParam(createParam<TL1105>(Vec(portX[9]+20, main_lds_y+40), module, SEQ16::PREV_STEP, 0.0, 1.0, 0.0));
+		addParam(createParam<TL1105>(Vec(portX[10]+5, main_lds_y+40), module, SEQ16::NEXT_STEP, 0.0, 1.0, 0.0));
+	//
 	//STEPS KNOBS
 	addParam(createParam<as_KnobBlack>(Vec(portX[7]-elements_offst, 56), module, SEQ16::STEPS_PARAM, 1.0, 16.0, 16.0));
 	static const float main_inputs_offst = 1;
@@ -318,18 +384,18 @@ SEQ16Widget::SEQ16Widget() {
 	//SEQ VC INPUTS
 	addInput(createInput<as_PJ301MPort>(Vec(portX[1]- main_inputs_offst, main_inputs_y), module, SEQ16::CLOCK_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(portX[3]-main_inputs_offst, main_inputs_y), module, SEQ16::EXT_CLOCK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(portX[5]-main_inputs_offst, main_inputs_y), module, SEQ16::RESET_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(portX[4]-main_inputs_offst, main_inputs_y), module, SEQ16::RESET_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(portX[7]-main_inputs_offst, main_inputs_y), module, SEQ16::STEPS_INPUT));
 	//GATE/ROW LEDS
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[11]+elements_offst, main_lds_y), module, SEQ16::GATES_LIGHT));
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[12]+elements_offst, main_lds_y), module, SEQ16::ROW_LIGHTS));
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[13]+elements_offst, main_lds_y), module, SEQ16::ROW_LIGHTS + 1));
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[14]+elements_offst, main_lds_y), module, SEQ16::ROW_LIGHTS + 2));
+	addChild(createLight<MediumLight<RedLight>>(Vec(portX[12]+elements_offst, main_lds_y+6), module, SEQ16::GATES_LIGHT));
+	addChild(createLight<MediumLight<RedLight>>(Vec(portX[13]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS));
+	addChild(createLight<MediumLight<RedLight>>(Vec(portX[14]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 1));
+	addChild(createLight<MediumLight<RedLight>>(Vec(portX[15]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 2));
 	//GATE/ROW OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[11], 98), module, SEQ16::GATES_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[12], 98), module, SEQ16::ROW1_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[13], 98), module, SEQ16::ROW2_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[14], 98), module, SEQ16::ROW3_OUTPUT));
+	addOutput(createOutput<as_PJ301MPort>(Vec(portX[12], 98), module, SEQ16::GATES_OUTPUT));
+	addOutput(createOutput<as_PJ301MPort>(Vec(portX[13], 98), module, SEQ16::ROW1_OUTPUT));
+	addOutput(createOutput<as_PJ301MPort>(Vec(portX[14], 98), module, SEQ16::ROW2_OUTPUT));
+	addOutput(createOutput<as_PJ301MPort>(Vec(portX[15], 98), module, SEQ16::ROW3_OUTPUT));
 
 	for (int i = 0; i < 16; i++) {
 		//ROW KNOBS
@@ -338,7 +404,7 @@ SEQ16Widget::SEQ16Widget() {
 		addParam(createParam<as_KnobBlack>(Vec(portX[i]-elements_offst, 240), module, SEQ16::ROW3_PARAM + i, 0.0, 10.0, 0.0));
 		//GATE LEDS
 		addParam(createParam<LEDButton>(Vec(portX[i]+1.5, 284), module, SEQ16::GATE_PARAM + i, 0.0, 1.0, 0.0));
-		addChild(createLight<MediumLight<RedLight>>(Vec(portX[i]+5.7, 287.9), module, SEQ16::GATE_LIGHTS + i));
+		addChild(createLight<MediumLight<RedLight>>(Vec(portX[i]+5.8, 287.9), module, SEQ16::GATE_LIGHTS + i));
 		//GATE STEPS OUT
 		addOutput(createOutput<as_PJ301MPort>(Vec(portX[i]-2, 310), module, SEQ16::GATE_OUTPUT + i));
 	}
