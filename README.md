@@ -7,6 +7,9 @@ AS is a collection of modules for [VCV Rack](https://vcvrack.com/) by Alfredo Sa
 
 AS is compatible with VCV Rack 0.5.X. releases for Mac, Win and Linux are found on the [Release Page](https://github.com/AScustomWorks/as/releases)
 
+If you enjoy those modules you can support the development by making a donation, it will be appreciated!. Here's the link: [DONATE](https://www.paypal.me/frederius/)
+
+
 ![AS](https://github.com/AScustomWorks/AS/blob/master/AS.JPG)
 
 # AS modules
@@ -95,9 +98,5 @@ V 0.5.4: Updated look.
 
 ### Blank Panel
 Blank panels in 4,6 & 8 screw spacing widths.
-
-### Donate
-
-If you enjoy those modules you can support the development by making a donation. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
 ### Have fun!
