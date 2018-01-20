@@ -1,3 +1,8 @@
+//**************************************************************************************
+//TriLFO module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
+//
+//Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
+//**************************************************************************************
 #include "AS.hpp"
 #include "dsp/digital.hpp"
 

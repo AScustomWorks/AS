@@ -1,5 +1,5 @@
 //**************************************************************************************
-//8 channel mixer VCV Rack mods by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//8 channel mixer module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Based on DrumsMixer VCV Rack by Autodafe http://www.autodafe.net
 //Based on code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com

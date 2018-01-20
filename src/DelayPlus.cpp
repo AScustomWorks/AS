@@ -1,5 +1,5 @@
 //**************************************************************************************
-//Delay Plus VCV Rack mods by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//Delay Plus module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
@@ -243,10 +243,10 @@ DelayPlusFxWidget::DelayPlusFxWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(createParam<as_KnobBlack>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.0, 1.0, 0.636));
-	addParam(createParam<as_KnobBlack>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_KnobBlack>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_KnobBlack>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.0, 1.0, 0.636));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0, 1.0, 0.5));
 	//BYPASS SWITCH
   	addParam(createParam<LEDBezel>(Vec(49, 272+y_offset), module, DelayPlusFx::BYPASS_SWITCH , 0.0, 1.0, 0.0));
   	addChild(createLight<LedLight<RedLight>>(Vec(51.2, 274+y_offset), module, DelayPlusFx::BYPASS_LED));

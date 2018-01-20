@@ -1,5 +1,5 @@
 //**************************************************************************************
-//SawOSC VCV Rack mod by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//SawOSC module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Code taken from RODENTCAT https://github.com/RODENTCAT/RODENTMODULES
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
@@ -58,9 +58,18 @@ void SawOSC::step() {
 	//float sine = sinf(2 * M_PI * phase);
 	//outputs[SINE_OUTPUT].value = 5.0 * sine;
     
-    //SQUARE stuff, original dev says swuare, but it sounds more like a SAW wave, hence this module name hehe
-    float square = cos(exp(pinput * M_PI * phase));
-    outputs[OSC_OUTPUT].value = 5 * square;
+    //saw stuff, original dev says square, but it sounds more like a SAW wave, hence this module name hehe
+    float saw = cos(exp(pinput * M_PI * phase))/0.87;
+	//dc block
+	
+	float block_coeff = 1.0 - (2. * M_PI * (10. / 44100.));
+	float m_prev_in = 0.0;
+	float m_prev_out = 0.0;
+	m_prev_out = saw - m_prev_in + block_coeff * m_prev_out;
+	m_prev_in = saw;
+	
+    //outputs[OSC_OUTPUT].value = 5 * saw;
+    outputs[OSC_OUTPUT].value = m_prev_out*5;
 	lights[FREQ_LIGHT].value = (outputs[OSC_OUTPUT].value > 0.0) ? 1.0 : 0.0;
 }
 
@@ -84,7 +93,7 @@ SawOscWidget::SawOscWidget() {
 	addChild(createLight<SmallLight<RedLight>>(Vec(22, 57), module, SawOSC::FREQ_LIGHT));
 	//PARAMS
 	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SawOSC::PITCH_PARAM, -3.0, 3.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, SawOSC::PW_PARAM, -5.0, 5.0, -5.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, SawOSC::PW_PARAM, -4.0, 5.0, -4.0));
 	//INPUTS
 	addInput(createInput<as_PJ301MPort>(Vec(33, 200), module, SawOSC::PW_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SawOSC::PITCH_INPUT));

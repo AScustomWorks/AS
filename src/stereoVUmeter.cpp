@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////
-//
+// Stereo VU Meter module by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 // stereoVUmeter
 //
 /////////////////////////////////////////////////////
@@ -51,19 +51,6 @@ void stereoVUmeter::step(){
 		lights[METER_LIGHT_LEFT + i].setBrightnessSmooth(vuBar.getBrightness(i));
 		vuBar.setValue(signal_in_Right / 10.0);
 		lights[METER_LIGHT_RIGHT + i].setBrightnessSmooth(vuBar.getBrightness(i));
-	}
-};
-
-template <typename BASE>
- struct MeterLight : BASE {
- 	MeterLight() {
- 		this->box.size = Vec(8, 8);
- 	}
- };
-
- struct OrangeLight : ModuleLightWidget {
-	OrangeLight() {
-		addBaseColor(COLOR_ORANGE);
 	}
 };
 

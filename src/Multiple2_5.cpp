@@ -1,3 +1,7 @@
+//**************************************************************************************
+//Multiple 2x5 module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
+//
+//**************************************************************************************
 #include "AS.hpp"
 
 struct Multiple2_5 : Module {

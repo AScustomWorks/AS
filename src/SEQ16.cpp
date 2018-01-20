@@ -1,9 +1,9 @@
-//**************************************************************************************
-//16 channel sequencer VCV Rack mods by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//***********************************************************************************************
+//16-step sequencer module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Based on SEQ16 VCV Rack by Autodafe http://www.autodafe.net
 //Based on code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
-//**************************************************************************************
+//***********************************************************************************************
 #include "AS.hpp"
 #include "dsp/digital.hpp"
 
@@ -16,6 +16,7 @@ struct SEQ16 : Module {
 		TRIGGER_PARAM,
 		PREV_STEP,
 		NEXT_STEP,
+		GATE_MODE_PARAM,
 		ROW1_PARAM,
 		ROW2_PARAM = ROW1_PARAM + 16,
 		ROW3_PARAM = ROW2_PARAM + 16,
@@ -62,9 +63,12 @@ struct SEQ16 : Module {
 	float blinkPhase = 0.0;
 	int index = 0;
 	int stepIndex = index+1;
+	int modeIndex = 0;
+	bool nextStep = false;
 	bool gateState[16] = {};
 	float resetLight = 0.0;
 	float stepLights[16] = {};
+	const float lightLambda = 0.075;
 
 	enum GateMode {
 		TRIGGER,
@@ -138,14 +142,17 @@ struct SEQ16 : Module {
 void SEQ16::step() {
 	numSteps = roundf(clampf(params[STEPS_PARAM].value, 1.0, 16.0)); 
 	stepIndex = index+1;
-	const float lightLambda = 0.075;
+	// Gate mode Switch with 3 way switch
+	modeIndex = params[GATE_MODE_PARAM].value;
+	gateMode = (GateMode)int(modeIndex);
+
 	// Run
 	if (runningTrigger.process(params[RUN_PARAM].value)) {
 		running = !running;
 	}
 	lights[RUNNING_LIGHT].value = running ? 1.0 : 0.0;
 
-	bool nextStep = false;
+	nextStep = false;
 
 	if (running) {
 		if (inputs[EXT_CLOCK_INPUT].active) {
@@ -367,24 +374,25 @@ SEQ16Widget::SEQ16Widget() {
 	//CLOCK KNOB
 	addParam(createParam<as_KnobBlack>(Vec(portX[1]-elements_offst, 56), module, SEQ16::CLOCK_PARAM, -2.0, 6.0, 2.0));
 	//RUN RESET SWITCHES & LEDS
-	addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RUN_PARAM , 0.0, 1.0, 0.0));
-	addChild(createLight<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
-	addParam(createParam<LEDBezel>(Vec(portX[4], main_lds_y), module, SEQ16::RESET_PARAM , 0.0, 1.0, 0.0));
-	addChild(createLight<MuteLight<RedLight>>(Vec(portX[4]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
+	addParam(createParam<LEDBezel>(Vec(portX[2], main_lds_y), module, SEQ16::RUN_PARAM , 0.0, 1.0, 0.0));
+	addChild(createLight<MuteLight<RedLight>>(Vec(portX[2]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
+	addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RESET_PARAM , 0.0, 1.0, 0.0));
+	addChild(createLight<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
 	//STEP TRIGGER
 	addParam(createParam<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM , 0.0, 1.0, 0.0));
 	addChild(createLight<MuteLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT));
 		addParam(createParam<TL1105>(Vec(portX[9]+20, main_lds_y+40), module, SEQ16::PREV_STEP, 0.0, 1.0, 0.0));
 		addParam(createParam<TL1105>(Vec(portX[10]+5, main_lds_y+40), module, SEQ16::NEXT_STEP, 0.0, 1.0, 0.0));
-	//
+	//GATE MODE SWITCH
+	   addParam(createParam<as_CKSSThree>(Vec(portX[6]+2, main_lds_y-4), module, SEQ16::GATE_MODE_PARAM, 0.0, 2.0, 0.0));
 	//STEPS KNOBS
 	addParam(createParam<as_KnobBlack>(Vec(portX[7]-elements_offst, 56), module, SEQ16::STEPS_PARAM, 1.0, 16.0, 16.0));
 	static const float main_inputs_offst = 1;
 	static const float main_inputs_y = 98;
 	//SEQ VC INPUTS
 	addInput(createInput<as_PJ301MPort>(Vec(portX[1]- main_inputs_offst, main_inputs_y), module, SEQ16::CLOCK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(portX[3]-main_inputs_offst, main_inputs_y), module, SEQ16::EXT_CLOCK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(portX[4]-main_inputs_offst, main_inputs_y), module, SEQ16::RESET_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(portX[2]-main_inputs_offst, main_inputs_y), module, SEQ16::EXT_CLOCK_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(portX[3]-main_inputs_offst, main_inputs_y), module, SEQ16::RESET_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(portX[7]-main_inputs_offst, main_inputs_y), module, SEQ16::STEPS_INPUT));
 	//GATE/ROW LEDS
 	addChild(createLight<MediumLight<RedLight>>(Vec(portX[12]+elements_offst, main_lds_y+6), module, SEQ16::GATES_LIGHT));

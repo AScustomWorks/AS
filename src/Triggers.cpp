@@ -1,3 +1,7 @@
+//**************************************************************************************
+//Triggers module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
+//
+//**************************************************************************************
 #include "AS.hpp"
 #include "dsp/digital.hpp"
 #include <iostream>

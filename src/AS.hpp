@@ -42,11 +42,37 @@ struct Mixer8chWidget : ModuleWidget {
 	Mixer8chWidget();
 };
 
+struct TriggersWidget : ModuleWidget 
+{ 
+    TriggersWidget();
+};
+struct StepsWidget : ModuleWidget 
+{ 
+    StepsWidget();
+};
+struct monoVUmeterWidget : ModuleWidget 
+{ 
+    monoVUmeterWidget();
+};
+struct stereoVUmeterWidget : ModuleWidget 
+{ 
+    stereoVUmeterWidget();
+};
+
 struct DelayPlusFxWidget : ModuleWidget {
 	DelayPlusFxWidget();
 };
+
 struct PhaserFxWidget : ModuleWidget {
 	PhaserFxWidget();
+};
+
+struct ReverbFxWidget : ModuleWidget {
+	ReverbFxWidget();
+};
+
+struct SuperDriveFxWidget : ModuleWidget {
+	SuperDriveFxWidget();
 };
 
 struct WaveShaperWidget : ModuleWidget {
@@ -66,16 +92,6 @@ struct BlankPanel6Widget : ModuleWidget
 struct BlankPanel8Widget : ModuleWidget 
 { 
     BlankPanel8Widget();
-};
-
-struct TriggersWidget : ModuleWidget 
-{ 
-    TriggersWidget();
-};
-
-struct stereoVUmeterWidget : ModuleWidget 
-{ 
-    stereoVUmeterWidget();
 };
 
 //////////////////////////////////////
@@ -108,6 +124,25 @@ struct as_KnobBlack : SVGKnob {
 	}
 };
 
+struct as_FxKnobWhite : SVGKnob {
+	as_FxKnobWhite() {
+        minAngle = -0.83 * M_PI;
+		maxAngle = 0.83 * M_PI;
+		sw->svg = SVG::load(assetPlugin(plugin, "res/as-FxKnobWhite.svg"));
+		sw->wrap();
+		box.size = sw->box.size;
+	}
+};
+struct as_FxKnobBlack : SVGKnob {
+	as_FxKnobBlack() {
+        minAngle = -0.83 * M_PI;
+		maxAngle = 0.83 * M_PI;
+		sw->svg = SVG::load(assetPlugin(plugin, "res/as-FxKnobBlack.svg"));
+		sw->wrap();
+		box.size = sw->box.size;
+	}
+};
+
 struct BigLEDBezel : SVGSwitch, MomentarySwitch {
         BigLEDBezel() {
                 addFrame(SVG::load(assetPlugin(plugin, "res/as_bigLEDBezel.svg")));
@@ -130,6 +165,14 @@ struct as_CKSSH : SVGSwitch, ToggleSwitch {
 	}
 };
 
+struct as_CKSSThree : SVGSwitch, ToggleSwitch {
+	as_CKSSThree() {
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSSThree_2.svg")));
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSSThree_1.svg")));
+		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSSThree_0.svg")));
+	}
+};
+
 struct as_MuteBtn : SVGSwitch, ToggleSwitch {
 	as_MuteBtn() {
 		addFrame(SVG::load(assetPlugin(plugin,"res/as_mute-off.svg")));
@@ -149,6 +192,19 @@ struct GiantLight : BASE {
         GiantLight() {
                 this->box.size = mm2px(Vec(18.0, 18.0));
         }
+};
+
+template <typename BASE>
+ struct MeterLight : BASE {
+ 	MeterLight() {
+ 		this->box.size = Vec(8, 8);
+ 	}
+ };
+
+ struct OrangeLight : ModuleLightWidget {
+	OrangeLight() {
+		addBaseColor(COLOR_ORANGE);
+	}
 };
 
 template <typename BASE>

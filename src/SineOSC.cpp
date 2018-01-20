@@ -1,5 +1,5 @@
 //**************************************************************************************
-//SineOSC VCV Rack - Alfredo Santamaria - AS - http://www.hakken.com.mx
+//SineOSC module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //Is just the tutorial module and nothing else hehe
 //
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com

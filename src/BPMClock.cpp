@@ -1,5 +1,6 @@
 //**************************************************************************************
-//BPM Clock VCV Rack mods by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//
+//BPM Clock module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Based on code taken from Master Clock Module VCV Module Strum 2017 https://github.com/Strum/Strums_Mental_VCV_Modules
 //**************************************************************************************
@@ -64,6 +65,7 @@ struct BPMClock : Module {
   SchmittTrigger bars_trig;
   SchmittTrigger run_button_trig;
 	SchmittTrigger reset_btn_trig;
+  SchmittTrigger reset_ext_trig;
 
   const float lightLambda = 0.075;
   float resetLight = 0.0;
@@ -127,23 +129,28 @@ void BPMClock::step()
   time_sig_bottom = std::pow(2,time_sig_bottom+1);
  
   frequency = tempo/60.0;
+  //RESET TRIGGERS
   //EXTERNAL RESET TRIGGER
-	if (reset_btn_trig.process(inputs[RESET_INPUT].value)) {
+	if (reset_ext_trig.process(inputs[RESET_INPUT].value)) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
     outputs[RESET_OUTPUT].value = 10.0;
   //INTERNAL RESET TRIGGER
-	}else  if (params[RESET_SWITCH].value > 0.0) {
+  }else  if (reset_btn_trig.process(params[RESET_SWITCH].value)) {
+  //}else  if (params[RESET_SWITCH].value > 0.0) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
     outputs[RESET_OUTPUT].value = 10.0;
-  } else{
+  }else{
     outputs[RESET_OUTPUT].value = 0.0;
   }
+
+	
+
   resetLight -= resetLight / lightLambda / engineGetSampleRate();
   lights[RESET_LED].value = resetLight;
 

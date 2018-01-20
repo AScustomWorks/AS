@@ -1,5 +1,5 @@
 SLUG = AS
-VERSION = 0.5.3
+VERSION = 0.5.4
 
 # FLAGS will be passed to both the C and C++ compiler
 FLAGS +=
@@ -11,7 +11,7 @@ CXXFLAGS +=
 LDFLAGS +=
 
 # Add .cpp and .c files to the build
-SOURCES = $(wildcard src/*.cpp)
+SOURCES = $(wildcard src/*.cpp freeverb/*.cpp)
 
 
 # Must include the VCV plugin Makefile framework

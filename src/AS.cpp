@@ -10,8 +10,8 @@ void init(rack::Plugin *p) {
 #ifdef VERSION
 	p->version = TOSTRING(VERSION);
 #endif
-	p->website = "http://www.hakken.com.mx";
-	p->manual = "";
+	p->website = "https://github.com/AScustomWorks/AS/";
+	p->manual = "https://github.com/AScustomWorks/AS/README.md";
 
 	// For each module, specify the ModuleWidget subclass, manufacturer slug (for saving in patches), manufacturer human-readable name, module slug, and module name
 	//OSCILLATORS
@@ -22,14 +22,18 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<VCAWidget>("AS", "VCA", "VCA", AMPLIFIER_TAG));
 	p->addModel(createModel<TriLFOWidget>("AS", "TriLFO", "Tri LFO", LFO_TAG));
 	p->addModel(createModel<BPMClockWidget>("AS", "BPMClock", "BPM Clock", CLOCK_TAG));
-	p->addModel(createModel<SEQ16Widget>("AS", "SEQ16", "16 Step Sequencer", SEQUENCER_TAG));
-	p->addModel(createModel<Mixer8chWidget>("AS", "Mixer8ch", "8 CH Mixer", MIXER_TAG, AMPLIFIER_TAG));
+	p->addModel(createModel<SEQ16Widget>("AS", "SEQ16", "16-Step Sequencer", SEQUENCER_TAG));
+	p->addModel(createModel<Mixer8chWidget>("AS", "Mixer8ch", "8-CH Mixer", MIXER_TAG, AMPLIFIER_TAG));
 	p->addModel(createModel<stereoVUmeterWidget>("AS", "stereoVUmeterWidget", "Stereo VU meter", VISUAL_TAG, UTILITY_TAG));
+	p->addModel(createModel<monoVUmeterWidget>("AS", "monoVUmeterWidget", "Mono VU meter", VISUAL_TAG, UTILITY_TAG));
 	p->addModel(createModel<Multiple2_5Widget>("AS", "Multiple2_5", "Multiple 2 x 5", MULTIPLE_TAG, UTILITY_TAG));
 	p->addModel(createModel<TriggersWidget>("AS", "Triggers", "Triggers", SWITCH_TAG, UTILITY_TAG));
+	p->addModel(createModel<StepsWidget>("AS", "Steps", "Steps", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG));
 	//EFFECTS
 	p->addModel(createModel<DelayPlusFxWidget>("AS", "DelayPlusFx", "FX Delay Plus", DELAY_TAG, EFFECT_TAG));
 	p->addModel(createModel<PhaserFxWidget>("AS", "PhaserFx", "FX Phaser", EFFECT_TAG));
+	p->addModel(createModel<ReverbFxWidget>("AS", "ReverbFx", "FX Reverb", REVERB_TAG, EFFECT_TAG));
+	p->addModel(createModel<SuperDriveFxWidget>("AS", "SuperDriveFx", "FX Super Drive", AMPLIFIER_TAG, EFFECT_TAG));
 	p->addModel(createModel<WaveShaperWidget>("AS", "WaveShaper", "FX Wave Shaper", WAVESHAPER_TAG, EFFECT_TAG));
 	//BLANK PANELS
 	p->addModel(createModel<BlankPanel4Widget>("AS", "BlankPanel4", "Blank Panel 4", BLANK_TAG));

@@ -1,5 +1,5 @@
 //**************************************************************************************
-//ADSR VCV Rack mods by Alfredo Santamaria - AS - http://www.hakken.com.mx
+//ADSR module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************

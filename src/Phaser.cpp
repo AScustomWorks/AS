@@ -1,10 +1,11 @@
-//**************************************************************************************
-//Phaser VCV Rack mods by Alfredo Santamaria  - AS -
+//***********************************************************************************************
 //
+//Phaser module for VCV Rack by Alfredo Santamaria  - AS - https://github.com/AScustomWorks/AS
 //Based on the Phaser Module for VCV Rack by Autodafe http://www.autodafe.net
 //Based on code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //And part of code on musicdsp.org: http://musicdsp.org/showArchiveComment.php?ArchiveID=78
-//**************************************************************************************
+//
+//***********************************************************************************************
 
 #include "AS.hpp"
 #include "dsp/digital.hpp"
@@ -13,14 +14,17 @@
 
 struct PhaserFx : Module{
 	enum ParamIds {
-		PARAM_RATE,
-		PARAM_FEEDBACK,
-		PARAM_DEPTH,
+		RATE_PARAM,
+		FBK_PARAM,
+		DEPTH_PARAM,
         BYPASS_SWITCH,
 		NUM_PARAMS
 	};
 	enum InputIds {
 		INPUT,
+		RATE_CV_INPUT,
+		FEEDBACK_CV_INPUT,
+		DEPTH_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -28,6 +32,9 @@ struct PhaserFx : Module{
 		NUM_OUTPUTS
 	};
 	  enum LightIds {
+		RATE_LIGHT,
+		FBK_LIGHT,
+		DEPTH_LIGHT,
 		BYPASS_LED,
 		NUM_LIGHTS
 	};
@@ -162,9 +169,9 @@ void PhaserFx::step() {
     lights[BYPASS_LED].value = fx_bypass ? 1.0 : 0.0;
 
 
-	float rate = params[PARAM_RATE].value;
-	float feedback = params[PARAM_FEEDBACK].value;
-	float depth = params[PARAM_DEPTH].value;
+	float rate = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0, 0.0, 1.0);
+	float feedback = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0, 0.0, 0.95);
+	float depth = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0, 0.0, 1.0);
 
 	float input = inputs[INPUT].value / 5.0;
 
@@ -175,12 +182,15 @@ void PhaserFx::step() {
 	float out = pha->Update(input);
 
 	//check bypass switch status
-	if (fx_bypass)
-    {
-		 outputs[OUT].value = input * 5;
-	  }else
+	if (fx_bypass){
+		outputs[OUT].value = input * 5;
+	}else{
 		outputs[OUT].value= out * 5;
+	}
 
+	lights[RATE_LIGHT].value = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0, 0.0, 1.0);
+	lights[FBK_LIGHT].value = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0, 0.0, 1.0);
+	lights[DEPTH_LIGHT].value = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0, 0.0, 1.0);
 }
 
 PhaserFxWidget::PhaserFxWidget() {
@@ -200,14 +210,22 @@ PhaserFxWidget::PhaserFxWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
     //KNOBS  
-	addParam(createParam<as_KnobBlack>(Vec(25, 60), module, PhaserFx::PARAM_RATE, 0, 1, 0));
-	addParam(createParam<as_KnobBlack>(Vec(25, 125), module, PhaserFx::PARAM_FEEDBACK, 0, 0.95, 0));
-	addParam(createParam<as_KnobBlack>(Vec(25, 190), module, PhaserFx::PARAM_DEPTH, 0, 1, 0));
+	addParam(createParam<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM, 0, 1, 0));
+	addParam(createParam<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM, 0, 0.95, 0));
+	addParam(createParam<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM, 0, 1, 0));
+	//LIGHTS
+	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 57), module, PhaserFx::RATE_LIGHT));
+	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
+	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
     //BYPASS SWITCH
   	addParam(createParam<LEDBezel>(Vec(33, 260), module, PhaserFx::BYPASS_SWITCH , 0.0, 1.0, 0.0));
   	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, PhaserFx::BYPASS_LED));
     //INS/OUTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, PhaserFx::INPUT));
 	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, PhaserFx::OUT));
+	//CV INPUTS
+	addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, PhaserFx::RATE_CV_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, PhaserFx::FEEDBACK_CV_INPUT));
+	addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, PhaserFx::DEPTH_CV_INPUT));
  
 }
