@@ -97,7 +97,8 @@ void DelayPlusFx::step() {
 	float dry = in + lastWet * feedback;
 
 	// Compute delay time in seconds
-	float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM].value + inputs[TIME_INPUT].value / 10.0, 0.0, 1.0));
+	//float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM].value + inputs[TIME_INPUT].value / 10.0, 0.0, 1.0));
+	float delay = clampf(params[TIME_PARAM].value + inputs[TIME_INPUT].value, 0.001, 10.0);
 	//LCD display tempo  - show value as ms
 	 lcd_tempo = std::round(delay*1000);
 	// Number of delay samples
@@ -243,7 +244,7 @@ DelayPlusFxWidget::DelayPlusFxWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.0, 1.0, 0.636));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.001, 10.0, 0.350));
 	addParam(createParam<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0, 1.0, 0.5));
 	addParam(createParam<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0, 1.0, 0.5));
 	addParam(createParam<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0, 1.0, 0.5));

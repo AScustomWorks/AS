@@ -1,5 +1,5 @@
 SLUG = AS
-VERSION = 0.5.4
+VERSION = 0.5.5
 
 # FLAGS will be passed to both the C and C++ compiler
 FLAGS +=

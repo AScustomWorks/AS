@@ -1,7 +1,7 @@
 //**************************************************************************************
 //TriLFO module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
-//Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
+//Code adapted from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
 #include "AS.hpp"
 #include "dsp/digital.hpp"
@@ -128,13 +128,16 @@ struct TriLFO : Module {
 
 	TriLFO() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
+
+	float pw_param = 0.5;
 };
 
 
 void TriLFO::step() {
 	//LFO1
 	oscillator1.setPitch(params[FREQ1_PARAM].value + params[FM1_PARAM].value * inputs[FM1_INPUT].value + params[FM2_PARAM].value * inputs[FM2_INPUT].value);
-	oscillator1.setPulseWidth(params[PW_PARAM].value + params[PWM_PARAM].value * inputs[PW_INPUT].value / 10.0);
+	//oscillator1.setPulseWidth(params[PW_PARAM].value + params[PWM_PARAM].value * inputs[PW_INPUT].value / 10.0);
+	oscillator1.setPulseWidth(pw_param);
 	oscillator1.offset = (params[OFFSET1_PARAM].value > 0.0);
 	oscillator1.invert = (params[INVERT1_PARAM].value <= 0.0);
 	oscillator1.step(1.0 / engineGetSampleRate());
@@ -149,7 +152,8 @@ void TriLFO::step() {
 	lights[PHASE1_NEG_LIGHT].setBrightnessSmooth(fmaxf(0.0, -oscillator1.light()));
 	//LFO2
 	oscillator2.setPitch(params[FREQ2_PARAM].value + params[FM1_PARAM].value * inputs[FM1_INPUT].value + params[FM2_PARAM].value * inputs[FM2_INPUT].value);
-	oscillator2.setPulseWidth(params[PW_PARAM].value + params[PWM_PARAM].value * inputs[PW_INPUT].value / 10.0);
+	//oscillator2.setPulseWidth(params[PW_PARAM].value + params[PWM_PARAM].value * inputs[PW_INPUT].value / 10.0);
+	oscillator2.setPulseWidth(pw_param);
 	oscillator2.offset = (params[OFFSET2_PARAM].value > 0.0);
 	oscillator2.invert = (params[INVERT2_PARAM].value <= 0.0);
 	oscillator2.step(1.0 / engineGetSampleRate());
@@ -164,7 +168,8 @@ void TriLFO::step() {
 	lights[PHASE2_NEG_LIGHT].setBrightnessSmooth(fmaxf(0.0, -oscillator2.light()));
 	//LFO3
 	oscillator3.setPitch(params[FREQ3_PARAM].value + params[FM1_PARAM].value * inputs[FM1_INPUT].value + params[FM2_PARAM].value * inputs[FM2_INPUT].value);
-	oscillator3.setPulseWidth(params[PW_PARAM].value + params[PWM_PARAM].value * inputs[PW_INPUT].value / 10.0);
+	//oscillator3.setPulseWidth(params[PW_PARAM].value + params[PWM_PARAM].value * inputs[PW_INPUT].value / 10.0);
+	oscillator3.setPulseWidth(pw_param);
 	oscillator3.offset = (params[OFFSET3_PARAM].value > 0.0);
 	oscillator3.invert = (params[INVERT3_PARAM].value <= 0.0);
 	oscillator3.step(1.0 / engineGetSampleRate());

@@ -14,7 +14,7 @@
 struct Steps : Module {
 	enum ParamIds {
     RST_BUTTON1,
-    COUNT_NUM_PARAM,
+    COUNT_NUM_PARAM_1,
     RST_BUTTON2,
     COUNT_NUM_PARAM_2,
     RST_BUTTON3,
@@ -22,8 +22,8 @@ struct Steps : Module {
 		NUM_PARAMS
 	};  
 	enum InputIds {
-    CLK_IN,
-    RESET_IN,
+    CLK_IN_1,
+    RESET_IN_1,
     CLK_IN_2,
     RESET_IN_2,
     CLK_IN_3,
@@ -31,7 +31,7 @@ struct Steps : Module {
 		NUM_INPUTS
 	};
 	enum OutputIds {
-		OUTPUT,
+		OUTPUT_1,
     OUTPUT_2,
     OUTPUT_3,    
 		NUM_OUTPUTS
@@ -43,34 +43,35 @@ struct Steps : Module {
 		NUM_LIGHTS
 	};
 
-    SchmittTrigger clock_trigger;
-    SchmittTrigger reset_trigger;
-    int count_limit = 0;
-    int count = 0;
+    SchmittTrigger clock_trigger_1;
+    SchmittTrigger reset_trigger_1;
+    SchmittTrigger reset_ext_trigger_1;
+    int count_limit1 = 1;
+    int count1 = 0;
     SchmittTrigger clock_trigger_2;
     SchmittTrigger reset_trigger_2;
-    int count_limit_2 = 0;
+    SchmittTrigger reset_ext_trigger_2;
+    int count_limit_2 = 1;
     int count_2 = 0;
     SchmittTrigger clock_trigger_3;
     SchmittTrigger reset_trigger_3;
-    int count_limit_3 = 0;
+    SchmittTrigger reset_ext_trigger_3;
+    int count_limit_3 = 1;
     int count_3 = 0;
     const float lightLambda = 0.075;
     float resetLight1 = 0.0;
     float resetLight2 = 0.0;
     float resetLight3 = 0.0;
   
+    PulseGenerator clockPulse1;
+    bool pulse1 = false;
+    PulseGenerator clockPulse2;
+    bool pulse2 = false;
+    PulseGenerator clockPulse3;
+    bool pulse3 = false;
 
     Steps() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-      /*
-        params.resize(NUM_PARAMS);
-        inputs.resize(NUM_INPUTS);
-        outputs.resize(NUM_OUTPUTS);
-        clock_trigger.setThresholds(0.0, 1.0);
-        reset_trigger.setThresholds(0.0, 1.0);
-        clock_trigger_2.setThresholds(0.0, 1.0);
-        reset_trigger_2.setThresholds(0.0, 1.0);
-        */
+
     }
 
 	void step() override;
@@ -79,36 +80,54 @@ struct Steps : Module {
 
 void Steps::step(){
 
-  count_limit = round(params[COUNT_NUM_PARAM].value);
+  count_limit1 = round(params[COUNT_NUM_PARAM_1].value);
   count_limit_2 = round(params[COUNT_NUM_PARAM_2].value);
   count_limit_3 = round(params[COUNT_NUM_PARAM_3].value);
   
-  bool reset = false;
+  bool reset1 = false;
   bool reset_2 = false;
-  bool reset_3 = false;  
+  bool reset_3 = false;
+  pulse1 = false;
   
-    if (reset_trigger.process(params[RST_BUTTON1].value)  || (reset_trigger.process(inputs[RESET_IN].value))){
-        reset = true;
-        count = 0;
-        outputs[OUTPUT].value = 0; 
+    if (reset_trigger_1.process(params[RST_BUTTON1].value)){
+        reset1 = true;
+        count1 = 0;
+        outputs[OUTPUT_1].value = 0; 
         resetLight1 = 1.0;
 
-    }  
+    }
+    if (reset_ext_trigger_1.process(inputs[RESET_IN_1].value)){
+        reset1 = true;
+        count1 = 0;
+        outputs[OUTPUT_1].value = 0; 
+        resetLight1 = 1.0;
+
+    } 
 
   resetLight1 -= resetLight1 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT1].value = resetLight1;
 
-  if (reset == false){
-		if (clock_trigger.process(inputs[CLK_IN].value) && count <= count_limit)
-					count++;	
+  if (reset1 == false){
+		if (clock_trigger_1.process(inputs[CLK_IN_1].value) && count1 <= count_limit1)
+					count1++;	
   }
-  if (count == count_limit) outputs[OUTPUT].value = 10.0;
-  if (count > count_limit){
-    count = 0;
-    outputs[OUTPUT].value = 0; 
+  if (count1 == count_limit1){
+      clockPulse1.trigger(1e-3);
   }
+  if (count1 > count_limit1){
+    count1 = 0;
+  }
+  pulse1 = clockPulse1.process(1.0 / engineGetSampleRate());
+  outputs[OUTPUT_1].value = pulse1 ? 10.0 : 0.0;
+    
   ///////////// counter 2
-  if (reset_trigger_2.process(params[RST_BUTTON2].value)  || (reset_trigger_2.process(inputs[RESET_IN_2].value))){
+  if (reset_trigger_2.process(params[RST_BUTTON2].value)){
+    reset_2 = true;
+    count_2 = 0;
+    outputs[OUTPUT_2].value = 0;
+    resetLight2 = 1.0;
+  }
+  if (reset_ext_trigger_2.process(inputs[RESET_IN_2].value)){
     reset_2 = true;
     count_2 = 0;
     outputs[OUTPUT_2].value = 0;
@@ -121,19 +140,27 @@ void Steps::step(){
 		if (clock_trigger_2.process(inputs[CLK_IN_2].value) && count_2 <= count_limit_2)
 					count_2++;	
   }
-  if (count_2 == count_limit_2) outputs[OUTPUT_2].value = 10.0;
+  if (count_2 == count_limit_2){
+    clockPulse2.trigger(1e-3);
+  }
   if (count_2 > count_limit_2){
     count_2 = 0;
-    outputs[OUTPUT_2].value = 0; 
   }  
-
+  pulse2 = clockPulse2.process(1.0 / engineGetSampleRate());
+  outputs[OUTPUT_2].value = pulse2 ? 10.0 : 0.0;
   ///////////// counter 3
-  if (reset_trigger_3.process(params[RST_BUTTON3].value)  || (reset_trigger_3.process(inputs[RESET_IN_3].value))){
+  if (reset_trigger_3.process(params[RST_BUTTON3].value)){
     reset_3 = true;
     count_3 = 0;
     outputs[OUTPUT_3].value = 0;
     resetLight3 = 1.0;
-  } 
+  }
+  if (reset_ext_trigger_3.process(inputs[RESET_IN_3].value)){
+    reset_3 = true;
+    count_3 = 0;
+    outputs[OUTPUT_3].value = 0;
+    resetLight3 = 1.0;
+  }  
   resetLight3 -= resetLight3 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT3].value = resetLight3;
 
@@ -141,12 +168,14 @@ void Steps::step(){
 		if (clock_trigger_3.process(inputs[CLK_IN_3].value) && count_3 <= count_limit_3)
 					count_3++;	
   }
-  if (count_3 == count_limit_3) outputs[OUTPUT_3].value = 10.0;
+  if (count_3 == count_limit_3){
+    clockPulse3.trigger(1e-3);
+  }
   if (count_3 > count_limit_3){
     count_3 = 0;
-    outputs[OUTPUT_3].value = 0; 
   }  
-
+  pulse3 = clockPulse3.process(1.0 / engineGetSampleRate());
+  outputs[OUTPUT_3].value = pulse3 ? 10.0 : 0.0;
 }
 
 ///////////////////////////////////
@@ -220,13 +249,13 @@ StepsWidget::StepsWidget() {
     NumberDisplayWidget *display1 = new NumberDisplayWidget();
     display1->box.pos = Vec(10,50);
     display1->box.size = Vec(30, 20);
-    display1->value = &module->count;
+    display1->value = &module->count1;
     addChild(display1);
   //STEPS DISPLAY  
     NumberDisplayWidget *display2 = new NumberDisplayWidget();
     display2->box.pos = Vec(50,50);
     display2->box.size = Vec(30, 20);
-    display2->value = &module->count_limit;
+    display2->value = &module->count_limit1;
     addChild(display2);
 
    int group_offset = 100;
@@ -234,11 +263,11 @@ StepsWidget::StepsWidget() {
     addParam(createParam<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 , 0.0, 1.0, 0.0));
     addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM, 1.0, 64.0, 1.0)); 
+    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1, 1.0, 64.0, 1.0)); 
 
-    addInput(createInput<as_PJ301MPort>(Vec(3, 120), module, Steps::RESET_IN));
-    addInput(createInput<as_PJ301MPort>(Vec(33, 120), module, Steps::CLK_IN));
-    addOutput(createOutput<as_PJ301MPort>(Vec(63, 120), module, Steps::OUTPUT));
+    addInput(createInput<as_PJ301MPort>(Vec(3, 120), module, Steps::RESET_IN_1));
+    addInput(createInput<as_PJ301MPort>(Vec(33, 120), module, Steps::CLK_IN_1));
+    addOutput(createOutput<as_PJ301MPort>(Vec(63, 120), module, Steps::OUTPUT_1));
   
   // counter 2
   //COUNT DISPLAY

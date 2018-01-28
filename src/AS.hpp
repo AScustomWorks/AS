@@ -42,6 +42,10 @@ struct Mixer8chWidget : ModuleWidget {
 	Mixer8chWidget();
 };
 
+struct QuadVCAWidget : ModuleWidget {
+	QuadVCAWidget();
+};
+
 struct TriggersWidget : ModuleWidget 
 { 
     TriggersWidget();
@@ -57,6 +61,14 @@ struct monoVUmeterWidget : ModuleWidget
 struct stereoVUmeterWidget : ModuleWidget 
 { 
     stereoVUmeterWidget();
+};
+
+struct LaunchGateWidget : ModuleWidget {
+	LaunchGateWidget();
+};
+
+struct SignalDelayWidget : ModuleWidget {
+	SignalDelayWidget();
 };
 
 struct DelayPlusFxWidget : ModuleWidget {
