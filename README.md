@@ -124,7 +124,7 @@ Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP 
 0.5.4: First relase of this module.
 
 ### Tremolo
-Tremolo Fx module with SHAPE, SPEED and BLEND parameters, your Tremolo to go!.
+Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (set your effect, duplicate the module and invert the phase for stereo tremolo setup)your Tremolo to go!.
 
 0.5.6: First relase of this module.
 
