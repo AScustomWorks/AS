@@ -108,22 +108,7 @@ void ReverbFx::step() {
 
 	float input_signal = clampf(inputs[SIGNAL_INPUT].value,-10.0,10.0);
 	//float input_signal = inputs[SIGNAL_INPUT].value;
-
-	/*
-	if(inputs[DECAY_CV_INPUT].active) {
-		roomsize = clampf(inputs[DECAY_CV_INPUT].value/8.0, 0.0, 1.0);
-	} else {
-		roomsize = params[DECAY_PARAM].value;
-	};
-	*/
 	roomsize = clampf(params[DECAY_PARAM].value + inputs[DECAY_CV_INPUT].value / 10.0, 0.0, 0.88);
-	/*
-	if(inputs[DAMP_CV_INPUT].active) {
-		damp = clampf(inputs[DAMP_CV_INPUT].value/8.0, 0.0, 1.0);
-	} else {
-		damp = params[DAMP_PARAM].value;
-	};
-*/
 	damp = clampf(params[DAMP_PARAM].value + inputs[DAMP_CV_INPUT].value / 10.0, 0.0, 1.0);
 
 	if( old_damp != damp ) reverb.setdamp(damp);
@@ -135,15 +120,6 @@ void ReverbFx::step() {
 	if (fx_bypass){
 		outputs[SIGNAL_OUTPUT].value = inputs[SIGNAL_INPUT].value;
 	}else {
-		/*
-		if(inputs[BLEND_CV_INPUT].active) {
-			outputs[SIGNAL_OUTPUT].value = input_signal + out1 * clampf(inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
-			lights[BLEND_LIGHT].value = clampf(inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
-		} else {
-			outputs[SIGNAL_OUTPUT].value = (input_signal + out1 * params[BLEND_PARAM].value);
-			lights[BLEND_LIGHT].value = params[BLEND_PARAM].value;
-		};
-		*/
 		outputs[SIGNAL_OUTPUT].value = input_signal + out1 * clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
 		//outputs[SIGNAL_OUTPUT2].value = input_signal + out2 * clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
 	}

@@ -67,6 +67,10 @@ struct LaunchGateWidget : ModuleWidget {
 	LaunchGateWidget();
 };
 
+struct KillGateWidget : ModuleWidget {
+	KillGateWidget();
+};
+
 struct SignalDelayWidget : ModuleWidget {
 	SignalDelayWidget();
 };
@@ -85,6 +89,11 @@ struct ReverbFxWidget : ModuleWidget {
 
 struct SuperDriveFxWidget : ModuleWidget {
 	SuperDriveFxWidget();
+};
+
+struct TremoloFxWidget : ModuleWidget 
+{ 
+    TremoloFxWidget();
 };
 
 struct WaveShaperWidget : ModuleWidget {
@@ -224,6 +233,14 @@ struct LedLight : BASE {
 	LedLight() {
 	  //this->box.size = Vec(20.0, 20.0);
 	  this->box.size = mm2px(Vec(6.0, 6.0));
+	}
+};
+
+/** Reads two adjacent lightIds, so `lightId` and `lightId + 1` must be defined */
+struct YellowRedLight : ModuleLightWidget {
+	YellowRedLight() {
+		addBaseColor(COLOR_YELLOW);
+		addBaseColor(COLOR_RED);
 	}
 };
 

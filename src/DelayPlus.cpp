@@ -154,8 +154,7 @@ void DelayPlusFx::step() {
 		highpassFilter.setCutoff(highpassFreq / engineGetSampleRate());
 		highpassFilter.process(wet);
 		wet = highpassFilter.highpass();
-		lastWet = wet;
-
+		//lastWet = wet;
 	}else {
 	//external color, to filter the wet delay signal outside of the module, or to feed another module
 		outputs[COLOR_SEND].value = wet;

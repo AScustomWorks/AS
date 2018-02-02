@@ -29,6 +29,7 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<stereoVUmeterWidget>("AS", "stereoVUmeterWidget", "Stereo VU meter", VISUAL_TAG, UTILITY_TAG));
 	p->addModel(createModel<StepsWidget>("AS", "Steps", "Steps", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG));
 	p->addModel(createModel<LaunchGateWidget>("AS", "LaunchGate", "Launch Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG));
+	p->addModel(createModel<KillGateWidget>("AS", "KillGate", "Kill Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG));
 	p->addModel(createModel<SignalDelayWidget>("AS", "SignalDelay", "Signal Delay", UTILITY_TAG, DELAY_TAG));
 	p->addModel(createModel<Multiple2_5Widget>("AS", "Multiple2_5", "Multiple 2 x 5", MULTIPLE_TAG, UTILITY_TAG));
 	p->addModel(createModel<TriggersWidget>("AS", "Triggers", "Triggers", SWITCH_TAG, UTILITY_TAG));
@@ -38,6 +39,7 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<PhaserFxWidget>("AS", "PhaserFx", "Phaser FX", EFFECT_TAG));
 	p->addModel(createModel<ReverbFxWidget>("AS", "ReverbFx", "Reverb FX", REVERB_TAG, EFFECT_TAG));
 	p->addModel(createModel<SuperDriveFxWidget>("AS", "SuperDriveFx", "Super Drive FX", AMPLIFIER_TAG, EFFECT_TAG));
+	p->addModel(createModel<TremoloFxWidget>("AS", "TremoloFxWidget", "Tremolo FX", EFFECT_TAG));
 	p->addModel(createModel<WaveShaperWidget>("AS", "WaveShaper", "Wave Shaper FX", WAVESHAPER_TAG, EFFECT_TAG));
 	//BLANK PANELS
 	p->addModel(createModel<BlankPanel4Widget>("AS", "BlankPanel4", "Blank Panel 4", BLANK_TAG));

@@ -1,5 +1,5 @@
 SLUG = AS
-VERSION = 0.5.5
+VERSION = 0.5.6
 
 # FLAGS will be passed to both the C and C++ compiler
 FLAGS +=
@@ -14,16 +14,20 @@ LDFLAGS +=
 SOURCES = $(wildcard src/*.cpp freeverb/*.cpp)
 
 
+# Add files to the ZIP package when running `make dist`
+# The compiled plugin is automatically added.
+DISTRIBUTABLES += $(wildcard LICENSE*) res
+
 # Must include the VCV plugin Makefile framework
 include ../../plugin.mk
 
 
 # Convenience target for packaging files into a ZIP file
-.PHONY: dist
-dist: all
-	rm -rf dist
-	mkdir -p dist/$(SLUG)
-	cp LICENSE* dist/$(SLUG)/
-	cp $(TARGET) dist/$(SLUG)/
-	cp -R res dist/$(SLUG)/
-	cd dist && zip -5 -r $(SLUG)-$(VERSION)-$(ARCH).zip $(SLUG)
+#.PHONY: dist
+#dist: all
+#	rm -rf dist
+#	mkdir -p dist/$(SLUG)
+#	cp LICENSE* dist/$(SLUG)/
+#	cp $(TARGET) dist/$(SLUG)/
+#	cp -R res dist/$(SLUG)/
+#	cd dist && zip -5 -r $(SLUG)-$(VERSION)-$(ARCH).zip $(SLUG)

@@ -1,7 +1,7 @@
 
 # AS modules for VCV Rack
 
-AS is a collection of modules for [VCV Rack](https://vcvrack.com/) by Alfredo Santamaria, Need a custom work?, you can find me at [Hakken.com.mx](https://www.hakken.com.mx/).
+AS is a collection of modules for [VCV Rack](https://vcvrack.com/) by Alfredo Santamaria, Need a custom work?, you can find me at [Hakken.com.mx](http://www.hakken.com.mx/).
 
 AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria , All rights reserved.
 Panel graphics in res/ are © 2017
@@ -87,9 +87,14 @@ V 0.5.4: First relase of this module.
 V 0.5.5: code tweaks.
 
 ### Launch Gate
-Delay the start of a flow of CV signals by a set number of clock ticks (TAOS request).
+Delay the start of a flow of signals by a set number of clock ticks (TAOS request).
 
 V 0.5.5: First relase of this module.
+
+### Kill Gate
+Cut the flow of signals after a set number of clock ticks (TAOS request).
+
+V 0.5.6: First relase of this module.
 
 ### Signal Delay
 Delay the incomming CV signal by set milliseconds, with signal thru and delayed output. You can chain several Signal Delay modules together for unlimited length of delays. (TAOS request).
@@ -104,19 +109,24 @@ V 0.5.4: Updated look.
 V 0.5.5 CHanged the time knob reading from exponential to linear, now you can set any value precisely at the whole 1 to 10k ms range.
 
 ### Phaser
-Autodafe's Phaser module. Mods: graphics, bypass switch.
+Autodafe's Phaser Fx module. Mods: graphics, bypass switch.
 
 V 0.5.4: Added CV inputs for each parameter, updated look.
 
 ### SuperDrive
-Overdrive/clipping module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
+Overdrive/clipping Fx module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
 
 V 0.5.4: First relase of this module.
 
 ### Reverb
-Reverb module based on ML_modules reverb and Freeverb code, with DECAY, DAMP and BLEND parameters, a little bit tamed Reverb with mixed output signal.
+Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP and BLEND parameters, a little bit tamed Reverb with mixed output signal.
 
 0.5.4: First relase of this module.
+
+### Tremolo
+Tremolo Fx module with SHAPE, SPEED and BLEND parameters, your Tremolo to go!.
+
+0.5.6: First relase of this module.
 
 ### WaveShaper
 HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
