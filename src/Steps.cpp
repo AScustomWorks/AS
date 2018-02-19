@@ -58,10 +58,10 @@ struct Steps : Module {
     SchmittTrigger reset_ext_trigger_3;
     int count_limit_3 = 1;
     int count_3 = 0;
-    const float lightLambda = 0.075;
-    float resetLight1 = 0.0;
-    float resetLight2 = 0.0;
-    float resetLight3 = 0.0;
+    const float lightLambda = 0.075f;
+    float resetLight1 = 0.0f;
+    float resetLight2 = 0.0f;
+    float resetLight3 = 0.0f;
   
     PulseGenerator clockPulse1;
     bool pulse1 = false;
@@ -93,14 +93,14 @@ void Steps::step(){
         reset1 = true;
         count1 = 0;
         outputs[OUTPUT_1].value = 0; 
-        resetLight1 = 1.0;
+        resetLight1 = 1.0f;
 
     }
     if (reset_ext_trigger_1.process(inputs[RESET_IN_1].value)){
         reset1 = true;
         count1 = 0;
         outputs[OUTPUT_1].value = 0; 
-        resetLight1 = 1.0;
+        resetLight1 = 1.0f;
 
     } 
 
@@ -118,20 +118,20 @@ void Steps::step(){
     count1 = 0;
   }
   pulse1 = clockPulse1.process(1.0 / engineGetSampleRate());
-  outputs[OUTPUT_1].value = pulse1 ? 10.0 : 0.0;
+  outputs[OUTPUT_1].value = pulse1 ? 10.0f : 0.0f;
     
   ///////////// counter 2
   if (reset_trigger_2.process(params[RST_BUTTON2].value)){
     reset_2 = true;
     count_2 = 0;
     outputs[OUTPUT_2].value = 0;
-    resetLight2 = 1.0;
+    resetLight2 = 1.0f;
   }
   if (reset_ext_trigger_2.process(inputs[RESET_IN_2].value)){
     reset_2 = true;
     count_2 = 0;
     outputs[OUTPUT_2].value = 0;
-    resetLight2 = 1.0;
+    resetLight2 = 1.0f;
   } 
   resetLight2 -= resetLight2 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT2].value = resetLight2;
@@ -147,19 +147,19 @@ void Steps::step(){
     count_2 = 0;
   }  
   pulse2 = clockPulse2.process(1.0 / engineGetSampleRate());
-  outputs[OUTPUT_2].value = pulse2 ? 10.0 : 0.0;
+  outputs[OUTPUT_2].value = pulse2 ? 10.0f : 0.0f;
   ///////////// counter 3
   if (reset_trigger_3.process(params[RST_BUTTON3].value)){
     reset_3 = true;
     count_3 = 0;
     outputs[OUTPUT_3].value = 0;
-    resetLight3 = 1.0;
+    resetLight3 = 1.0f;
   }
   if (reset_ext_trigger_3.process(inputs[RESET_IN_3].value)){
     reset_3 = true;
     count_3 = 0;
     outputs[OUTPUT_3].value = 0;
-    resetLight3 = 1.0;
+    resetLight3 = 1.0f;
   }  
   resetLight3 -= resetLight3 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT3].value = resetLight3;
@@ -175,7 +175,7 @@ void Steps::step(){
     count_3 = 0;
   }  
   pulse3 = clockPulse3.process(1.0 / engineGetSampleRate());
-  outputs[OUTPUT_3].value = pulse3 ? 10.0 : 0.0;
+  outputs[OUTPUT_3].value = pulse3 ? 10.0f : 0.0f;
 }
 
 ///////////////////////////////////
@@ -191,13 +191,14 @@ struct NumberDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+    NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
     nvgFillColor(vg, backgroundColor);
     nvgFill(vg);
-    nvgStrokeWidth(vg, 1.0);
+    nvgStrokeWidth(vg, 1.5);
     nvgStrokeColor(vg, borderColor);
     nvgStroke(vg);    
     // text 
@@ -260,10 +261,10 @@ StepsWidget::StepsWidget() {
 
    int group_offset = 100;
 
-    addParam(createParam<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 , 0.0, 1.0, 0.0));
+    addParam(createParam<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
     addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1, 1.0, 64.0, 1.0)); 
+    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
 
     addInput(createInput<as_PJ301MPort>(Vec(3, 120), module, Steps::RESET_IN_1));
     addInput(createInput<as_PJ301MPort>(Vec(33, 120), module, Steps::CLK_IN_1));
@@ -283,10 +284,10 @@ StepsWidget::StepsWidget() {
     display4->value = &module->count_limit_2;
     addChild(display4);
 
-    addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset), module, Steps::RST_BUTTON2 , 0.0, 1.0, 0.0));
+    addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset), module, Steps::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
     addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset), module, Steps::RESET_LIGHT2));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2, 1.0, 64.0, 1.0)); 
+    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
 
     addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset), module, Steps::RESET_IN_2));
     addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset), module, Steps::CLK_IN_2));
@@ -306,10 +307,10 @@ StepsWidget::StepsWidget() {
     display6->value = &module->count_limit_3;
     addChild(display6);
 
-    addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset*2), module, Steps::RST_BUTTON3 , 0.0, 1.0, 0.0));
+    addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset*2), module, Steps::RST_BUTTON3 , 0.0f, 1.0f, 0.0f));
     addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset*2), module, Steps::RESET_LIGHT3));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3, 1.0, 64.0, 1.0)); 
+    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3, 1.0f, 64.0f, 1.0f)); 
 
     addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset*2), module, Steps::RESET_IN_3));
     addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset*2), module, Steps::CLK_IN_3));

@@ -37,14 +37,14 @@ struct SignalDelay : Module {
 	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer1;
 	DoubleRingBuffer<float, 16> outBuffer1;
 	SampleRateConverter<1> src1;
-	float lastWet1 = 0.0;
+	float lastWet1 = 0.0f;
 
 	int lcd_tempo1 = 0;
 
 	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer2;
 	DoubleRingBuffer<float, 16> outBuffer2;
 	SampleRateConverter<1> src2;
-	float lastWet2 = 0.0;
+	float lastWet2 = 0.0f;
 
 	int lcd_tempo2 = 0;
 
@@ -62,7 +62,7 @@ void SignalDelay::step() {
 	float dry1 = in1 + lastWet1 * feedback1;
 	// Compute delay time in seconds
 	//delay time in seconds. Linear reading, now easy to setup any value by the digit
-	float delay1 = clampf(params[TIME_1_PARAM].value + inputs[TIME_1_INPUT].value, 0.001, 10.0);
+	float delay1 = clampf(params[TIME_1_PARAM].value + inputs[TIME_1_INPUT].value, 0.001f, 10.0f);
 	//LCD display tempo  - show value as ms
 	lcd_tempo1 = std::round(delay1*1000);
 	// Number of delay samples
@@ -88,7 +88,7 @@ void SignalDelay::step() {
 		outBuffer1.endIncr(outFrames1);
 	}
 
-	float wet1 = 0.0;
+	float wet1 = 0.0f;
 	if (!outBuffer1.empty()) {
 		wet1 = outBuffer1.shift();
 	}
@@ -102,7 +102,7 @@ void SignalDelay::step() {
 	float dry2 = in2 + lastWet2 * feedback2;
 	// Compute delay time in seconds
 	//delay time in seconds. Linear reading, now easy to setup any value by the digit
-	float delay2 = clampf(params[TIME_2_PARAM].value + inputs[TIME_2_INPUT].value, 0.001, 10.0);
+	float delay2 = clampf(params[TIME_2_PARAM].value + inputs[TIME_2_INPUT].value, 0.001f, 10.0f);
 	//LCD display tempo  - show value as ms
 	lcd_tempo2 = std::round(delay2*1000);
 	// Number of delay samples
@@ -153,13 +153,14 @@ struct MsDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+	 NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
     nvgFillColor(vg, backgroundColor);
     nvgFill(vg);
-    nvgStrokeWidth(vg, 1.0);
+    nvgStrokeWidth(vg, 1.5);
     nvgStrokeColor(vg, borderColor);
     nvgStroke(vg);    
     // text 
@@ -212,7 +213,7 @@ SignalDelayWidget::SignalDelayWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(createParam<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM, 0.001, 10.0, 0.350));
+	addParam(createParam<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM, 0.001f, 10.0f, 0.350f));
 	//CV INPUT
 	addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 87), module, SignalDelay::TIME_1_INPUT));
 	//INPUT
@@ -230,7 +231,7 @@ SignalDelayWidget::SignalDelayWidget() {
 	display2->value = &module->lcd_tempo2;
 	addChild(display2); 
 	//KNOBS
-	addParam(createParam<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM, 0.001, 10.0, 0.350));
+	addParam(createParam<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM, 0.001f, 10.0f, 0.350f));
 	//CV INPUT
 	addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 87+mod_offset), module, SignalDelay::TIME_2_INPUT));
 	//INPUT

@@ -27,9 +27,9 @@ struct VCA : Module {
 		NUM_OUTPUTS
 	};
 
-	float v1= 0.0;
-	float v2= 0.0;
-	const float expBase = 50.0;
+	float v1= 0.0f;
+	float v2= 0.0f;
+	const float expBase = 50.0f;
 
 	VCA() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {}
 	void step() override;
@@ -40,9 +40,9 @@ void VCA::step() {
 	v1 = inputs[IN1_INPUT].value * params[LEVEL1_PARAM].value;
 	if(inputs[ENV1_INPUT].active){
 		if(params[MODE1_PARAM].value==1){
-			v1 *= clampf(inputs[ENV1_INPUT].value / 10.0, 0.0, 1.0);
+			v1 *= clampf(inputs[ENV1_INPUT].value / 10.0f, 0.0f, 1.0f);
 		}else{
-			v1 *= rescalef(powf(expBase, clampf(inputs[ENV1_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+			v1 *= rescalef(powf(expBase, clampf(inputs[ENV1_INPUT].value / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 		}
 	}
 	outputs[OUT1_OUTPUT].value = v1;
@@ -50,9 +50,9 @@ void VCA::step() {
 	v2 = inputs[IN2_INPUT].value * params[LEVEL2_PARAM].value;
 	if(inputs[ENV2_INPUT].active){
 		if(params[MODE2_PARAM].value){
-			v2 *= clampf(inputs[ENV2_INPUT].value / 10.0, 0.0, 1.0);
+			v2 *= clampf(inputs[ENV2_INPUT].value / 10.0f, 0.0f, 1.0f);
 		}else{
-			v2 *= rescalef(powf(expBase, clampf(inputs[ENV2_INPUT].value / 10.0, 0.0, 1.0)), 1.0, expBase, 0.0, 1.0);
+			v2 *= rescalef(powf(expBase, clampf(inputs[ENV2_INPUT].value / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 		}
 	}
 	outputs[OUT2_OUTPUT].value = v2;
@@ -76,11 +76,11 @@ VCAWidget::VCAWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
     //SLIDERS
-	addParam(createParam<as_SlidePot>(Vec(10, 70), module, VCA::LEVEL1_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(55, 70), module, VCA::LEVEL2_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_SlidePot>(Vec(10, 70), module, VCA::LEVEL1_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_SlidePot>(Vec(55, 70), module, VCA::LEVEL2_PARAM, 0.0f, 1.0f, 0.5f));
     //MODE SWITCHES
-    addParam(createParam<as_CKSS>(Vec(14, 190), module, VCA::MODE1_PARAM, 0.0, 1.0, 1.0));
-	addParam(createParam<as_CKSS>(Vec(59, 190), module, VCA::MODE2_PARAM, 0.0, 1.0, 1.0));
+    addParam(createParam<as_CKSS>(Vec(14, 190), module, VCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f));
+	addParam(createParam<as_CKSS>(Vec(59, 190), module, VCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f));
 	//PORTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 217), module, VCA::ENV1_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(55, 217), module, VCA::ENV2_INPUT));

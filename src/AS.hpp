@@ -18,6 +18,9 @@ struct Multiple2_5Widget : ModuleWidget {
 	Multiple2_5Widget();
 };
 
+struct Merge2_5Widget : ModuleWidget {
+	Merge2_5Widget();
+};
 struct BPMClockWidget : ModuleWidget {
 	BPMClockWidget();
 };
@@ -50,6 +53,16 @@ struct TriggersWidget : ModuleWidget
 { 
     TriggersWidget();
 };
+
+struct TriggersMKIWidget : ModuleWidget 
+{ 
+    TriggersMKIWidget();
+};
+struct TriggersMKIIWidget : ModuleWidget 
+{ 
+    TriggersMKIIWidget();
+};
+
 struct StepsWidget : ModuleWidget 
 { 
     StepsWidget();

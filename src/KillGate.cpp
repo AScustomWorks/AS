@@ -53,8 +53,8 @@ struct KillGate : Module {
  
     const float lightLambda = 0.075;
 
-    float resetLight1 = 0.0;
-    float resetLight2 = 0.0;
+    float resetLight1 = 0.0f;
+    float resetLight2 = 0.0f;
 
     bool gate1_open= true;
     bool gate2_open= true;
@@ -116,7 +116,7 @@ void KillGate::step(){
       gate1_open = false;
   }
   if (!gate1_open){
-    outputs[OUTPUT_1].value = 0;   
+    outputs[OUTPUT_1].value = 0.0f;   
   }else{
     outputs[OUTPUT_1].value = inputs[INPUT_1].value;
   }
@@ -125,13 +125,13 @@ void KillGate::step(){
     reset_2 = true;
     count_2 = 0;
     gate2_open=true;
-    resetLight2 = 1.0;
+    resetLight2 = 1.0f;
   }
   if (reset_ext_trigger_2.process(inputs[RESET_IN_2].value)){
     reset_2 = true;
     count_2 = 0;
     gate2_open=true;
-    resetLight2 = 1.0;
+    resetLight2 = 1.0f;
   } 
   resetLight2 -= resetLight2 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT2].value = resetLight2;
@@ -147,7 +147,7 @@ void KillGate::step(){
       gate2_open = false;
   }
   if (!gate2_open){
-    outputs[OUTPUT_2].value = 0;
+    outputs[OUTPUT_2].value = 0.0f;
   }else{
     outputs[OUTPUT_2].value = inputs[INPUT_2].value;
   }
@@ -167,13 +167,14 @@ struct NumberDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+     NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
     nvgFillColor(vg, backgroundColor);
     nvgFill(vg);
-    nvgStrokeWidth(vg, 1.0);
+    nvgStrokeWidth(vg, 1.5);
     nvgStrokeColor(vg, borderColor);
     nvgStroke(vg);    
     // text 
@@ -236,10 +237,10 @@ KillGateWidget::KillGateWidget() {
 
    int group_offset = 160;
 
-    addParam(createParam<LEDBezel>(Vec(11, 82), module, KillGate::RST_BUTTON1 , 0.0, 1.0, 0.0));
+    addParam(createParam<LEDBezel>(Vec(11, 82), module, KillGate::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
     addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, KillGate::RESET_LIGHT1));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1, 1.0, 64.0, 1.0)); 
+    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
 
     addInput(createInput<as_PJ301MPort>(Vec(10, 125), module, KillGate::RESET_IN_1));
     addInput(createInput<as_PJ301MPort>(Vec(55, 125), module, KillGate::CLK_IN_1));
@@ -261,10 +262,10 @@ KillGateWidget::KillGateWidget() {
     display4->value = &module->count_limit_2;
     addChild(display4);
 
-    addParam(createParam<LEDBezel>(Vec(11, 82+ group_offset), module, KillGate::RST_BUTTON2 , 0.0, 1.0, 0.0));
+    addParam(createParam<LEDBezel>(Vec(11, 82+ group_offset), module, KillGate::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
     addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, KillGate::RESET_LIGHT2));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2, 1.0, 64.0, 1.0)); 
+    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
 
     addInput(createInput<as_PJ301MPort>(Vec(10, 125 + group_offset), module, KillGate::RESET_IN_2));
     addInput(createInput<as_PJ301MPort>(Vec(55, 125 + group_offset), module, KillGate::CLK_IN_2));

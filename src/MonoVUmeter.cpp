@@ -41,7 +41,7 @@ void monoVUmeter::step(){
 	outputs[OUT].value = signal_in;
 	//VU METER BARS LIGHTS
 	vuBar.dBInterval = 3;
-	vuBar.setValue(signal_in / 10.0);
+	vuBar.setValue(signal_in / 10.0f);
 	for (int i = 0; i < 15; i++){
 		lights[METER_LIGHT + i].setBrightnessSmooth(vuBar.getBrightness(i));
 	}

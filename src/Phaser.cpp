@@ -76,22 +76,22 @@ struct PhaserFx : Module{
 class Phaser{
 public:
 	Phaser()  //initialise to some usefull defaults...
-    	: _fb( .7f )
-    	, _lfoPhase( 0.f )
-    	, _depth( 1.f )
+    	: _fb( 0.7f )
+    	, _lfoPhase( 0.0f )
+    	, _depth( 1.0f )
         , _zm1( 0.f )
     {
-    	Range( 440.f, 1600.f );
-    	Rate( .5f );
+    	Range( 440.0f, 1600.0f );
+    	Rate( 0.5f );
     }
 
     void Range( float fMin, float fMax ){ // Hz
-    	_dmin = fMin / (SR/2.f);
-        _dmax = fMax / (SR/2.f);
+    	_dmin = fMin / (SR/2.0f);
+        _dmax = fMax / (SR/2.0f);
     }
 
     void Rate( float rate ){ // cps
-    	_lfoInc = 2.f * F_PI * (rate / SR);
+    	_lfoInc = 2.0f * F_PI * (rate / SR);
     }
 
     void Feedback( float fb ){ // 0 -> <1.
@@ -107,8 +107,8 @@ public:
         float d  = _dmin + (_dmax-_dmin) * ((sin( _lfoPhase ) + 
 1.f)/2.f);
         _lfoPhase += _lfoInc;
-        if( _lfoPhase >= F_PI * 2.f )
-        	_lfoPhase -= F_PI * 2.f;
+        if( _lfoPhase >= F_PI * 2.0f )
+        	_lfoPhase -= F_PI * 2.0f;
 
         //update filter coeffs
         for( int i=0; i<6; i++ )
@@ -129,12 +129,12 @@ private:
 	class AllpassDelay{
     public:
     	AllpassDelay()
-        	: _a1( 0.f )
-            , _zm1( 0.f )
+        	: _a1( 0.0f )
+            , _zm1( 0.0f )
             {}
 
         void Delay( float delay ){ //sample delay time
-        	_a1 = (1.f - delay) / (1.f + delay);
+        	_a1 = (1.0f - delay) / (1.0f + delay);
         }
 
         float Update( float inSamp ){
@@ -166,14 +166,14 @@ void PhaserFx::step() {
     {
 		  fx_bypass = !fx_bypass;
 	  }
-    lights[BYPASS_LED].value = fx_bypass ? 1.0 : 0.0;
+    lights[BYPASS_LED].value = fx_bypass ? 1.00 : 0.0;
 
 
-	float rate = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0, 0.0, 1.0);
-	float feedback = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0, 0.0, 0.95);
-	float depth = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0, 0.0, 1.0);
+	float rate = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float feedback = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 0.95f);
+	float depth = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
-	float input = inputs[INPUT].value / 5.0;
+	float input = inputs[INPUT].value / 5.0f;
 
 		pha->Rate(rate);
 		pha->Feedback(feedback);
@@ -183,14 +183,14 @@ void PhaserFx::step() {
 
 	//check bypass switch status
 	if (fx_bypass){
-		outputs[OUT].value = input * 5;
+		outputs[OUT].value = input * 5.0f;
 	}else{
-		outputs[OUT].value= out * 5;
+		outputs[OUT].value = out * 5.0f;
 	}
 
-	lights[RATE_LIGHT].value = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0, 0.0, 1.0);
-	lights[FBK_LIGHT].value = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0, 0.0, 1.0);
-	lights[DEPTH_LIGHT].value = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0, 0.0, 1.0);
+	lights[RATE_LIGHT].value = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[FBK_LIGHT].value = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[DEPTH_LIGHT].value = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 }
 
 PhaserFxWidget::PhaserFxWidget() {
@@ -210,15 +210,15 @@ PhaserFxWidget::PhaserFxWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
     //KNOBS  
-	addParam(createParam<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM, 0, 1, 0));
-	addParam(createParam<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM, 0, 0.95, 0));
-	addParam(createParam<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM, 0, 1, 0));
+	addParam(createParam<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f));
+	addParam(createParam<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f));
+	addParam(createParam<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f));
 	//LIGHTS
 	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 57), module, PhaserFx::RATE_LIGHT));
 	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
 	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, PhaserFx::BYPASS_SWITCH , 0.0, 1.0, 0.0));
+  	addParam(createParam<LEDBezel>(Vec(33, 260), module, PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, PhaserFx::BYPASS_LED));
     //INS/OUTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, PhaserFx::INPUT));

@@ -65,7 +65,7 @@ void WaveShaper::step() {
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)){
 		fx_bypass = !fx_bypass;
 	}
-    lights[BYPASS_LED].value = fx_bypass ? 1.0 : 0.0;
+    lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
 	float input = inputs[INPUT].value;
 
@@ -77,8 +77,8 @@ void WaveShaper::step() {
 	shape = clampf(shape, -5.0f, 5.0f) * 0.2f;
 	shape *= 0.99f;
 
-	const float shapeB = (1.0 - shape) / (1.0 + shape);
-	const float shapeA = (4.0 * shape) / ((1.0 - shape) * (1.0 + shape));
+	const float shapeB = (1.0f - shape) / (1.0f + shape);
+	const float shapeA = (4.0f * shape) / ((1.0f - shape) * (1.0f + shape));
 
 	float output = input * (shapeA + shapeB);
 	output = output / ((std::abs(input) * shapeA) + shapeB);
@@ -108,14 +108,14 @@ WaveShaperWidget::WaveShaperWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, WaveShaper::AMOUNT_PARAM, -5.0, 5.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, WaveShaper::SCALE_PARAM, -1.0, 1.0, 1.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, WaveShaper::AMOUNT_PARAM, -5.0f, 5.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, WaveShaper::SCALE_PARAM, -1.0f, 1.0f, 1.0f));
 	//INPUTS
 	addInput(createInput<as_PJ301MPort>(Vec(33, 180), module, WaveShaper::AMOUNT_INPUT));
 	//RANGE SWITCH
-	addParam(createParam<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM, 0.0, 1.0, 0.0));
+	addParam(createParam<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM, 0.0f, 1.0f, 0.0f));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, WaveShaper::BYPASS_SWITCH , 0.0, 1.0, 0.0));
+  	addParam(createParam<LEDBezel>(Vec(33, 260), module, WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, WaveShaper::BYPASS_LED));
     //INS/OUTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, WaveShaper::INPUT));

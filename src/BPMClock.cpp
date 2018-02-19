@@ -12,21 +12,21 @@
 #include <iomanip>
 
 struct LFOGenerator {
-	float phase = 0.0;
-	float pw = 0.5;
-	float freq = 1.0;	
+	float phase = 0.0f;
+	float pw = 0.5f;
+	float freq = 1.0f;	
 	void setFreq(float freq_to_set)
   {
     freq = freq_to_set;
   }		
 	void step(float dt) {
-		float deltaPhase = fminf(freq * dt, 0.5);
+		float deltaPhase = fminf(freq * dt, 0.5f);
 		phase += deltaPhase;
-		if (phase >= 1.0)
-			phase -= 1.0;
+		if (phase >= 1.0f)
+			phase -= 1.0f;
 	}	
 	float sqr() {
-		float sqr = phase < pw ? 1.0 : -1.0;
+		float sqr = phase < pw ? 1.0f : -1.0f;
 		return sqr;
 	}
 };
@@ -67,8 +67,8 @@ struct BPMClock : Module {
 	SchmittTrigger reset_btn_trig;
   SchmittTrigger reset_ext_trig;
 
-  const float lightLambda = 0.075;
-  float resetLight = 0.0;
+  const float lightLambda = 0.075f;
+  float resetLight = 0.0f;
 
   bool running = true;
   
@@ -77,12 +77,13 @@ struct BPMClock : Module {
   int bars_count = 0;
   
   int tempo, time_sig_top, time_sig_bottom = 0;
-  float frequency = 2.0;
+  float frequency = 2.0f;
   int quarters_count_limit = 4;
   int eighths_count_limit = 2;
   int bars_count_limit = 16;
   
 	BPMClock() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
+    /*
     params.resize(NUM_PARAMS);
     inputs.resize(NUM_INPUTS);
     outputs.resize(NUM_OUTPUTS);
@@ -90,7 +91,7 @@ struct BPMClock : Module {
     eighths_trig.setThresholds(0.0, 1.0);
     quarters_trig.setThresholds(0.0, 1.0);
     bars_trig.setThresholds(0.0, 1.0);
-
+*/
   }
 	void step() override;
 
@@ -121,14 +122,14 @@ void BPMClock::step()
   if (run_button_trig.process(params[RUN_SWITCH].value)){
 		  running = !running;
 	}
-  lights[RUN_LED].value = running ? 1.0 : 0.0;
+  lights[RUN_LED].value = running ? 1.0f : 0.0f;
     
   tempo = std::round(params[TEMPO_PARAM].value);
   time_sig_top = std::round(params[TIMESIGTOP_PARAM].value);
   time_sig_bottom = std::round(params[TIMESIGBOTTOM_PARAM].value);
   time_sig_bottom = std::pow(2,time_sig_bottom+1);
  
-  frequency = tempo/60.0;
+  frequency = tempo/60.0f;
   //RESET TRIGGERS
   //EXTERNAL RESET TRIGGER
 	if (reset_ext_trig.process(inputs[RESET_INPUT].value)) {
@@ -136,16 +137,16 @@ void BPMClock::step()
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
-    outputs[RESET_OUTPUT].value = 10.0;
+    outputs[RESET_OUTPUT].value = 10.0f;
   //INTERNAL RESET TRIGGER
   }else  if (reset_btn_trig.process(params[RESET_SWITCH].value)) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
-    outputs[RESET_OUTPUT].value = 10.0;
+    outputs[RESET_OUTPUT].value = 10.0f;
   }else{
-    outputs[RESET_OUTPUT].value = 0.0;
+    outputs[RESET_OUTPUT].value = 0.0f;
   }
 
   resetLight -= resetLight / lightLambda / engineGetSampleRate();
@@ -188,7 +189,7 @@ void BPMClock::step()
     }
   
     clock.step(1.0 / engineGetSampleRate());
-    outputs[SIXTEENTHS_OUT].value = clampf(10.0 * clock.sqr(), 0.0, 10.0);
+    outputs[SIXTEENTHS_OUT].value = clampf(10.0f * clock.sqr(), 0.0f, 10.0f);
  
     if (eighths_trig.process(clock.sqr()) && eighths_count <= eighths_count_limit)
       eighths_count++;
@@ -196,8 +197,8 @@ void BPMClock::step()
     {
       eighths_count = 0;    
     }
-    if (eighths_count == 0) outputs[EIGHTHS_OUT].value = 10.0;
-    else outputs[EIGHTHS_OUT].value = 0.0;
+    if (eighths_count == 0) outputs[EIGHTHS_OUT].value = 10.0f;
+    else outputs[EIGHTHS_OUT].value = 0.0f;
     
     if (quarters_trig.process(clock.sqr()) && quarters_count <= quarters_count_limit)
       quarters_count++;
@@ -205,8 +206,8 @@ void BPMClock::step()
     {
       quarters_count = 0;    
     }
-    if (quarters_count == 0) outputs[BEAT_OUT].value = 10.0;
-    else outputs[BEAT_OUT].value = 0.0;
+    if (quarters_count == 0) outputs[BEAT_OUT].value = 10.0f;
+    else outputs[BEAT_OUT].value = 0.0f;
     
     if (bars_trig.process(clock.sqr()) && bars_count <= bars_count_limit)
       bars_count++;
@@ -214,8 +215,8 @@ void BPMClock::step()
     {
       bars_count = 0;    
     }
-    if (bars_count == 0) outputs[BAR_OUT].value = 10.0;
-    else outputs[BAR_OUT].value = 0.0; 
+    if (bars_count == 0) outputs[BAR_OUT].value = 10.0f;
+    else outputs[BAR_OUT].value = 0.0f; 
     }
 }
 
@@ -231,13 +232,14 @@ struct BpmDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+     NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
     nvgFillColor(vg, backgroundColor);
     nvgFill(vg);
-    nvgStrokeWidth(vg, 1.0);
+    nvgStrokeWidth(vg, 1.5);
     nvgStrokeColor(vg, borderColor);
     nvgStroke(vg);    
     // text 
@@ -278,7 +280,8 @@ struct SigDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+     NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
@@ -336,7 +339,7 @@ BPMClockWidget::BPMClockWidget() {
   display->value = &module->tempo;
   addChild(display); 
   //TEMPO KNOB
-  addParam(createParam<as_KnobBlack>(Vec(26, 74), module, BPMClock::TEMPO_PARAM, 40.0, 250.0, 120.0));
+  addParam(createParam<as_KnobBlack>(Vec(26, 74), module, BPMClock::TEMPO_PARAM, 40.0f, 250.0f, 120.0f));
   //SIG TOP DISPLAY 
   SigDisplayWidget *display2 = new SigDisplayWidget();
   display2->box.pos = Vec(54,123);
@@ -344,7 +347,7 @@ BPMClockWidget::BPMClockWidget() {
   display2->value = &module->time_sig_top;
   addChild(display2);
   //SIG TOP KNOB
-  addParam(createParam<as_KnobBlack>(Vec(8, 110), module, BPMClock::TIMESIGTOP_PARAM,2.0, 15.0, 4.0));
+  addParam(createParam<as_KnobBlack>(Vec(8, 110), module, BPMClock::TIMESIGTOP_PARAM,2.0f, 15.0f, 4.0f));
   //SIG BOTTOM DISPLAY    
   SigDisplayWidget *display3 = new SigDisplayWidget();
   display3->box.pos = Vec(54,155);
@@ -352,11 +355,11 @@ BPMClockWidget::BPMClockWidget() {
   display3->value = &module->time_sig_bottom;
   addChild(display3); 
   //SIG BOTTOM KNOB
-  addParam(createParam<as_KnobBlack>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0, 3.0, 1.0));
+  addParam(createParam<as_KnobBlack>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f));
   //RESET & RUN LEDS
-  addParam(createParam<LEDBezel>(Vec(55, 202), module, BPMClock::RUN_SWITCH , 0.0, 1.0, 0.0));
+  addParam(createParam<LEDBezel>(Vec(55, 202), module, BPMClock::RUN_SWITCH , 0.0f, 1.0f, 0.0f));
   addChild(createLight<LedLight<RedLight>>(Vec(57.2, 204.3), module, BPMClock::RUN_LED));
-  addParam(createParam<LEDBezel>(Vec(10.5, 202), module, BPMClock::RESET_SWITCH , 0.0, 1.0, 0.0));
+  addParam(createParam<LEDBezel>(Vec(10.5, 202), module, BPMClock::RESET_SWITCH , 0.0f, 1.0f, 0.0f));
   addChild(createLight<LedLight<RedLight>>(Vec(12.7, 204.3), module, BPMClock::RESET_LED));
   //RESET INPUT
   addInput(createInput<as_PJ301MPort>(Vec(10, 240), module, BPMClock::RESET_INPUT));

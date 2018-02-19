@@ -35,11 +35,12 @@ struct Triggers: Module {
     };
 
     SchmittTrigger runTrigger;
+     SchmittTrigger BtnTrigger;
 
-    const float lightLambda = 0.075;
-    float resetLight = 0.0;
-    float output = 0.0;
-    float volts=0;
+    const float lightLambda = 0.075f;
+    float resetLight = 0.0f;
+    float output = 0.0f;
+    float volts=0.0f;
     bool running = false;
     Triggers() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
     void step() override;
@@ -70,24 +71,24 @@ struct Triggers: Module {
 
 void Triggers::step() {
 
-    output = 0.0;
-    volts = 0.0;
+    output = 0.0f;
+    volts = 0.0f;
     //RUN BUTTON STATUS
     if (runTrigger.process(params[RUN_SWITCH].value)){
         running = !running;
     }
     lights[RUN_LED].value = running ? 1.0 : 0.0;
      if (running){
-        volts = clampf(params[VOLTAGE_PARAM].value, 1.0, 10.0);
+        volts = clampf(params[VOLTAGE_PARAM].value, 1.0f, 10.0f);
 	}
     outputs[RUN_OUTPUT1].value =  volts;
     outputs[RUN_OUTPUT2].value = volts;
     outputs[RUN_OUTPUT3].value = volts;
     outputs[RUN_OUTPUT4].value = volts;
     //MOMENTARY BUTTON STATUS
-    if (params[MOMENTARY_SWITCH].value > 0.0){
+    if (BtnTrigger.process(params[MOMENTARY_SWITCH].value)){
           resetLight = 1.0;
-          output = clampf(params[VOLTAGE_PARAM].value, 1.0, 10.0);
+          output = clampf(params[VOLTAGE_PARAM].value, 1.0f, 10.0f);
 	}
     resetLight -= resetLight / lightLambda / engineGetSampleRate();
     lights[MOMENTARY_LED].value = resetLight;
@@ -121,7 +122,7 @@ TriggersWidget::TriggersWidget() {
     addParam(createParam<BigLEDBezel>(Vec(led_center, 232), module, Triggers::MOMENTARY_SWITCH, 0.0, 1.0, 0.0));
     addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 232+led_offset), module, Triggers::MOMENTARY_LED));
 	//PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, Triggers::VOLTAGE_PARAM, 1.0, 10.0, 5.0));
+	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, Triggers::VOLTAGE_PARAM, 1.0, 10.0, 5.5));
 
     //PORTS
     addOutput(createOutput<as_PJ301MPort>(Vec(10, 180), module, Triggers::RUN_OUTPUT1));

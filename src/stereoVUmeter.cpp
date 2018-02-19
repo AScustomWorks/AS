@@ -47,9 +47,9 @@ void stereoVUmeter::step(){
 	//VU METER BARS LIGHTS
 	vuBar.dBInterval = 3;
 	for (int i = 0; i < 15; i++){
-		vuBar.setValue(signal_in_Left / 10.0);
+		vuBar.setValue(signal_in_Left / 10.0f);
 		lights[METER_LIGHT_LEFT + i].setBrightnessSmooth(vuBar.getBrightness(i));
-		vuBar.setValue(signal_in_Right / 10.0);
+		vuBar.setValue(signal_in_Right / 10.0f);
 		lights[METER_LIGHT_RIGHT + i].setBrightnessSmooth(vuBar.getBrightness(i));
 	}
 };

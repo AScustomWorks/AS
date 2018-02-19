@@ -93,7 +93,7 @@ void Multiple2_5::step() {
 Multiple2_5Widget::Multiple2_5Widget() {
 	Multiple2_5 *module = new Multiple2_5();
 	setModule(module);
-	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+	box.size = Vec(5 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
 	{
 		SVGPanel *panel = new SVGPanel();
@@ -107,23 +107,22 @@ Multiple2_5Widget::Multiple2_5Widget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 65), module, Multiple2_5::INPUT1));
-	addInput(createInput<as_PJ301MPort>(Vec(55, 65), module, Multiple2_5::INPUT2));
+	addInput(createInput<as_PJ301MPort>(Vec(8, 65), module, Multiple2_5::INPUT1));
+	addInput(createInput<as_PJ301MPort>(Vec(43, 65), module, Multiple2_5::INPUT2));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(10, 130), module, Multiple2_5::OUT11));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 130), module, Multiple2_5::OUT21));
+	addOutput(createOutput<as_PJ301MPort>(Vec(8, 130), module, Multiple2_5::OUT11));
+	addOutput(createOutput<as_PJ301MPort>(Vec(43, 130), module, Multiple2_5::OUT21));
 	
-	addOutput(createOutput<as_PJ301MPort>(Vec(10, 175), module, Multiple2_5::OUT12));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 175), module, Multiple2_5::OUT22));
+	addOutput(createOutput<as_PJ301MPort>(Vec(8, 175), module, Multiple2_5::OUT12));
+	addOutput(createOutput<as_PJ301MPort>(Vec(43, 175), module, Multiple2_5::OUT22));
 
-	addOutput(createOutput<as_PJ301MPort>(Vec(10, 220), module, Multiple2_5::OUT13));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 220), module, Multiple2_5::OUT23));
+	addOutput(createOutput<as_PJ301MPort>(Vec(8, 220), module, Multiple2_5::OUT13));
+	addOutput(createOutput<as_PJ301MPort>(Vec(43, 220), module, Multiple2_5::OUT23));
 
-	addOutput(createOutput<as_PJ301MPort>(Vec(10, 265), module, Multiple2_5::OUT14));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 265), module, Multiple2_5::OUT24));
+	addOutput(createOutput<as_PJ301MPort>(Vec(8, 265), module, Multiple2_5::OUT14));
+	addOutput(createOutput<as_PJ301MPort>(Vec(43, 265), module, Multiple2_5::OUT24));
 
-	addOutput(createOutput<as_PJ301MPort>(Vec(10, 310), module, Multiple2_5::OUT15));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, Multiple2_5::OUT25));
-
+	addOutput(createOutput<as_PJ301MPort>(Vec(8, 310), module, Multiple2_5::OUT15));
+	addOutput(createOutput<as_PJ301MPort>(Vec(43, 310), module, Multiple2_5::OUT25));
 
 }

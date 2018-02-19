@@ -131,8 +131,8 @@ struct Mixer8ch : Module {
 	float ch8m = false;
 	float chMm = false;	
 
-	float mixL = 0.0;
-	float mixR = 0.0;
+	float mixL = 0.0f;
+	float mixR = 0.0f;
 
 
  	json_t *toJson()override {
@@ -219,76 +219,76 @@ void Mixer8ch::step() {
 	if (ch1mute.process(params[CH1MUTE].value)) {
 		ch1m = !ch1m;	
 	}
-	lights[MUTE_LIGHT1].value = ch1m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT1].value = ch1m ? 1.0f : 0.0f;
 	if (ch2mute.process(params[CH2MUTE].value)) {
 		ch2m = !ch2m;	
 	}
-	lights[MUTE_LIGHT2].value = ch2m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT2].value = ch2m ? 1.0f : 0.0f;
 	if (ch3mute.process(params[CH3MUTE].value)) {
 		ch3m = !ch3m;
 	}
-	lights[MUTE_LIGHT3].value = ch3m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT3].value = ch3m ? 1.0f : 0.0f;
 	if (ch4mute.process(params[CH4MUTE].value)) {
 		ch4m = !ch4m;
 	}
-	lights[MUTE_LIGHT4].value = ch4m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT4].value = ch4m ? 1.0f : 0.0f;
 	if (ch5mute.process(params[CH5MUTE].value)) {
 		ch5m = !ch5m;	
 	}
-	lights[MUTE_LIGHT5].value = ch5m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT5].value = ch5m ? 1.0f : 0.0f;
 	if (ch6mute.process(params[CH6MUTE].value)) {
 		ch6m = !ch6m;
 	}
-	lights[MUTE_LIGHT6].value = ch6m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT6].value = ch6m ? 1.0f : 0.0f;
 	if (ch7mute.process(params[CH7MUTE].value)) {
 		ch7m = !ch7m;
 	}
-	lights[MUTE_LIGHT7].value = ch7m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT7].value = ch7m ? 1.0f : 0.0f;
 	if (ch8mute.process(params[CH8MUTE].value)) {
 		ch8m = !ch8m;
 	}
-	lights[MUTE_LIGHT8].value = ch8m ? 1.0 : 0.0;
+	lights[MUTE_LIGHT8].value = ch8m ? 1.0f : 0.0f;
 
 	if (chMmute.process(params[MASTER_MUTE].value)) {
 		chMm = !chMm;
 	}
-	lights[MUTE_LIGHT_MASTER].value = chMm ? 1.0 : 0.0;
+	lights[MUTE_LIGHT_MASTER].value = chMm ? 1.0f : 0.0f;
 	//CHANNEL RESULTS
-	float ch1L =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanL(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value))* clampf(inputs[CH1_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch1R =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanR(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value)) * clampf(inputs[CH1_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch1L =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanL(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value))* clampf(inputs[CH1_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch1R =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanR(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value)) * clampf(inputs[CH1_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 	
-	float ch2L = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanL(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clampf(inputs[CH2_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch2R = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanR(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clampf(inputs[CH2_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch2L = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanL(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clampf(inputs[CH2_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch2R = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanR(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clampf(inputs[CH2_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 	
-	float ch3L = (1-ch3m) *(inputs[CH3_INPUT].value) * params[CH3_PARAM].value * PanL(params[CH3_PAN_PARAM].value,(inputs[CH3_CV_PAN_INPUT].value)) * clampf(inputs[CH3_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch3R = (1-ch3m) *(inputs[CH3_INPUT].value) * params[CH3_PARAM].value * PanR(params[CH3_PAN_PARAM].value,(inputs[CH3_CV_PAN_INPUT].value)) * clampf(inputs[CH3_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch3L = (1-ch3m) *(inputs[CH3_INPUT].value) * params[CH3_PARAM].value * PanL(params[CH3_PAN_PARAM].value,(inputs[CH3_CV_PAN_INPUT].value)) * clampf(inputs[CH3_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch3R = (1-ch3m) *(inputs[CH3_INPUT].value) * params[CH3_PARAM].value * PanR(params[CH3_PAN_PARAM].value,(inputs[CH3_CV_PAN_INPUT].value)) * clampf(inputs[CH3_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 
-	float ch4L = (1-ch4m) *(inputs[CH4_INPUT].value) * params[CH4_PARAM].value * PanL(params[CH4_PAN_PARAM].value,(inputs[CH4_CV_PAN_INPUT].value)) * clampf(inputs[CH4_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch4R = (1-ch4m) *(inputs[CH4_INPUT].value) * params[CH4_PARAM].value * PanR(params[CH4_PAN_PARAM].value,(inputs[CH4_CV_PAN_INPUT].value)) * clampf(inputs[CH4_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch4L = (1-ch4m) *(inputs[CH4_INPUT].value) * params[CH4_PARAM].value * PanL(params[CH4_PAN_PARAM].value,(inputs[CH4_CV_PAN_INPUT].value)) * clampf(inputs[CH4_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch4R = (1-ch4m) *(inputs[CH4_INPUT].value) * params[CH4_PARAM].value * PanR(params[CH4_PAN_PARAM].value,(inputs[CH4_CV_PAN_INPUT].value)) * clampf(inputs[CH4_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 
 
-	float ch5L = (1-ch5m) *(inputs[CH5_INPUT].value) * params[CH5_PARAM].value * PanL(params[CH5_PAN_PARAM].value,(inputs[CH5_CV_PAN_INPUT].value)) * clampf(inputs[CH5_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch5R = (1-ch5m) *(inputs[CH5_INPUT].value) * params[CH5_PARAM].value * PanR(params[CH5_PAN_PARAM].value,(inputs[CH5_CV_PAN_INPUT].value)) * clampf(inputs[CH5_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch5L = (1-ch5m) *(inputs[CH5_INPUT].value) * params[CH5_PARAM].value * PanL(params[CH5_PAN_PARAM].value,(inputs[CH5_CV_PAN_INPUT].value)) * clampf(inputs[CH5_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch5R = (1-ch5m) *(inputs[CH5_INPUT].value) * params[CH5_PARAM].value * PanR(params[CH5_PAN_PARAM].value,(inputs[CH5_CV_PAN_INPUT].value)) * clampf(inputs[CH5_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 
-	float ch6L = (1-ch6m) *(inputs[CH6_INPUT].value) * params[CH6_PARAM].value * PanL(params[CH6_PAN_PARAM].value,(inputs[CH6_CV_PAN_INPUT].value)) * clampf(inputs[CH6_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch6R = (1-ch6m) *(inputs[CH6_INPUT].value) * params[CH6_PARAM].value * PanR(params[CH6_PAN_PARAM].value,(inputs[CH6_CV_PAN_INPUT].value)) * clampf(inputs[CH6_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch7L = (1-ch7m) *(inputs[CH7_INPUT].value) * params[CH7_PARAM].value * PanL(params[CH7_PAN_PARAM].value,(inputs[CH7_CV_PAN_INPUT].value)) * clampf(inputs[CH7_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch7R = (1-ch7m) *(inputs[CH7_INPUT].value) * params[CH7_PARAM].value * PanR(params[CH7_PAN_PARAM].value,(inputs[CH7_CV_PAN_INPUT].value)) * clampf(inputs[CH7_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch6L = (1-ch6m) *(inputs[CH6_INPUT].value) * params[CH6_PARAM].value * PanL(params[CH6_PAN_PARAM].value,(inputs[CH6_CV_PAN_INPUT].value)) * clampf(inputs[CH6_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch6R = (1-ch6m) *(inputs[CH6_INPUT].value) * params[CH6_PARAM].value * PanR(params[CH6_PAN_PARAM].value,(inputs[CH6_CV_PAN_INPUT].value)) * clampf(inputs[CH6_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch7L = (1-ch7m) *(inputs[CH7_INPUT].value) * params[CH7_PARAM].value * PanL(params[CH7_PAN_PARAM].value,(inputs[CH7_CV_PAN_INPUT].value)) * clampf(inputs[CH7_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch7R = (1-ch7m) *(inputs[CH7_INPUT].value) * params[CH7_PARAM].value * PanR(params[CH7_PAN_PARAM].value,(inputs[CH7_CV_PAN_INPUT].value)) * clampf(inputs[CH7_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 
-	float ch8L = (1-ch8m) *(inputs[CH8_INPUT].value) * params[CH8_PARAM].value * PanL(params[CH8_PAN_PARAM].value,(inputs[CH8_CV_PAN_INPUT].value)) * clampf(inputs[CH8_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-	float ch8R = (1-ch8m) *(inputs[CH8_INPUT].value) * params[CH8_PARAM].value * PanR(params[CH8_PAN_PARAM].value,(inputs[CH8_CV_PAN_INPUT].value)) * clampf(inputs[CH8_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+	float ch8L = (1-ch8m) *(inputs[CH8_INPUT].value) * params[CH8_PARAM].value * PanL(params[CH8_PAN_PARAM].value,(inputs[CH8_CV_PAN_INPUT].value)) * clampf(inputs[CH8_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+	float ch8R = (1-ch8m) *(inputs[CH8_INPUT].value) * params[CH8_PARAM].value * PanR(params[CH8_PAN_PARAM].value,(inputs[CH8_CV_PAN_INPUT].value)) * clampf(inputs[CH8_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 
 	if(!chMm){
-		mixL = (ch1L + ch2L + ch3L +ch4L + ch5L + ch6L + ch7L + ch8L) * params[MIX_PARAM].value * clampf(inputs[MIX_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
-		mixR = (ch1R + ch2R + ch3R +ch4R + ch5R + ch6R + ch7R + ch8R) * params[MIX_PARAM].value * clampf(inputs[MIX_CV_INPUT].normalize(10.0) / 10.0, 0.0, 1.0);
+		mixL = (ch1L + ch2L + ch3L +ch4L + ch5L + ch6L + ch7L + ch8L) * params[MIX_PARAM].value * clampf(inputs[MIX_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
+		mixR = (ch1R + ch2R + ch3R +ch4R + ch5R + ch6R + ch7R + ch8R) * params[MIX_PARAM].value * clampf(inputs[MIX_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 		//CHECK FOR INPUT FROM ANOTHER MIXER
 		if(inputs[LINK_L].active && inputs[LINK_R].active){
 			mixL += inputs[LINK_L].value;
 			mixR += inputs[LINK_R].value;
 		}
 	}else{
-		mixL = 0.0;
-		mixR = 0.0;
+		mixL = 0.0f;
+		mixR = 0.0f;
 	}
 
 	outputs[CH1_OUTPUT].value= ch1L+ch1R; 
@@ -303,7 +303,7 @@ void Mixer8ch::step() {
 
 	if(!outputs[MIX_OUTPUTR].active){
 		outputs[MIX_OUTPUTL].value= mixL+mixR;
-		outputs[MIX_OUTPUTR].value= 0.0;
+		outputs[MIX_OUTPUTR].value= 0.0f;
 	}else{
 		outputs[MIX_OUTPUTL].value= mixL;
 		outputs[MIX_OUTPUTR].value= mixR;
@@ -335,41 +335,41 @@ Mixer8chWidget::Mixer8chWidget() {
 	//PAN KNOBS
  	static const float columnPos[8] = {33,73,113,153, 193, 233, 273, 313};
 	static const float panPosY = 180;
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[0]-5, panPosY), module, Mixer8ch::CH1_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[1]-5, panPosY), module, Mixer8ch::CH2_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[2]-5, panPosY), module, Mixer8ch::CH3_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[3]-5, panPosY), module, Mixer8ch::CH4_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[4]-5, panPosY), module, Mixer8ch::CH5_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[5]-5, panPosY), module, Mixer8ch::CH6_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[6]-5, panPosY), module, Mixer8ch::CH7_PAN_PARAM, -1.0, 1.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(columnPos[7]-5, panPosY), module, Mixer8ch::CH8_PAN_PARAM, -1.0, 1.0, 0.0));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[0]-5, panPosY), module, Mixer8ch::CH1_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[1]-5, panPosY), module, Mixer8ch::CH2_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[2]-5, panPosY), module, Mixer8ch::CH3_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[3]-5, panPosY), module, Mixer8ch::CH4_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[4]-5, panPosY), module, Mixer8ch::CH5_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[5]-5, panPosY), module, Mixer8ch::CH6_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[6]-5, panPosY), module, Mixer8ch::CH7_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+	addParam(createParam<as_KnobBlack>(Vec(columnPos[7]-5, panPosY), module, Mixer8ch::CH8_PAN_PARAM, -1.0f, 1.0f, 0.0f));
 	//VOLUME FADERS
 	static const float volPosY = 223; 
-	addParam(createParam<as_FaderPot>(Vec(columnPos[0]+2, volPosY), module, Mixer8ch::CH1_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[1]+2, volPosY), module, Mixer8ch::CH2_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[2]+2, volPosY), module, Mixer8ch::CH3_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[3]+2, volPosY), module, Mixer8ch::CH4_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[4]+2, volPosY), module, Mixer8ch::CH5_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[5]+2, volPosY), module, Mixer8ch::CH6_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[6]+2, volPosY), module, Mixer8ch::CH7_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<as_FaderPot>(Vec(columnPos[7]+2, volPosY), module, Mixer8ch::CH8_PARAM, 0.0, 1.0, 0.8));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[0]+2, volPosY), module, Mixer8ch::CH1_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[1]+2, volPosY), module, Mixer8ch::CH2_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[2]+2, volPosY), module, Mixer8ch::CH3_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[3]+2, volPosY), module, Mixer8ch::CH4_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[4]+2, volPosY), module, Mixer8ch::CH5_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[5]+2, volPosY), module, Mixer8ch::CH6_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[6]+2, volPosY), module, Mixer8ch::CH7_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<as_FaderPot>(Vec(columnPos[7]+2, volPosY), module, Mixer8ch::CH8_PARAM, 0.0f, 1.0f, 0.8f));
 	//MUTES
 	static const float mutePosY = 310;
-	addParam(createParam<LEDBezel>(Vec(columnPos[0]+3, mutePosY), module, Mixer8ch::CH1MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[0]+3, mutePosY), module, Mixer8ch::CH1MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT1));
-	addParam(createParam<LEDBezel>(Vec(columnPos[1]+3, mutePosY), module, Mixer8ch::CH2MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[1]+3, mutePosY), module, Mixer8ch::CH2MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT2));
-	addParam(createParam<LEDBezel>(Vec(columnPos[2]+3, mutePosY), module, Mixer8ch::CH3MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[2]+3, mutePosY), module, Mixer8ch::CH3MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[2]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT3));
-	addParam(createParam<LEDBezel>(Vec(columnPos[3]+3, mutePosY), module, Mixer8ch::CH4MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[3]+3, mutePosY), module, Mixer8ch::CH4MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[3]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT4));
-	addParam(createParam<LEDBezel>(Vec(columnPos[4]+3, mutePosY), module, Mixer8ch::CH5MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[4]+3, mutePosY), module, Mixer8ch::CH5MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[4]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT5));
-	addParam(createParam<LEDBezel>(Vec(columnPos[5]+3, mutePosY), module, Mixer8ch::CH6MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[5]+3, mutePosY), module, Mixer8ch::CH6MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[5]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT6));
-	addParam(createParam<LEDBezel>(Vec(columnPos[6]+3, mutePosY), module, Mixer8ch::CH7MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[6]+3, mutePosY), module, Mixer8ch::CH7MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[6]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT7));
-	addParam(createParam<LEDBezel>(Vec(columnPos[7]+3, mutePosY), module, Mixer8ch::CH8MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<LEDBezel>(Vec(columnPos[7]+3, mutePosY), module, Mixer8ch::CH8MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(columnPos[7]+5.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT8));
 	//PORTS
  	static const float portsY[4] = {60,90,120,150};
@@ -417,8 +417,8 @@ Mixer8chWidget::Mixer8chWidget() {
 	addOutput(createOutput<as_PJ301MPort>(Vec(356, portsY[0]), module, Mixer8ch::MIX_OUTPUTL));
 	addOutput(createOutput<as_PJ301MPort>(Vec(356, portsY[1]), module, Mixer8ch::MIX_OUTPUTR));
 	addInput(createInput<as_PJ301MPort>(Vec(356, portsY[3]), module, Mixer8ch::MIX_CV_INPUT));
-	addParam(createParam<as_FaderPot>(Vec(356, volPosY), module, Mixer8ch::MIX_PARAM, 0.0, 1.0, 0.8));
-	addParam(createParam<LEDBezel>(Vec(356, mutePosY), module, Mixer8ch::MASTER_MUTE , 0.0, 1.0, 0.0));
+	addParam(createParam<as_FaderPot>(Vec(356, volPosY), module, Mixer8ch::MIX_PARAM, 0.0f, 1.0f, 0.8f));
+	addParam(createParam<LEDBezel>(Vec(356, mutePosY), module, Mixer8ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(356+2.2, mutePosY+2), module, Mixer8ch::MUTE_LIGHT_MASTER));
 
 	//LINK

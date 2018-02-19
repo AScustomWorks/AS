@@ -47,7 +47,7 @@ struct DelayPlusFx : Module {
 	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer;
 	DoubleRingBuffer<float, 16> outBuffer;
 	SampleRateConverter<1> src;
-	float lastWet = 0.0;
+	float lastWet = 0.0f;
 	RCFilter lowpassFilter;
 	RCFilter highpassFilter;
 
@@ -89,11 +89,11 @@ void DelayPlusFx::step() {
     {
 		  fx_bypass = !fx_bypass;
 	  }
-    lights[BYPASS_LED].value = fx_bypass ? 1.0 : 0.0;
+    lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
 	// Get input to delay block
 	float in = inputs[IN_INPUT].value;
-	float feedback = clampf(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0, 0.0, 1.0);
+	float feedback = clampf(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0f, 0.0f, 1.0f);
 	float dry = in + lastWet * feedback;
 
 	// Compute delay time in seconds
@@ -136,7 +136,7 @@ void DelayPlusFx::step() {
 	}
 	float out;
 	float mix;
-	float wet = 0.0;
+	float wet = 0.0f;
 	if (!outBuffer.empty()) {
 		wet = outBuffer.shift();
 	}
@@ -145,12 +145,12 @@ void DelayPlusFx::step() {
 		//internal color
 		// Apply color to delay wet output
 		// TODO Make it sound better
-		float color = clampf(params[COLOR_PARAM].value + inputs[COLOR_INPUT].value / 10.0, 0.0, 1.0);
-		float lowpassFreq = 10000.0 * powf(10.0, clampf(2.0*color, 0.0, 1.0));
+		float color = clampf(params[COLOR_PARAM].value + inputs[COLOR_INPUT].value / 10.0f, 0.0f, 1.0f);
+		float lowpassFreq = 10000.0f * powf(10.0f, clampf(2.0*color, 0.0f, 1.0f));
 		lowpassFilter.setCutoff(lowpassFreq / engineGetSampleRate());
 		lowpassFilter.process(wet);
 		wet = lowpassFilter.lowpass();
-		float highpassFreq = 10.0 * powf(100.0, clampf(2.0*color - 1.0, 0.0, 1.0));
+		float highpassFreq = 10.0f * powf(100.0f, clampf(2.0f*color - 1.0f, 0.0f, 1.0f));
 		highpassFilter.setCutoff(highpassFreq / engineGetSampleRate());
 		highpassFilter.process(wet);
 		wet = highpassFilter.highpass();
@@ -161,7 +161,7 @@ void DelayPlusFx::step() {
 		wet = inputs[COLOR_RETURN].value;	
 	}
 	lastWet = wet;
-	mix = clampf(params[MIX_PARAM].value + inputs[MIX_INPUT].value / 10.0, 0.0, 1.0);
+	mix = clampf(params[MIX_PARAM].value + inputs[MIX_INPUT].value / 10.0f, 0.0f, 1.0f);
 	out = crossf(in, wet, mix);
 	//check bypass switch status
 	if (fx_bypass){
@@ -184,13 +184,14 @@ struct MsDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+   // NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
+	 NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
     nvgFillColor(vg, backgroundColor);
     nvgFill(vg);
-    nvgStrokeWidth(vg, 1.0);
+    nvgStrokeWidth(vg, 1.5);
     nvgStrokeColor(vg, borderColor);
     nvgStroke(vg);    
     // text 
@@ -243,12 +244,12 @@ DelayPlusFxWidget::DelayPlusFxWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.001, 10.0, 0.350));
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f));
 	//BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(49, 272+y_offset), module, DelayPlusFx::BYPASS_SWITCH , 0.0, 1.0, 0.0));
+  	addParam(createParam<LEDBezel>(Vec(49, 272+y_offset), module, DelayPlusFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(51.2, 274+y_offset), module, DelayPlusFx::BYPASS_LED));
 	//INPUTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 45+y_offset), module, DelayPlusFx::TIME_INPUT));

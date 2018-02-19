@@ -10,48 +10,48 @@
 
 //LFO CODE *****************************
 struct LowFrequencyOscillator {
-	float phase = 0.0;
-	float pw = 0.5;
-	float freq = 1.0;
+	float phase = 0.0f;
+	float pw = 0.5f;
+	float freq = 1.0f;
 	bool offset = false;
 	bool invert = false;
 	SchmittTrigger resetTrigger;
 	LowFrequencyOscillator() {
-		resetTrigger.setThresholds(0.0, 0.01);
+		resetTrigger.setThresholds(0.0f, 0.01f);
 	}
 	void setPitch(float pitch) {
-		pitch = fminf(pitch, 8.0);
-		freq = powf(2.0, pitch);
+		pitch = fminf(pitch, 8.0f);
+		freq = powf(2.0f, pitch);
 	}
 	void setPulseWidth(float pw_) {
-		const float pwMin = 0.01;
-		pw = clampf(pw_, pwMin, 1.0 - pwMin);
+		const float pwMin = 0.01f;
+		pw = clampf(pw_, pwMin, 1.0f - pwMin);
 	}
 	void setReset(float reset) {
 		if (resetTrigger.process(reset)) {
-			phase = 0.0;
+			phase = 0.0f;
 		}
 	}
 	void step(float dt) {
-		float deltaPhase = fminf(freq * dt, 0.5);
+		float deltaPhase = fminf(freq * dt, 0.5f);
 		phase += deltaPhase;
-		if (phase >= 1.0)
-			phase -= 1.0;
+		if (phase >= 1.0f)
+			phase -= 1.0f;
 	}
 	float sin() {
 		if (offset)
-			return 1.0 - cosf(2*M_PI * phase) * (invert ? -1.0 : 1.0);
+			return 1.0f - cosf(2*M_PI * phase) * (invert ? -1.0f : 1.0f);
 		else
-			return sinf(2*M_PI * phase) * (invert ? -1.0 : 1.0);
+			return sinf(2.0f*M_PI * phase) * (invert ? -1.0f : 1.0f);
 	}
 	float tri(float x) {
-		return 4.0 * fabsf(x - roundf(x));
+		return 4.0f * fabsf(x - roundf(x));
 	}
 	float tri() {
 		if (offset)
 			return tri(invert ? phase - 0.5 : phase);
 		else
-			return -1.0 + tri(invert ? phase - 0.25 : phase - 0.75);
+			return -1.0f + tri(invert ? phase - 0.25f : phase - 0.75f);
 	}
 	/*
 	float saw(float x) {
@@ -69,7 +69,7 @@ struct LowFrequencyOscillator {
 	}
 	*/
 	float light() {
-		return sinf(2*M_PI * phase);
+		return sinf(2.0f*M_PI * phase);
 	}
 };
 //LFO CODE *****************************
@@ -135,11 +135,11 @@ struct TremoloFx : Module{
 		
 	}
 	
-	float input_signal =0.0;
-	float output_signal = 0.0;
-	float tremolo_signal = 0.0;
-	float blend_control = 0.0;
-	float lfo_modulation = 0.0;
+	float input_signal =0.0f;
+	float output_signal = 0.0f;
+	float tremolo_signal = 0.0f;
+	float blend_control = 0.0f;
+	float lfo_modulation = 0.0f;
 	
 };
 
@@ -148,35 +148,35 @@ void TremoloFx::step() {
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)){
 		  fx_bypass = !fx_bypass;
 	}
-    lights[BYPASS_LED].value = fx_bypass ? 1.0 : 0.0;
+    lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
-	input_signal = clampf(inputs[SIGNAL_INPUT].value,-10.0,10.0);
+	input_signal = clampf(inputs[SIGNAL_INPUT].value,-10.0f,10.0f);
 
 	//oscillator.setPitch(params[FREQ_PARAM].value);
-	oscillator.setPitch( clampf(params[FREQ_PARAM].value + inputs[FREQ_CV_INPUT].value, 0.0, 3.5) );
-	oscillator.offset = (1.0);
-	oscillator.invert = (params[INVERT_PARAM].value <= 0.0);
-	oscillator.setPulseWidth(0.5);
-	oscillator.step(1.0 / engineGetSampleRate());
+	oscillator.setPitch( clampf(params[FREQ_PARAM].value + inputs[FREQ_CV_INPUT].value, 0.0f, 3.5f) );
+	oscillator.offset = (1.0f);
+	oscillator.invert = (params[INVERT_PARAM].value <= 0.0f);
+	oscillator.setPulseWidth(0.5f);
+	oscillator.step(1.0f / engineGetSampleRate());
 
-	float wave = clampf( params[WAVE_PARAM].value + inputs[WAVE_CV_INPUT].value, 0.0, 1.0 );
+	float wave = clampf( params[WAVE_PARAM].value + inputs[WAVE_CV_INPUT].value, 0.0f, 1.0f );
 	float interp = crossf(oscillator.sin(), oscillator.tri(), wave);
 
-	lfo_modulation = 5.0 * interp;
+	lfo_modulation = 5.0f * interp;
 
 	//check bypass switch status
 	if (fx_bypass){
 		outputs[SIGNAL_OUTPUT].value = input_signal;
 	}else {
-		tremolo_signal = input_signal * clampf(lfo_modulation/10, 0.0, 1.0);
-		blend_control = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
+		tremolo_signal = input_signal * clampf(lfo_modulation/10.0f, 0.0f, 1.0f);
+		blend_control = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 		output_signal = crossf(input_signal,tremolo_signal,blend_control);
 		outputs[SIGNAL_OUTPUT].value = output_signal;
 	}
 
-	lights[PHASE_POS_LIGHT].setBrightnessSmooth(fmaxf(0.0, oscillator.light()));
-	lights[PHASE_NEG_LIGHT].setBrightnessSmooth(fmaxf(0.0, -oscillator.light()));
-	lights[BLEND_LIGHT].value = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
+	lights[PHASE_POS_LIGHT].setBrightnessSmooth(fmaxf(0.0f, oscillator.light()));
+	lights[PHASE_NEG_LIGHT].setBrightnessSmooth(fmaxf(0.0f, -oscillator.light()));
+	lights[BLEND_LIGHT].value = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 }
 
@@ -197,16 +197,16 @@ TremoloFxWidget::TremoloFxWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//phase switch
-	addParam(createParam<as_CKSS>(Vec(13, 100), module, TremoloFx::INVERT_PARAM, 0.0, 1.0, 1.0));
+	addParam(createParam<as_CKSS>(Vec(13, 100), module, TremoloFx::INVERT_PARAM, 0.0f, 1.0f, 1.0f));
     //KNOBS  
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, TremoloFx::WAVE_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, TremoloFx::FREQ_PARAM, 0, 3.5, 1.75));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 190), module, TremoloFx::BLEND_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, TremoloFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, TremoloFx::FREQ_PARAM, 0.0f, 3.5f, 1.75f));
+	addParam(createParam<as_FxKnobWhite>(Vec(43, 190), module, TremoloFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f));
 	//LIGHTS
 	addChild(createLight<SmallLight<YellowRedLight>>(Vec(39, 122), module, TremoloFx::PHASE_POS_LIGHT));
 	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, TremoloFx::BLEND_LIGHT));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, TremoloFx::BYPASS_SWITCH , 0.0, 1.0, 0.0));
+  	addParam(createParam<LEDBezel>(Vec(33, 260), module, TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
   	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, TremoloFx::BYPASS_LED));
     //INS/OUTS
 	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, TremoloFx::SIGNAL_INPUT));

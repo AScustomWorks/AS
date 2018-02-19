@@ -48,6 +48,13 @@ V 0.5.2: added MIX L & R input to chain mixers without giving up 2 mixer channel
 ### Multi 2x5
 2x5 Signal multiplier.
 
+V 0.5.7 Module size reduced to 5HP
+
+### Merge 2x5
+2x5 CV Signal merger.
+
+V 0.5.7: First relase of this module.
+
 ### Mono VU Meter
 V 0.5.4, New module added, Mono VU Meter made to match the 8CH Mixer.
 
@@ -70,14 +77,35 @@ V 0.5.4 Added dc blocker code, modified a bit the internal parameters.
 
 V 0.5.5 Extendend the freq range 1 octave below.
 
+V 0.5.7 Module size reduced to 4HP
+
 ### TinySine
 VCV tutorial module. Mods: graphics, proper sine wave.
+
+V 0.5.7 Module size reduced to 4HP
 
 ### TriLFO
 Fundamental LFO module. Mods:graphics, controls stripped to the basics but you get 3 LFOS on the same space.
 
 ### Triggers
 A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigger outputs, trigger volts knob going from 1 to 10 v output.
+
+(NOTICE: Triggers MKI will supersede Triggers, so Triggers will be removed from the plugin by v0.6 but you have time now to replace it on your current patches and keep everything working fine).
+
+### Triggers MKI
+A manual CV signal trigger module with latch and temporary triggers, volts knob lets you adjust from 0 to 10 v output.
+
+V 0.5.7: First relase of this module.
+
+### Triggers MKII
+A manual CV signal temporary trigger module with labeling integrated, so you remember where the signal is going.
+
+The labels list includes:
+    "------", "MUTE","  SOLO"," RESET"," DRUMS","  KICK"," SNARE"," HIHAT","  CLAP","  PERC","BASS 1","BASS 2"," GTR 1",
+    " GTR 2","LEAD 1","LEAD 2"," PAD 1"," PAD 2","CHORDS","  FX 1","  FX 2"," SEQ 1"," SEQ 2"," MIX 1"," MIX 2",    
+    " AUX 1"," AUX 2","    ON","   OFF"," START","  STOP"," PAUSE","    UP","  DOWN","  LEFT"," RIGHT",
+
+V 0.5.7: First relase of this module.
 
 ### Steps
 Strum's Mental VCV Counters module. Mods: graphics, 3 counters, up to 64 steps each, added reset lights to the buttons.
@@ -136,6 +164,6 @@ V 0.5.2: added back the voltage range switch.
 V 0.5.4: Updated look.
 
 ### Blank Panel
-Blank panels in 4,6 & 8 screw spacing widths.
+Blank panels in 4,6 & 8 HP.
 
 ### Have fun!

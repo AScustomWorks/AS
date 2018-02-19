@@ -25,8 +25,8 @@ struct SineOSC : Module {
 		NUM_LIGHTS
 	};
 
-	float phase = 0.0;
-	float blinkPhase = 0.0;
+	float phase = 0.0f;
+	float blinkPhase = 0.0f;
 
 	SineOSC() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
@@ -38,28 +38,28 @@ void SineOSC::step() {
 	// Compute the frequency from the pitch parameter and input
 	float pitch = params[FREQ_PARAM].value;
 	pitch += inputs[FREQ_CV].value;
-	pitch = clampf(pitch, -4.0, 4.0);
-	float freq = 440.0 * powf(2.0, pitch);
+	pitch = clampf(pitch, -4.0f, 4.0f);
+	float freq = 440.0f * powf(2.0f, pitch);
 	// Accumulate the phase
 	phase += freq / engineGetSampleRate();
-	if (phase >= 1.0)
-		phase -= 1.0;
+	if (phase >= 1.0f)
+		phase -= 1.0f;
 	// Compute the sine output
 	//correct sine
-	float sine = sinf(2.0 * M_PI * (phase+1 * 0.125)) * 5.0;
+	float sine = sinf(2.0f * M_PI * (phase+1 * 0.125f)) * 5.0f;
 	//original sine
 	//float sine = sinf(2 * M_PI * phase)+ sinf(2 * M_PI * phase * 2)*5;
 	//mod,like this it gives  a unipolar saw-ish wave
 	//float sine = sinf(2.0 * M_PI * (phase * 0.125)) * 5.0;
 	outputs[OSC_OUTPUT].value = sine;
-    lights[FREQ_LIGHT].value = (outputs[OSC_OUTPUT].value > 0.0) ? 1.0 : 0.0;
+    lights[FREQ_LIGHT].value = (outputs[OSC_OUTPUT].value > 0.0f) ? 1.0f : 0.0f;
 
 }
 
 SineOscWidget::SineOscWidget() {
 	SineOSC *module = new SineOSC();
 	setModule(module);
-	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
+	box.size = Vec(4 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 	
 
 	{
@@ -68,18 +68,18 @@ SineOscWidget::SineOscWidget() {
 		panel->setBackground(SVG::load(assetPlugin(plugin, "res/SineOSC.svg")));
 		addChild(panel);
 	}
-	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	//SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
+	addChild(createScrew<as_HexScrew>(Vec(0, 0)));
+	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+	addChild(createScrew<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//LIGHT
-	addChild(createLight<SmallLight<RedLight>>(Vec(22, 57), module, SineOSC::FREQ_LIGHT));
+	addChild(createLight<SmallLight<RedLight>>(Vec(22-15, 57), module, SineOSC::FREQ_LIGHT));
 	//PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SineOSC::FREQ_PARAM, -3.0, 3.0, 0.0));
+	addParam(createParam<as_KnobBlack>(Vec(26-15, 60), module, SineOSC::FREQ_PARAM, -3.0f, 3.0f, 0.0f));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33, 260), module, SineOSC::FREQ_CV));
+	addInput(createInput<as_PJ301MPort>(Vec(33-15, 260), module, SineOSC::FREQ_CV));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(33, 310), module, SineOSC::OSC_OUTPUT));
+	addOutput(createOutput<as_PJ301MPort>(Vec(33-15, 310), module, SineOSC::OSC_OUTPUT));
 	
 }

@@ -36,28 +36,28 @@ struct ADSR : Module {
 	};
 
 	bool decaying = false;
-	float env = 0.0;
+	float env = 0.0f;
 	SchmittTrigger trigger;
 
 	ADSR() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		trigger.setThresholds(0.0, 1.0);
+		trigger.setThresholds(0.0f, 1.0f);
 	}
 	void step() override;
 };
 
 
 void ADSR::step() {
-	float attack = clampf(params[ATTACK_INPUT].value + inputs[ATTACK_INPUT].value / 10.0, 0.0, 1.0);
-	float decay = clampf(params[DECAY_PARAM].value + inputs[DECAY_INPUT].value / 10.0, 0.0, 1.0);
-	float sustain = clampf(params[SUSTAIN_PARAM].value + inputs[SUSTAIN_INPUT].value / 10.0, 0.0, 1.0);
-	float release = clampf(params[RELEASE_PARAM].value + inputs[RELEASE_PARAM].value / 10.0, 0.0, 1.0);
+	float attack = clampf(params[ATTACK_INPUT].value + inputs[ATTACK_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float decay = clampf(params[DECAY_PARAM].value + inputs[DECAY_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float sustain = clampf(params[SUSTAIN_PARAM].value + inputs[SUSTAIN_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float release = clampf(params[RELEASE_PARAM].value + inputs[RELEASE_PARAM].value / 10.0f, 0.0f, 1.0f);
 	// Gate and trigger
-	bool gated = inputs[GATE_INPUT].value >= 1.0;
+	bool gated = inputs[GATE_INPUT].value >= 1.0f;
 	if (trigger.process(inputs[TRIG_INPUT].value))
 		decaying = false;
 
-	const float base = 20000.0;
-	const float maxTime = 10.0;
+	const float base = 20000.0f;
+	const float maxTime = 10.0f;
 	if (gated) {
 		if (decaying) {
 			// Decay
@@ -72,13 +72,13 @@ void ADSR::step() {
 			// Attack
 			// Skip ahead if attack is all the way down (infinitely fast)
 			if (attack < 1e-4) {
-				env = 1.0;
+				env = 1.0f;
 			}
 			else {
 				env += powf(base, 1 - attack) / maxTime * (1.01 - env) / engineGetSampleRate();
 			}
-			if (env >= 1.0) {
-				env = 1.0;
+			if (env >= 1.0f) {
+				env = 1.0f;
 				decaying = true;
 			}
 		}
@@ -86,7 +86,7 @@ void ADSR::step() {
 	else {
 		// Release
 		if (release < 1e-4) {
-			env = 0.0;
+			env = 0.0f;
 		}
 		else {
 			env += powf(base, 1 - release) / maxTime * (0.0 - env) / engineGetSampleRate();
@@ -97,13 +97,13 @@ void ADSR::step() {
 	bool sustaining = nearf(env, sustain, 1e-3);
 	bool resting = nearf(env, 0.0, 1e-3);
 
-	outputs[ENVELOPE_OUTPUT].value = 10.0 * env;
+	outputs[ENVELOPE_OUTPUT].value = 10.0f * env;
 
 	// Lights
-	lights[ATTACK_LIGHT].value = (gated && !decaying) ? 1.0 : 0.0;
-	lights[DECAY_LIGHT].value = (gated && decaying && !sustaining) ? 1.0 : 0.0;
-	lights[SUSTAIN_LIGHT].value = (gated && decaying && sustaining) ? 1.0 : 0.0;
-	lights[RELEASE_LIGHT].value = (!gated && !resting) ? 1.0 : 0.0;
+	lights[ATTACK_LIGHT].value = (gated && !decaying) ? 1.0f : 0.0f;
+	lights[DECAY_LIGHT].value = (gated && decaying && !sustaining) ? 1.0f : 0.0f;
+	lights[SUSTAIN_LIGHT].value = (gated && decaying && sustaining) ? 1.0f : 0.0f;
+	lights[RELEASE_LIGHT].value = (!gated && !resting) ? 1.0f : 0.0f;
 }
 
 
@@ -124,16 +124,16 @@ ADSRWidget::ADSRWidget() {
 	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	
-	static const float posX[4] = {13,39,65,91};
+	static const float posX[4] = {13.0f,39.0f,65.0f,91.0f};
 	addChild(createLight<SmallLight<RedLight>>(Vec(posX[0]+6, 74), module, ADSR::ATTACK_LIGHT));
 	addChild(createLight<SmallLight<RedLight>>(Vec(posX[1]+6, 74), module, ADSR::DECAY_LIGHT));
 	addChild(createLight<SmallLight<RedLight>>(Vec(posX[2]+6, 74), module, ADSR::SUSTAIN_LIGHT));
 	addChild(createLight<SmallLight<RedLight>>(Vec(posX[3]+6, 74), module, ADSR::RELEASE_LIGHT));
 
-	addParam(createParam<as_SlidePot>(Vec(posX[0]-3, 90), module, ADSR::ATTACK_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(posX[1]-3, 90), module, ADSR::DECAY_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(posX[2]-3, 90), module, ADSR::SUSTAIN_PARAM, 0.0, 1.0, 0.5));
-	addParam(createParam<as_SlidePot>(Vec(posX[3]-3, 90), module, ADSR::RELEASE_PARAM, 0.0, 1.0, 0.5));
+	addParam(createParam<as_SlidePot>(Vec(posX[0]-3, 90), module, ADSR::ATTACK_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_SlidePot>(Vec(posX[1]-3, 90), module, ADSR::DECAY_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_SlidePot>(Vec(posX[2]-3, 90), module, ADSR::SUSTAIN_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(createParam<as_SlidePot>(Vec(posX[3]-3, 90), module, ADSR::RELEASE_PARAM, 0.0f, 1.0f, 0.5f));
 
 	addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 217), module, ADSR::ATTACK_INPUT));
 	addInput(createInput<as_PJ301MPort>(Vec(posX[1]-4, 217), module, ADSR::DECAY_INPUT));

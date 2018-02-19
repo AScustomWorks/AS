@@ -1,6 +1,8 @@
 **/.DS_Store
 /build/*
 /src2/*
+/src backup/*
 /dist/*
 *dylib
 slug.txt
+.gitignore

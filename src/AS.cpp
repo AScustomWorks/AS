@@ -17,6 +17,7 @@ void init(rack::Plugin *p) {
 	//OSCILLATORS
 	p->addModel(createModel<SawOscWidget>("AS", "SawOSC", "TinySawish", OSCILLATOR_TAG));
 	p->addModel(createModel<SineOscWidget>("AS", "SineOSC", "TinySine", OSCILLATOR_TAG));
+
 	//TOOLS
 	p->addModel(createModel<ADSRWidget>("AS", "ADSR", "ADSR", ENVELOPE_GENERATOR_TAG));
 	p->addModel(createModel<VCAWidget>("AS", "VCA", "VCA", AMPLIFIER_TAG));
@@ -32,8 +33,10 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<KillGateWidget>("AS", "KillGate", "Kill Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG));
 	p->addModel(createModel<SignalDelayWidget>("AS", "SignalDelay", "Signal Delay", UTILITY_TAG, DELAY_TAG));
 	p->addModel(createModel<Multiple2_5Widget>("AS", "Multiple2_5", "Multiple 2 x 5", MULTIPLE_TAG, UTILITY_TAG));
+	p->addModel(createModel<Merge2_5Widget>("AS", "Merge2_5", "Merge 2 x 5", MULTIPLE_TAG, UTILITY_TAG));
 	p->addModel(createModel<TriggersWidget>("AS", "Triggers", "Triggers", SWITCH_TAG, UTILITY_TAG));
-
+	p->addModel(createModel<TriggersMKIWidget>("AS", "TriggersMKI", "Triggers MKI", SWITCH_TAG, UTILITY_TAG));
+	p->addModel(createModel<TriggersMKIIWidget>("AS", "TriggersMKII", "Triggers MKII", SWITCH_TAG, UTILITY_TAG));
 	//EFFECTS
 	p->addModel(createModel<DelayPlusFxWidget>("AS", "DelayPlusFx", "Delay Plus FX", DELAY_TAG, EFFECT_TAG));
 	p->addModel(createModel<PhaserFxWidget>("AS", "PhaserFx", "Phaser FX", EFFECT_TAG));
