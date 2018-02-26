@@ -93,12 +93,12 @@ void DelayPlusFx::step() {
 
 	// Get input to delay block
 	float in = inputs[IN_INPUT].value;
-	float feedback = clampf(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float feedback = clamp(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0f, 0.0f, 1.0f);
 	float dry = in + lastWet * feedback;
 
 	// Compute delay time in seconds
 	//float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM].value + inputs[TIME_INPUT].value / 10.0, 0.0, 1.0));
-	float delay = clampf(params[TIME_PARAM].value + inputs[TIME_INPUT].value, 0.001, 10.0);
+	float delay = clamp(params[TIME_PARAM].value + inputs[TIME_INPUT].value, 0.001f, 10.0f);
 	//LCD display tempo  - show value as ms
 	 lcd_tempo = std::round(delay*1000);
 	// Number of delay samples
@@ -116,7 +116,7 @@ void DelayPlusFx::step() {
 	//printf("%f\t%d\t%f\n", index, historyBuffer.size(), consume);
 	// printf("wanted: %f\tactual: %d\tdiff: %d\tratio: %f\n", index, historyBuffer.size(), consume, index / historyBuffer.size());
 	if (outBuffer.empty()) {
-		// Idk wtf I'm doing
+
 		double ratio = 1.0;
 		if (consume <= -16)
 			ratio = 0.5;
@@ -124,10 +124,11 @@ void DelayPlusFx::step() {
 			ratio = 2.0;
 
 		// printf("%f\t%lf\n", consume, ratio);
-		int inFrames = mini(historyBuffer.size(), 16);
+		int inFrames = min(historyBuffer.size(), 16);
 		int outFrames = outBuffer.capacity();
 		// printf(">\t%d\t%d\n", inFrames, outFrames);
-		src.setRatioSmooth(ratio);
+
+		src.setRates(ratio * engineGetSampleRate(), engineGetSampleRate());
 		src.process((const Frame<1>*)historyBuffer.startData(), &inFrames, (Frame<1>*)outBuffer.endData(), &outFrames);
 		historyBuffer.startIncr(inFrames);
 		outBuffer.endIncr(outFrames);
@@ -144,13 +145,12 @@ void DelayPlusFx::step() {
 	if (outputs[COLOR_SEND].active == false) {
 		//internal color
 		// Apply color to delay wet output
-		// TODO Make it sound better
-		float color = clampf(params[COLOR_PARAM].value + inputs[COLOR_INPUT].value / 10.0f, 0.0f, 1.0f);
-		float lowpassFreq = 10000.0f * powf(10.0f, clampf(2.0*color, 0.0f, 1.0f));
+		float color = clamp(params[COLOR_PARAM].value + inputs[COLOR_INPUT].value / 10.0f, 0.0f, 1.0f);
+		float lowpassFreq = 10000.0f * powf(10.0f, clamp(2.0*color, 0.0f, 1.0f));
 		lowpassFilter.setCutoff(lowpassFreq / engineGetSampleRate());
 		lowpassFilter.process(wet);
 		wet = lowpassFilter.lowpass();
-		float highpassFreq = 10.0f * powf(100.0f, clampf(2.0f*color - 1.0f, 0.0f, 1.0f));
+		float highpassFreq = 10.0f * powf(100.0f, clamp(2.0f*color - 1.0f, 0.0f, 1.0f));
 		highpassFilter.setCutoff(highpassFreq / engineGetSampleRate());
 		highpassFilter.process(wet);
 		wet = highpassFilter.highpass();
@@ -161,8 +161,8 @@ void DelayPlusFx::step() {
 		wet = inputs[COLOR_RETURN].value;	
 	}
 	lastWet = wet;
-	mix = clampf(params[MIX_PARAM].value + inputs[MIX_INPUT].value / 10.0f, 0.0f, 1.0f);
-	out = crossf(in, wet, mix);
+	mix = clamp(params[MIX_PARAM].value + inputs[MIX_INPUT].value / 10.0f, 0.0f, 1.0f);
+	out = crossfade(in, wet, mix);
 	//check bypass switch status
 	if (fx_bypass){
 		outputs[OUT_OUTPUT].value = in;
@@ -218,10 +218,13 @@ struct MsDisplayWidget : TransparentWidget {
   }
 };
 ////////////////////////////////////
+struct DelayPlusFxWidget : ModuleWidget 
+{ 
+    DelayPlusFxWidget(DelayPlusFx *module);
+};
 
-DelayPlusFxWidget::DelayPlusFxWidget() {
-	DelayPlusFx *module = new DelayPlusFx();
-	setModule(module);
+DelayPlusFxWidget::DelayPlusFxWidget(DelayPlusFx *module) : ModuleWidget(module) {
+
 	box.size = Vec(RACK_GRID_WIDTH*8, RACK_GRID_HEIGHT);
 
 	{
@@ -239,29 +242,31 @@ DelayPlusFxWidget::DelayPlusFxWidget() {
 	addChild(display); 	
 	int y_offset=40;
  	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.001f, 10.0f, 0.350f));
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(createParam<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f));
 	//BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(49, 272+y_offset), module, DelayPlusFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(createLight<LedLight<RedLight>>(Vec(51.2, 274+y_offset), module, DelayPlusFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(49, 272+y_offset), module, DelayPlusFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(51.2, 274+y_offset), module, DelayPlusFx::BYPASS_LED));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 45+y_offset), module, DelayPlusFx::TIME_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 95+y_offset), module, DelayPlusFx::FEEDBACK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 145+y_offset), module, DelayPlusFx::COLOR_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 45+y_offset), Port::INPUT, module, DelayPlusFx::TIME_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 95+y_offset), Port::INPUT, module, DelayPlusFx::FEEDBACK_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 145+y_offset), Port::INPUT, module, DelayPlusFx::COLOR_INPUT));
 	//DELAY SIGNAL SEND
-	addOutput(createOutput<as_PJ301MPort>(Vec(20, 184+y_offset), module, DelayPlusFx::COLOR_SEND));
+	addOutput(Port::create<as_PJ301MPort>(Vec(20, 184+y_offset), Port::OUTPUT, module, DelayPlusFx::COLOR_SEND));
 	//DELAY SIGNAL RETURN
-	addInput(createInput<as_PJ301MPort>(Vec(75, 184+y_offset), module, DelayPlusFx::COLOR_RETURN));
+	addInput(Port::create<as_PJ301MPort>(Vec(75, 184+y_offset), Port::INPUT, module, DelayPlusFx::COLOR_RETURN));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 220+y_offset), module, DelayPlusFx::MIX_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, DelayPlusFx::IN_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 220+y_offset), Port::INPUT, module, DelayPlusFx::MIX_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, DelayPlusFx::IN_INPUT));
 	//OUTPUT
-	addOutput(createOutput<as_PJ301MPort>(Vec(85, 310), module, DelayPlusFx::OUT_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(85, 310), Port::OUTPUT, module, DelayPlusFx::OUT_OUTPUT));
 }
+
+Model *modelDelayPlusFx = Model::create<DelayPlusFx, DelayPlusFxWidget>("AS", "DelayPlusFx", "DelayPlus Fx", DELAY_TAG, EFFECT_TAG);

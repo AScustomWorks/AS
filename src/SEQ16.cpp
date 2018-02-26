@@ -133,14 +133,14 @@ struct SEQ16 : Module {
 
 	void randomize() override {
 		for (int i = 0; i < 16; i++) {
-			gateState[i] = (randomf() > 0.5);
+			gateState[i] = (random() > 0.5);
 		}
 	}
 };
 
 
 void SEQ16::step() {
-	numSteps = roundf(clampf(params[STEPS_PARAM].value, 1.0, 16.0)); 
+	numSteps = roundf(clamp(params[STEPS_PARAM].value, 1.0f, 16.0f)); 
 	stepIndex = index+1;
 	// Gate mode Switch with 3 way switch
 	modeIndex = params[GATE_MODE_PARAM].value;
@@ -183,7 +183,7 @@ void SEQ16::step() {
 
 	if (nextStep) {
 		// Advance step
-		int numSteps = clampi(roundf(params[STEPS_PARAM].value + inputs[STEPS_INPUT].value), 1, 16);
+		int numSteps = clamp(round(params[STEPS_PARAM].value + inputs[STEPS_INPUT].value), 1.0f, 16.0f);
 		index += 1;
 		if (index >= numSteps) {
 			index = 0;
@@ -339,9 +339,15 @@ struct MuteLight : BASE {
 	}
 };
 
-SEQ16Widget::SEQ16Widget() {
-	SEQ16 *module = new SEQ16();
-	setModule(module);
+
+struct SEQ16Widget : ModuleWidget { 
+    SEQ16Widget(SEQ16 *module);
+	Menu *createContextMenu() override;
+};
+
+
+SEQ16Widget::SEQ16Widget(SEQ16 *module) : ModuleWidget(module) {
+
 	box.size = Vec(44 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
 	{
@@ -364,58 +370,58 @@ SEQ16Widget::SEQ16Widget() {
 	addChild(display2);
 
 	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//
 	static const float portX[16] = {20,60,100,140,180,220,260,300,340,380,420,460,500,540,580,620};
 	static const float elements_offst = 8;
 	static const float main_lds_y = 64.4;
 	//CLOCK KNOB
-	addParam(createParam<as_KnobBlack>(Vec(portX[1]-elements_offst, 56), module, SEQ16::CLOCK_PARAM, -2.0f, 6.0f, 2.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(portX[1]-elements_offst, 56), module, SEQ16::CLOCK_PARAM, -2.0f, 6.0f, 2.0f));
 	//RUN RESET SWITCHES & LEDS
-	addParam(createParam<LEDBezel>(Vec(portX[2], main_lds_y), module, SEQ16::RUN_PARAM , 0.0f, 1.0f, 0.0f));
-	addChild(createLight<MuteLight<RedLight>>(Vec(portX[2]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
-	addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RESET_PARAM , 0.0f, 1.0f, 0.0f));
-	addChild(createLight<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
+	addParam(ParamWidget::create<LEDBezel>(Vec(portX[2], main_lds_y), module, SEQ16::RUN_PARAM , 0.0f, 1.0f, 0.0f));
+	addChild(ModuleLightWidget::create<MuteLight<RedLight>>(Vec(portX[2]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
+	addParam(ParamWidget::create<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RESET_PARAM , 0.0f, 1.0f, 0.0f));
+	addChild(ModuleLightWidget::create<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
 	//STEP TRIGGER
-	addParam(createParam<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM , 0.0f, 1.0f, 0.0f));
-	addChild(createLight<MuteLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT));
-		addParam(createParam<TL1105>(Vec(portX[9]+20, main_lds_y+40), module, SEQ16::PREV_STEP, 0.0f, 1.0f, 0.0f));
-		addParam(createParam<TL1105>(Vec(portX[10]+5, main_lds_y+40), module, SEQ16::NEXT_STEP, 0.0f, 1.0f, 0.0f));
+	addParam(ParamWidget::create<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM , 0.0f, 1.0f, 0.0f));
+	addChild(ModuleLightWidget::create<MuteLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT));
+		addParam(ParamWidget::create<TL1105>(Vec(portX[9]+20, main_lds_y+40), module, SEQ16::PREV_STEP, 0.0f, 1.0f, 0.0f));
+		addParam(ParamWidget::create<TL1105>(Vec(portX[10]+5, main_lds_y+40), module, SEQ16::NEXT_STEP, 0.0f, 1.0f, 0.0f));
 	//GATE MODE SWITCH
-	   addParam(createParam<as_CKSSThree>(Vec(portX[6]+2, main_lds_y-4), module, SEQ16::GATE_MODE_PARAM, 0.0f, 2.0f, 0.0f));
+	   addParam(ParamWidget::create<as_CKSSThree>(Vec(portX[6]+2, main_lds_y-4), module, SEQ16::GATE_MODE_PARAM, 0.0f, 2.0f, 0.0f));
 	//STEPS KNOBS
-	addParam(createParam<as_KnobBlack>(Vec(portX[7]-elements_offst, 56), module, SEQ16::STEPS_PARAM, 1.0f, 16.0f, 16.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(portX[7]-elements_offst, 56), module, SEQ16::STEPS_PARAM, 1.0f, 16.0f, 16.0f));
 	static const float main_inputs_offst = 1;
 	static const float main_inputs_y = 98;
 	//SEQ VC INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(portX[1]- main_inputs_offst, main_inputs_y), module, SEQ16::CLOCK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(portX[2]-main_inputs_offst, main_inputs_y), module, SEQ16::EXT_CLOCK_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(portX[3]-main_inputs_offst, main_inputs_y), module, SEQ16::RESET_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(portX[7]-main_inputs_offst, main_inputs_y), module, SEQ16::STEPS_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(portX[1]- main_inputs_offst, main_inputs_y), Port::INPUT, module, SEQ16::CLOCK_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(portX[2]-main_inputs_offst, main_inputs_y), Port::INPUT, module, SEQ16::EXT_CLOCK_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(portX[3]-main_inputs_offst, main_inputs_y), Port::INPUT, module, SEQ16::RESET_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(portX[7]-main_inputs_offst, main_inputs_y), Port::INPUT, module, SEQ16::STEPS_INPUT));
 	//GATE/ROW LEDS
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[12]+elements_offst, main_lds_y+6), module, SEQ16::GATES_LIGHT));
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[13]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS));
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[14]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 1));
-	addChild(createLight<MediumLight<RedLight>>(Vec(portX[15]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 2));
+	addChild(ModuleLightWidget::create<MediumLight<RedLight>>(Vec(portX[12]+elements_offst, main_lds_y+6), module, SEQ16::GATES_LIGHT));
+	addChild(ModuleLightWidget::create<MediumLight<RedLight>>(Vec(portX[13]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS));
+	addChild(ModuleLightWidget::create<MediumLight<RedLight>>(Vec(portX[14]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 1));
+	addChild(ModuleLightWidget::create<MediumLight<RedLight>>(Vec(portX[15]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 2));
 	//GATE/ROW OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[12], 98), module, SEQ16::GATES_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[13], 98), module, SEQ16::ROW1_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[14], 98), module, SEQ16::ROW2_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(portX[15], 98), module, SEQ16::ROW3_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(portX[12], 98), Port::OUTPUT, module, SEQ16::GATES_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(portX[13], 98), Port::OUTPUT, module, SEQ16::ROW1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(portX[14], 98), Port::OUTPUT, module, SEQ16::ROW2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(portX[15], 98), Port::OUTPUT, module, SEQ16::ROW3_OUTPUT));
 
 	for (int i = 0; i < 16; i++) {
 		//ROW KNOBS
-		addParam(createParam<as_KnobBlack>(Vec(portX[i]-elements_offst, 157), module, SEQ16::ROW1_PARAM + i, 0.0f, 10.0f, 0.0f));
-		addParam(createParam<as_KnobBlack>(Vec(portX[i]-elements_offst, 198), module, SEQ16::ROW2_PARAM + i, 0.0f, 10.0f, 0.0f));
-		addParam(createParam<as_KnobBlack>(Vec(portX[i]-elements_offst, 240), module, SEQ16::ROW3_PARAM + i, 0.0f, 10.0f, 0.0f));
+		addParam(ParamWidget::create<as_KnobBlack>(Vec(portX[i]-elements_offst, 157), module, SEQ16::ROW1_PARAM + i, 0.0f, 10.0f, 0.0f));
+		addParam(ParamWidget::create<as_KnobBlack>(Vec(portX[i]-elements_offst, 198), module, SEQ16::ROW2_PARAM + i, 0.0f, 10.0f, 0.0f));
+		addParam(ParamWidget::create<as_KnobBlack>(Vec(portX[i]-elements_offst, 240), module, SEQ16::ROW3_PARAM + i, 0.0f, 10.0f, 0.0f));
 		//GATE LEDS
-		addParam(createParam<LEDButton>(Vec(portX[i]+1.5, 284), module, SEQ16::GATE_PARAM + i, 0.0f, 1.0f, 0.0f));
-		addChild(createLight<MediumLight<RedLight>>(Vec(portX[i]+5.8, 287.9), module, SEQ16::GATE_LIGHTS + i));
+		addParam(ParamWidget::create<LEDButton>(Vec(portX[i]+1.5, 284), module, SEQ16::GATE_PARAM + i, 0.0f, 1.0f, 0.0f));
+		addChild(ModuleLightWidget::create<MediumLight<RedLight>>(Vec(portX[i]+5.8, 287.9), module, SEQ16::GATE_LIGHTS + i));
 		//GATE STEPS OUT
-		addOutput(createOutput<as_PJ301MPort>(Vec(portX[i]-2, 310), module, SEQ16::GATE_OUTPUT + i));
+		addOutput(Port::create<as_PJ301MPort>(Vec(portX[i]-2, 310), Port::OUTPUT, module, SEQ16::GATE_OUTPUT + i));
 	}
 }
 
@@ -426,7 +432,7 @@ struct SEQ16GateModeItem : MenuItem {
 		seq16->gateMode = gateMode;
 	}
 	void step() override {
-		rightText = (seq16->gateMode == gateMode) ? "✔" : "";
+		rightText = CHECKMARK(seq16->gateMode == gateMode);
 	}
 };
 
@@ -463,3 +469,5 @@ Menu *SEQ16Widget::createContextMenu() {
 
 	return menu;
 }
+
+Model *modelSEQ16 = Model::create<SEQ16, SEQ16Widget>("AS", "SEQ16", "16-Step Sequencer", SEQUENCER_TAG);

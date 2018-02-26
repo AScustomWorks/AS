@@ -70,11 +70,11 @@ void WaveShaper::step() {
 	float input = inputs[INPUT].value;
 
 	bool mode5V = (params[RANGE_PARAM].value == 0.0f);
-    if(mode5V) input = clampf(input, -5.0f, 5.0f) * 0.2f;
-	else input = clampf(input, -10.0f, 10.0f) * 0.1f;
+    if(mode5V) input = clamp(input, -5.0f, 5.0f) * 0.2f;
+	else input = clamp(input, -10.0f, 10.0f) * 0.1f;
 
 	float shape = params[AMOUNT_PARAM].value + (inputs[AMOUNT_INPUT].value * params[SCALE_PARAM].value);
-	shape = clampf(shape, -5.0f, 5.0f) * 0.2f;
+	shape = clamp(shape, -5.0f, 5.0f) * 0.2f;
 	shape *= 0.99f;
 
 	const float shapeB = (1.0f - shape) / (1.0f + shape);
@@ -91,9 +91,13 @@ void WaveShaper::step() {
 	  }
 }
 
-WaveShaperWidget::WaveShaperWidget() {
-	WaveShaper *module = new WaveShaper();
-	setModule(module);
+struct WaveShaperWidget : ModuleWidget 
+{ 
+    WaveShaperWidget(WaveShaper *module);
+};
+
+WaveShaperWidget::WaveShaperWidget(WaveShaper *module) : ModuleWidget(module) {
+
 	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
 	{
@@ -103,22 +107,24 @@ WaveShaperWidget::WaveShaperWidget() {
 		addChild(panel);
 	}
 	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26, 60), module, WaveShaper::AMOUNT_PARAM, -5.0f, 5.0f, 0.0f));
-	addParam(createParam<as_KnobBlack>(Vec(26, 125), module, WaveShaper::SCALE_PARAM, -1.0f, 1.0f, 1.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 60), module, WaveShaper::AMOUNT_PARAM, -5.0f, 5.0f, 0.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 125), module, WaveShaper::SCALE_PARAM, -1.0f, 1.0f, 1.0f));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33, 180), module, WaveShaper::AMOUNT_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(33, 180), Port::INPUT, module, WaveShaper::AMOUNT_INPUT));
 	//RANGE SWITCH
-	addParam(createParam<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM, 0.0f, 1.0f, 0.0f));
+	addParam(ParamWidget::create<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM, 0.0f, 1.0f, 0.0f));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, WaveShaper::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, WaveShaper::BYPASS_LED));
     //INS/OUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, WaveShaper::INPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, WaveShaper::OUTPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, WaveShaper::INPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, WaveShaper::OUTPUT));
 
 }
+
+Model *modelWaveShaper = Model::create<WaveShaper, WaveShaperWidget>("AS", "WaveShaper", "Wave Shaper", WAVESHAPER_TAG);

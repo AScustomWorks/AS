@@ -14,7 +14,7 @@ struct LowFrequencyOscillator {
 	bool invert = false;
 	SchmittTrigger resetTrigger;
 	LowFrequencyOscillator() {
-		resetTrigger.setThresholds(0.0f, 0.01f);
+		//resetTrigger.setThresholds(0.0f, 0.01f);
 	}
 	void setPitch(float pitch) {
 		pitch = fminf(pitch, 8.0f);
@@ -22,7 +22,7 @@ struct LowFrequencyOscillator {
 	}
 	void setPulseWidth(float pw_) {
 		const float pwMin = 0.01f;
-		pw = clampf(pw_, pwMin, 1.0f - pwMin);
+		pw = clamp(pw_, pwMin, 1.0f - pwMin);
 	}
 	void setReset(float reset) {
 		if (resetTrigger.process(reset)) {
@@ -186,9 +186,13 @@ void TriLFO::step() {
 }
 
 
-TriLFOWidget::TriLFOWidget() {
-	TriLFO *module = new TriLFO();
-	setModule(module);
+struct TriLFOWidget : ModuleWidget 
+{ 
+    TriLFOWidget(TriLFO *module);
+};
+
+
+TriLFOWidget::TriLFOWidget(TriLFO *module) : ModuleWidget(module) {
 	box.size = Vec(RACK_GRID_WIDTH*10, RACK_GRID_HEIGHT);
 
 	{
@@ -199,50 +203,52 @@ TriLFOWidget::TriLFOWidget() {
 	}
 
  	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//LFO 1
-	addInput(createInput<as_PJ301MPort>(Vec(10, 60), module, TriLFO::RESET1_INPUT));
-	addParam(createParam<as_KnobBlack>(Vec(41, 55), module, TriLFO::FREQ1_PARAM, -8.0f, 6.0f, -1.0f));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 60), Port::INPUT, module, TriLFO::RESET1_INPUT));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(41, 55), module, TriLFO::FREQ1_PARAM, -8.0f, 6.0f, -1.0f));
 	//
-    addChild(createLight<SmallLight<GreenRedLight>>(Vec(37, 52), module, TriLFO::PHASE1_POS_LIGHT));
+    addChild(ModuleLightWidget::create<SmallLight<GreenRedLight>>(Vec(37, 52), module, TriLFO::PHASE1_POS_LIGHT));
 	//
-    addParam(createParam<as_CKSS>(Vec(90, 60), module, TriLFO::OFFSET1_PARAM, 0.0f, 1.0f, 1.0f));
-	addParam(createParam<as_CKSS>(Vec(120, 60), module, TriLFO::INVERT1_PARAM, 0.0f, 1.0f, 1.0f));
+    addParam(ParamWidget::create<as_CKSS>(Vec(90, 60), module, TriLFO::OFFSET1_PARAM, 0.0f, 1.0f, 1.0f));
+	addParam(ParamWidget::create<as_CKSS>(Vec(120, 60), module, TriLFO::INVERT1_PARAM, 0.0f, 1.0f, 1.0f));
 	//
-	addOutput(createOutput<as_PJ301MPort>(Vec(11, 120), module, TriLFO::SIN1_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(45, 120), module, TriLFO::TRI1_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(80, 120), module, TriLFO::SAW1_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(114, 120), module, TriLFO::SQR1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(11, 120), Port::OUTPUT, module, TriLFO::SIN1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(45, 120), Port::OUTPUT, module, TriLFO::TRI1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(80, 120), Port::OUTPUT, module, TriLFO::SAW1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(114, 120), Port::OUTPUT, module, TriLFO::SQR1_OUTPUT));
 	//LFO 2
 	static const int lfo2_y_offset = 100;
-	addInput(createInput<as_PJ301MPort>(Vec(10, 60+lfo2_y_offset), module, TriLFO::RESET2_INPUT));
-	addParam(createParam<as_KnobBlack>(Vec(41, 55+lfo2_y_offset), module, TriLFO::FREQ2_PARAM, -8.0f, 6.0f, -1.0f));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 60+lfo2_y_offset), Port::INPUT, module, TriLFO::RESET2_INPUT));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(41, 55+lfo2_y_offset), module, TriLFO::FREQ2_PARAM, -8.0f, 6.0f, -1.0f));
 	//
-    addChild(createLight<SmallLight<GreenRedLight>>(Vec(37, 52+lfo2_y_offset), module, TriLFO::PHASE2_POS_LIGHT));
+    addChild(ModuleLightWidget::create<SmallLight<GreenRedLight>>(Vec(37, 52+lfo2_y_offset), module, TriLFO::PHASE2_POS_LIGHT));
 	//
-    addParam(createParam<as_CKSS>(Vec(90, 60+lfo2_y_offset), module, TriLFO::OFFSET2_PARAM, 0.0f, 1.0f, 1.0f));
-	addParam(createParam<as_CKSS>(Vec(120, 60+lfo2_y_offset), module, TriLFO::INVERT2_PARAM, 0.0f, 1.0f, 1.0f));
+    addParam(ParamWidget::create<as_CKSS>(Vec(90, 60+lfo2_y_offset), module, TriLFO::OFFSET2_PARAM, 0.0f, 1.0f, 1.0f));
+	addParam(ParamWidget::create<as_CKSS>(Vec(120, 60+lfo2_y_offset), module, TriLFO::INVERT2_PARAM, 0.0f, 1.0f, 1.0f));
 	//
-	addOutput(createOutput<as_PJ301MPort>(Vec(11, 120+lfo2_y_offset), module, TriLFO::SIN2_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(45, 120+lfo2_y_offset), module, TriLFO::TRI2_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(80, 120+lfo2_y_offset), module, TriLFO::SAW2_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(114, 120+lfo2_y_offset), module, TriLFO::SQR2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(11, 120+lfo2_y_offset), Port::OUTPUT, module, TriLFO::SIN2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(45, 120+lfo2_y_offset), Port::OUTPUT, module, TriLFO::TRI2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(80, 120+lfo2_y_offset), Port::OUTPUT, module, TriLFO::SAW2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(114, 120+lfo2_y_offset), Port::OUTPUT, module, TriLFO::SQR2_OUTPUT));
 	//LFO 3
 	static const int lfo3_y_offset = 200;
-	addInput(createInput<as_PJ301MPort>(Vec(10, 60+lfo3_y_offset), module, TriLFO::RESET3_INPUT));
-	addParam(createParam<as_KnobBlack>(Vec(41, 55+lfo3_y_offset), module, TriLFO::FREQ3_PARAM, -8.0f, 6.0f, -1.0f));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 60+lfo3_y_offset), Port::INPUT, module, TriLFO::RESET3_INPUT));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(41, 55+lfo3_y_offset), module, TriLFO::FREQ3_PARAM, -8.0f, 6.0f, -1.0f));
 	//
-    addChild(createLight<SmallLight<GreenRedLight>>(Vec(37, 52+lfo3_y_offset), module, TriLFO::PHASE3_POS_LIGHT));
+    addChild(ModuleLightWidget::create<SmallLight<GreenRedLight>>(Vec(37, 52+lfo3_y_offset), module, TriLFO::PHASE3_POS_LIGHT));
 	//
-    addParam(createParam<as_CKSS>(Vec(90, 60+lfo3_y_offset), module, TriLFO::OFFSET3_PARAM, 0.0f, 1.0f, 1.0f));
-	addParam(createParam<as_CKSS>(Vec(120, 60+lfo3_y_offset), module, TriLFO::INVERT3_PARAM, 0.0f, 1.0f, 1.0f));
+    addParam(ParamWidget::create<as_CKSS>(Vec(90, 60+lfo3_y_offset), module, TriLFO::OFFSET3_PARAM, 0.0f, 1.0f, 1.0f));
+	addParam(ParamWidget::create<as_CKSS>(Vec(120, 60+lfo3_y_offset), module, TriLFO::INVERT3_PARAM, 0.0f, 1.0f, 1.0f));
 	//
-	addOutput(createOutput<as_PJ301MPort>(Vec(11, 120+lfo3_y_offset), module, TriLFO::SIN3_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(45, 120+lfo3_y_offset), module, TriLFO::TRI3_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(80, 120+lfo3_y_offset), module, TriLFO::SAW3_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(114, 120+lfo3_y_offset), module, TriLFO::SQR3_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(11, 120+lfo3_y_offset), Port::OUTPUT, module, TriLFO::SIN3_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(45, 120+lfo3_y_offset), Port::OUTPUT, module, TriLFO::TRI3_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(80, 120+lfo3_y_offset), Port::OUTPUT, module, TriLFO::SAW3_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(114, 120+lfo3_y_offset), Port::OUTPUT, module, TriLFO::SQR3_OUTPUT));
 
 }
+
+Model *modelTriLFO = Model::create<TriLFO, TriLFOWidget>("AS", "TriLFO", "Tri LFO", LFO_TAG);

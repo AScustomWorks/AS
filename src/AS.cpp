@@ -1,23 +1,53 @@
 #include "AS.hpp"
 
-// The plugin-wide instance of the Plugin class
 Plugin *plugin;
 
 void init(rack::Plugin *p) {
 	plugin = p;
-	// This is the unique identifier for your plugin
-	p->slug = "AS";
-#ifdef VERSION
+	p->slug = TOSTRING(SLUG);
 	p->version = TOSTRING(VERSION);
-#endif
-	p->website = "https://github.com/AScustomWorks/AS/";
-	p->manual = "https://github.com/AScustomWorks/AS/README.md";
+	//OSCILLATORS
+	p->addModel(modelSineOsc);
+	p->addModel(modelSawOsc);
+	//TOOLS
+	p->addModel(modelADSR);
+	p->addModel(modelVCA);
+	p->addModel(modelQuadVCA);
+	p->addModel(modelTriLFO);
+	p->addModel(modelBPMClock);
+	p->addModel(modelSEQ16);
+	p->addModel(modelMixer8ch);
+	p->addModel(modelMonoVUmeter);
+	p->addModel(modelStereoVUmeter);
+	p->addModel(modelSteps);
+	p->addModel(modelLaunchGate);
+	p->addModel(modelKillGate);
+	p->addModel(modelSignalDelay);
+	p->addModel(modelMultiple2_5);
+	p->addModel(modelMerge2_5);
+	p->addModel(modelTriggersMKI);
+	p->addModel(modelTriggersMKII);
+	//EFFECTS	
+	p->addModel(modelDelayPlusFx);
+	p->addModel(modelPhaserFx);
+	p->addModel(modelReverbFx);
+	p->addModel(modelSuperDriveFx);
+	p->addModel(modelTremoloFx);
+	p->addModel(modelWaveShaper);
+	//BLANK PANELS
+	p->addModel(modelBlankPanel4);
+	p->addModel(modelBlankPanel6);
+	p->addModel(modelBlankPanel8);
 
-	// For each module, specify the ModuleWidget subclass, manufacturer slug (for saving in patches), manufacturer human-readable name, module slug, and module name
+}
+
+// Any other plugin initialization may go here.
+// As an alternative, consider lazy-loading assets and lookup tables when your module is created to reduce startup times of Rack.
+
+/*
 	//OSCILLATORS
 	p->addModel(createModel<SawOscWidget>("AS", "SawOSC", "TinySawish", OSCILLATOR_TAG));
 	p->addModel(createModel<SineOscWidget>("AS", "SineOSC", "TinySine", OSCILLATOR_TAG));
-
 	//TOOLS
 	p->addModel(createModel<ADSRWidget>("AS", "ADSR", "ADSR", ENVELOPE_GENERATOR_TAG));
 	p->addModel(createModel<VCAWidget>("AS", "VCA", "VCA", AMPLIFIER_TAG));
@@ -26,8 +56,8 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<BPMClockWidget>("AS", "BPMClock", "BPM Clock", CLOCK_TAG));
 	p->addModel(createModel<SEQ16Widget>("AS", "SEQ16", "16-Step Sequencer", SEQUENCER_TAG));
 	p->addModel(createModel<Mixer8chWidget>("AS", "Mixer8ch", "8-CH Mixer", MIXER_TAG, AMPLIFIER_TAG));
-	p->addModel(createModel<monoVUmeterWidget>("AS", "monoVUmeterWidget", "Mono VU meter", VISUAL_TAG, UTILITY_TAG));
-	p->addModel(createModel<stereoVUmeterWidget>("AS", "stereoVUmeterWidget", "Stereo VU meter", VISUAL_TAG, UTILITY_TAG));
+	p->addModel(createModel<monoVUmeterWidget>("AS", "MonoVUmeterWidget", "Mono VU meter", VISUAL_TAG, UTILITY_TAG));
+	p->addModel(createModel<stereoVUmeterWidget>("AS", "StereoVUmeterWidget", "Stereo VU meter", VISUAL_TAG, UTILITY_TAG));
 	p->addModel(createModel<StepsWidget>("AS", "Steps", "Steps", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG));
 	p->addModel(createModel<LaunchGateWidget>("AS", "LaunchGate", "Launch Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG));
 	p->addModel(createModel<KillGateWidget>("AS", "KillGate", "Kill Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG));
@@ -49,7 +79,4 @@ void init(rack::Plugin *p) {
 	p->addModel(createModel<BlankPanel6Widget>("AS", "BlankPanel6", "Blank Panel 6", BLANK_TAG));
 	p->addModel(createModel<BlankPanel8Widget>("AS", "BlankPanel8", "Blank Panel 8", BLANK_TAG));
 
-	// Any other plugin initialization may go here.
-	// As an alternative, consider lazy-loading assets and lookup tables when your module is created to reduce startup times of Rack.
-	
-}
+	*/

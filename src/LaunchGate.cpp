@@ -201,12 +201,13 @@ struct NumberDisplayWidget : TransparentWidget {
   }
 };
 ////////////////////////////////////
+struct LaunchGateWidget : ModuleWidget 
+{ 
+    LaunchGateWidget(LaunchGate *module);
+};
 
+LaunchGateWidget::LaunchGateWidget(LaunchGate *module) : ModuleWidget(module) {
 
-LaunchGateWidget::LaunchGateWidget() {
-	LaunchGate *module = new LaunchGate();
-	setModule(module);
-	//box.size = Vec(15*4, 380);
   	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
   
 	{
@@ -217,10 +218,10 @@ LaunchGateWidget::LaunchGateWidget() {
 	}
   
  //SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
   // counter 1
   //COUNT DISPLAY
     NumberDisplayWidget *display1 = new NumberDisplayWidget();
@@ -237,16 +238,16 @@ LaunchGateWidget::LaunchGateWidget() {
 
    int group_offset = 160;
 
-    addParam(createParam<LEDBezel>(Vec(11, 82), module, LaunchGate::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
-    addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, LaunchGate::RESET_LIGHT1));
+    addParam(ParamWidget::create<LEDBezel>(Vec(11, 82), module, LaunchGate::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
+    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, LaunchGate::RESET_LIGHT1));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, LaunchGate::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
+    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73), module, LaunchGate::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
 
-    addInput(createInput<as_PJ301MPort>(Vec(10, 125), module, LaunchGate::RESET_IN_1));
-    addInput(createInput<as_PJ301MPort>(Vec(55, 125), module, LaunchGate::CLK_IN_1));
+    addInput(Port::create<as_PJ301MPort>(Vec(10, 125), Port::INPUT, module, LaunchGate::RESET_IN_1));
+    addInput(Port::create<as_PJ301MPort>(Vec(55, 125), Port::INPUT, module, LaunchGate::CLK_IN_1));
 
-    addInput(createInput<as_PJ301MPort>(Vec(10, 170), module, LaunchGate::INPUT_1));
-    addOutput(createOutput<as_PJ301MPort>(Vec(55, 170), module, LaunchGate::OUTPUT_1));
+    addInput(Port::create<as_PJ301MPort>(Vec(10, 170), Port::INPUT, module, LaunchGate::INPUT_1));
+    addOutput(Port::create<as_PJ301MPort>(Vec(55, 170), Port::OUTPUT, module, LaunchGate::OUTPUT_1));
   
   // counter 2
   //COUNT DISPLAY
@@ -262,15 +263,17 @@ LaunchGateWidget::LaunchGateWidget() {
     display4->value = &module->count_limit_2;
     addChild(display4);
 
-    addParam(createParam<LEDBezel>(Vec(11, 82+ group_offset), module, LaunchGate::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
-    addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, LaunchGate::RESET_LIGHT2));
+    addParam(ParamWidget::create<LEDBezel>(Vec(11, 82+ group_offset), module, LaunchGate::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
+    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, LaunchGate::RESET_LIGHT2));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, LaunchGate::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
+    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73 + group_offset), module, LaunchGate::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
 
-    addInput(createInput<as_PJ301MPort>(Vec(10, 125 + group_offset), module, LaunchGate::RESET_IN_2));
-    addInput(createInput<as_PJ301MPort>(Vec(55, 125 + group_offset), module, LaunchGate::CLK_IN_2));
+    addInput(Port::create<as_PJ301MPort>(Vec(10, 125 + group_offset), Port::INPUT, module, LaunchGate::RESET_IN_2));
+    addInput(Port::create<as_PJ301MPort>(Vec(55, 125 + group_offset), Port::INPUT, module, LaunchGate::CLK_IN_2));
 
-    addInput(createInput<as_PJ301MPort>(Vec(10, 170 + group_offset), module, LaunchGate::INPUT_2));
-    addOutput(createOutput<as_PJ301MPort>(Vec(55, 170 + group_offset), module, LaunchGate::OUTPUT_2));
+    addInput(Port::create<as_PJ301MPort>(Vec(10, 170 + group_offset), Port::INPUT, module, LaunchGate::INPUT_2));
+    addOutput(Port::create<as_PJ301MPort>(Vec(55, 170 + group_offset), Port::OUTPUT, module, LaunchGate::OUTPUT_2));
  
 }
+
+Model *modelLaunchGate = Model::create<LaunchGate, LaunchGateWidget>("AS", "LaunchGate", "Launch Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG);

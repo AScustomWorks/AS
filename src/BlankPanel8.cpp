@@ -23,10 +23,12 @@ void BlankPanel8::step()
 {
 }
 
-BlankPanel8Widget::BlankPanel8Widget() 
-{
-	BlankPanel8 *module = new BlankPanel8();
-	setModule(module);
+struct BlankPanel8Widget : ModuleWidget 
+{ 
+    BlankPanel8Widget(BlankPanel8 *module);
+};
+
+BlankPanel8Widget::BlankPanel8Widget(BlankPanel8 *module) : ModuleWidget(module) {
 	box.size = Vec(8 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
 	{
@@ -36,8 +38,10 @@ BlankPanel8Widget::BlankPanel8Widget()
 		addChild(panel);
 	}
 
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 }
+
+Model *modelBlankPanel8 = Model::create<BlankPanel8, BlankPanel8Widget>("AS", "BlankPanel8", "BlankPanel 8", BLANK_TAG);

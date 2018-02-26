@@ -226,10 +226,13 @@ struct NumberDisplayWidget : TransparentWidget {
 };
 ////////////////////////////////////
 
+struct StepsWidget : ModuleWidget 
+{ 
+    StepsWidget(Steps *module);
+};
 
-StepsWidget::StepsWidget() {
-	Steps *module = new Steps();
-	setModule(module);
+
+StepsWidget::StepsWidget(Steps *module) : ModuleWidget(module) {
 	//box.size = Vec(15*4, 380);
   	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
   
@@ -241,10 +244,10 @@ StepsWidget::StepsWidget() {
 	}
   
  //SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
   // counter 1
   //COUNT DISPLAY
     NumberDisplayWidget *display1 = new NumberDisplayWidget();
@@ -261,14 +264,14 @@ StepsWidget::StepsWidget() {
 
    int group_offset = 100;
 
-    addParam(createParam<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
-    addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
+    addParam(ParamWidget::create<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
+    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
+    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
 
-    addInput(createInput<as_PJ301MPort>(Vec(3, 120), module, Steps::RESET_IN_1));
-    addInput(createInput<as_PJ301MPort>(Vec(33, 120), module, Steps::CLK_IN_1));
-    addOutput(createOutput<as_PJ301MPort>(Vec(63, 120), module, Steps::OUTPUT_1));
+    addInput(Port::create<as_PJ301MPort>(Vec(3, 120), Port::INPUT, module, Steps::RESET_IN_1));
+    addInput(Port::create<as_PJ301MPort>(Vec(33, 120), Port::INPUT, module, Steps::CLK_IN_1));
+    addOutput(Port::create<as_PJ301MPort>(Vec(63, 120), Port::OUTPUT, module, Steps::OUTPUT_1));
   
   // counter 2
   //COUNT DISPLAY
@@ -284,14 +287,14 @@ StepsWidget::StepsWidget() {
     display4->value = &module->count_limit_2;
     addChild(display4);
 
-    addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset), module, Steps::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
-    addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset), module, Steps::RESET_LIGHT2));
+    addParam(ParamWidget::create<LEDBezel>(Vec(5, 82+ group_offset), module, Steps::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
+    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset), module, Steps::RESET_LIGHT2));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
+    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
 
-    addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset), module, Steps::RESET_IN_2));
-    addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset), module, Steps::CLK_IN_2));
-    addOutput(createOutput<as_PJ301MPort>(Vec(63, 120 + group_offset), module, Steps::OUTPUT_2));
+    addInput(Port::create<as_PJ301MPort>(Vec(3, 120 + group_offset), Port::INPUT, module, Steps::RESET_IN_2));
+    addInput(Port::create<as_PJ301MPort>(Vec(33, 120 + group_offset), Port::INPUT, module, Steps::CLK_IN_2));
+    addOutput(Port::create<as_PJ301MPort>(Vec(63, 120 + group_offset), Port::OUTPUT, module, Steps::OUTPUT_2));
 
   // counter 3
   //COUNT DISPLAY
@@ -307,12 +310,14 @@ StepsWidget::StepsWidget() {
     display6->value = &module->count_limit_3;
     addChild(display6);
 
-    addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset*2), module, Steps::RST_BUTTON3 , 0.0f, 1.0f, 0.0f));
-    addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset*2), module, Steps::RESET_LIGHT3));
+    addParam(ParamWidget::create<LEDBezel>(Vec(5, 82+ group_offset*2), module, Steps::RST_BUTTON3 , 0.0f, 1.0f, 0.0f));
+    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset*2), module, Steps::RESET_LIGHT3));
 
-    addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3, 1.0f, 64.0f, 1.0f)); 
+    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3, 1.0f, 64.0f, 1.0f)); 
 
-    addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset*2), module, Steps::RESET_IN_3));
-    addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset*2), module, Steps::CLK_IN_3));
-    addOutput(createOutput<as_PJ301MPort>(Vec(63, 120 + group_offset*2), module, Steps::OUTPUT_3));	  
+    addInput(Port::create<as_PJ301MPort>(Vec(3, 120 + group_offset*2), Port::INPUT, module, Steps::RESET_IN_3));
+    addInput(Port::create<as_PJ301MPort>(Vec(33, 120 + group_offset*2), Port::INPUT, module, Steps::CLK_IN_3));
+    addOutput(Port::create<as_PJ301MPort>(Vec(63, 120 + group_offset*2), Port::OUTPUT, module, Steps::OUTPUT_3));	  
 }
+
+Model *modelSteps = Model::create<Steps, StepsWidget>("AS", "Steps", "Steps", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG);

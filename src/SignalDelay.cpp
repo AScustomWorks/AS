@@ -62,7 +62,7 @@ void SignalDelay::step() {
 	float dry1 = in1 + lastWet1 * feedback1;
 	// Compute delay time in seconds
 	//delay time in seconds. Linear reading, now easy to setup any value by the digit
-	float delay1 = clampf(params[TIME_1_PARAM].value + inputs[TIME_1_INPUT].value, 0.001f, 10.0f);
+	float delay1 = clamp(params[TIME_1_PARAM].value + inputs[TIME_1_INPUT].value, 0.001f, 10.0f);
 	//LCD display tempo  - show value as ms
 	lcd_tempo1 = std::round(delay1*1000);
 	// Number of delay samples
@@ -80,9 +80,9 @@ void SignalDelay::step() {
 		else if (consume1 >= 16)
 			ratio1 = 2.0;
 
-		int inFrames1 = mini(historyBuffer1.size(), 16);
+		int inFrames1 = min(historyBuffer1.size(), 16);
 		int outFrames1 = outBuffer1.capacity();
-		src1.setRatioSmooth(ratio1);
+		src1.setRates(ratio1 * engineGetSampleRate(), engineGetSampleRate());
 		src1.process((const Frame<1>*)historyBuffer1.startData(), &inFrames1, (Frame<1>*)outBuffer1.endData(), &outFrames1);
 		historyBuffer1.startIncr(inFrames1);
 		outBuffer1.endIncr(outFrames1);
@@ -98,11 +98,11 @@ void SignalDelay::step() {
 
 	// DELAY 2 Get input to delay block
 	float in2 = inputs[IN_2_INPUT].value;
-	float feedback2 = 0;//only one repetition, for regular use: clampf(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0, 0.0, 1.0);
+	float feedback2 = 0;//only one repetition, for regular use: clamp(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0, 0.0, 1.0);
 	float dry2 = in2 + lastWet2 * feedback2;
 	// Compute delay time in seconds
 	//delay time in seconds. Linear reading, now easy to setup any value by the digit
-	float delay2 = clampf(params[TIME_2_PARAM].value + inputs[TIME_2_INPUT].value, 0.001f, 10.0f);
+	float delay2 = clamp(params[TIME_2_PARAM].value + inputs[TIME_2_INPUT].value, 0.001f, 10.0f);
 	//LCD display tempo  - show value as ms
 	lcd_tempo2 = std::round(delay2*1000);
 	// Number of delay samples
@@ -120,9 +120,9 @@ void SignalDelay::step() {
 		else if (consume2 >= 16)
 			ratio2 = 2.0;
 
-		int inFrames2 = mini(historyBuffer2.size(), 16);
+		int inFrames2 = min(historyBuffer2.size(), 16);
 		int outFrames2 = outBuffer2.capacity();
-		src2.setRatioSmooth(ratio2);
+		src2.setRates(ratio2 * engineGetSampleRate(), engineGetSampleRate());
 		src2.process((const Frame<1>*)historyBuffer2.startData(), &inFrames2, (Frame<1>*)outBuffer2.endData(), &outFrames2);
 		historyBuffer2.startIncr(inFrames2);
 		outBuffer2.endIncr(outFrames2);
@@ -188,9 +188,13 @@ struct MsDisplayWidget : TransparentWidget {
 };
 ////////////////////////////////////
 
-SignalDelayWidget::SignalDelayWidget() {
-	SignalDelay *module = new SignalDelay();
-	setModule(module);
+struct SignalDelayWidget : ModuleWidget 
+{ 
+    SignalDelayWidget(SignalDelay *module);
+};
+
+
+SignalDelayWidget::SignalDelayWidget(SignalDelay *module) : ModuleWidget(module) {
 	box.size = Vec(RACK_GRID_WIDTH*6, RACK_GRID_HEIGHT);
 
 	{
@@ -208,19 +212,19 @@ SignalDelayWidget::SignalDelayWidget() {
 	addChild(display1); 
 	static const float posX[3] = {3,33,63};	
  	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(createParam<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM, 0.001f, 10.0f, 0.350f));
 	//CV INPUT
-	addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 87), module, SignalDelay::TIME_1_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]+5, 87), Port::INPUT, module, SignalDelay::TIME_1_INPUT));
 	//INPUT
-	addInput(createInput<as_PJ301MPort>(Vec(posX[0], 160), module, SignalDelay::IN_1_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(posX[0], 160), Port::INPUT, module, SignalDelay::IN_1_INPUT));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(posX[1], 160), module, SignalDelay::THRU_1_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(posX[2], 160), module, SignalDelay::OUT_1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(posX[1], 160), Port::OUTPUT, module, SignalDelay::THRU_1_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(posX[2], 160), Port::OUTPUT, module, SignalDelay::OUT_1_OUTPUT));
 
 	//DELAY 2
 	//MS DISPLAY 
@@ -231,12 +235,14 @@ SignalDelayWidget::SignalDelayWidget() {
 	display2->value = &module->lcd_tempo2;
 	addChild(display2); 
 	//KNOBS
-	addParam(createParam<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM, 0.001f, 10.0f, 0.350f));
 	//CV INPUT
-	addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 87+mod_offset), module, SignalDelay::TIME_2_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]+5, 87+mod_offset), Port::INPUT, module, SignalDelay::TIME_2_INPUT));
 	//INPUT
-	addInput(createInput<as_PJ301MPort>(Vec(posX[0], 160+mod_offset), module, SignalDelay::IN_2_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(posX[0], 160+mod_offset), Port::INPUT, module, SignalDelay::IN_2_INPUT));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(posX[1], 160+mod_offset), module, SignalDelay::THRU_2_OUTPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(posX[2], 160+mod_offset), module, SignalDelay::OUT_2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(posX[1], 160+mod_offset), Port::OUTPUT, module, SignalDelay::THRU_2_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(posX[2], 160+mod_offset), Port::OUTPUT, module, SignalDelay::OUT_2_OUTPUT));
 }
+
+Model *modelSignalDelay = Model::create<SignalDelay, SignalDelayWidget>("AS", "SignalDelay", "Signal Delay", UTILITY_TAG, DELAY_TAG);

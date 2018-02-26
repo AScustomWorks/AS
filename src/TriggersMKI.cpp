@@ -67,7 +67,7 @@ struct TriggersMKI: Module {
 
 void TriggersMKI::step() {
 
-    volts = clampf(params[VOLTAGE_PARAM].value, 0.0f, 10.0f);
+    volts = clamp(params[VOLTAGE_PARAM].value, 0.0f, 10.0f);
 
     //LATCH TRIGGER
     //EXTERNAL TRIGGER
@@ -148,11 +148,13 @@ struct VoltsDisplayWidget : TransparentWidget {
 };
 ////////////////////////////////////
 
+struct TriggersMKIWidget : ModuleWidget 
+{ 
+    TriggersMKIWidget(TriggersMKI *module);
+};
 
 
-TriggersMKIWidget::TriggersMKIWidget() {
-    TriggersMKI *module = new TriggersMKI();
-    setModule(module);
+TriggersMKIWidget::TriggersMKIWidget(TriggersMKI *module) : ModuleWidget(module) {
     box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
     {
@@ -162,10 +164,10 @@ TriggersMKIWidget::TriggersMKIWidget() {
         addChild(panel);
     }
 	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
 	//VOLTS DISPLAY 
 	VoltsDisplayWidget *display1 = new VoltsDisplayWidget();
@@ -175,18 +177,20 @@ TriggersMKIWidget::TriggersMKIWidget() {
 	addChild(display1); 
 
     //PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26, 77), module, TriggersMKI::VOLTAGE_PARAM, 0.0f, 10.0f, 5.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 77), module, TriggersMKI::VOLTAGE_PARAM, 0.0f, 10.0f, 5.0f));
     //SWITCHES
     static const float led_offset = 3.3;
     static const float led_center = 15;
-    addParam(createParam<BigLEDBezel>(Vec(led_center, 182), module, TriggersMKI::RUN_SWITCH, 0.0, 1.0, 0.0));
-    addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 182+led_offset), module, TriggersMKI::RUN_LED));
+    addParam(ParamWidget::create<BigLEDBezel>(Vec(led_center, 182), module, TriggersMKI::RUN_SWITCH, 0.0, 1.0, 0.0));
+    addChild(ModuleLightWidget::create<GiantLight<RedLight>>(Vec(led_center+led_offset, 182+led_offset), module, TriggersMKI::RUN_LED));
 
-    addParam(createParam<BigLEDBezel>(Vec(led_center, 262), module, TriggersMKI::MOMENTARY_SWITCH, 0.0, 1.0, 0.0));
-    addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 262+led_offset), module, TriggersMKI::MOMENTARY_LED));
+    addParam(ParamWidget::create<BigLEDBezel>(Vec(led_center, 262), module, TriggersMKI::MOMENTARY_SWITCH, 0.0, 1.0, 0.0));
+    addChild(ModuleLightWidget::create<GiantLight<RedLight>>(Vec(led_center+led_offset, 262+led_offset), module, TriggersMKI::MOMENTARY_LED));
 
     //PORTS
-    addInput(createInput<as_PJ301MPort>(Vec(10, 145), module, TriggersMKI::CV_RUN_INPUT));
-    addOutput(createOutput<as_PJ301MPort>(Vec(55, 145), module, TriggersMKI::TRIGGER_OUT));
+    addInput(Port::create<as_PJ301MPort>(Vec(10, 145), Port::INPUT, module, TriggersMKI::CV_RUN_INPUT));
+    addOutput(Port::create<as_PJ301MPort>(Vec(55, 145), Port::OUTPUT, module, TriggersMKI::TRIGGER_OUT));
 
 }
+
+Model *modelTriggersMKI = Model::create<TriggersMKI, TriggersMKIWidget>("AS", "TriggersMKI", "Triggers MKI", SWITCH_TAG, UTILITY_TAG);

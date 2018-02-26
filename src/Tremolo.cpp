@@ -17,7 +17,7 @@ struct LowFrequencyOscillator {
 	bool invert = false;
 	SchmittTrigger resetTrigger;
 	LowFrequencyOscillator() {
-		resetTrigger.setThresholds(0.0f, 0.01f);
+
 	}
 	void setPitch(float pitch) {
 		pitch = fminf(pitch, 8.0f);
@@ -25,7 +25,7 @@ struct LowFrequencyOscillator {
 	}
 	void setPulseWidth(float pw_) {
 		const float pwMin = 0.01f;
-		pw = clampf(pw_, pwMin, 1.0f - pwMin);
+		pw = clamp(pw_, pwMin, 1.0f - pwMin);
 	}
 	void setReset(float reset) {
 		if (resetTrigger.process(reset)) {
@@ -150,17 +150,17 @@ void TremoloFx::step() {
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
-	input_signal = clampf(inputs[SIGNAL_INPUT].value,-10.0f,10.0f);
+	input_signal = clamp(inputs[SIGNAL_INPUT].value,-10.0f,10.0f);
 
 	//oscillator.setPitch(params[FREQ_PARAM].value);
-	oscillator.setPitch( clampf(params[FREQ_PARAM].value + inputs[FREQ_CV_INPUT].value, 0.0f, 3.5f) );
+	oscillator.setPitch( clamp(params[FREQ_PARAM].value + inputs[FREQ_CV_INPUT].value, 0.0f, 3.5f) );
 	oscillator.offset = (1.0f);
 	oscillator.invert = (params[INVERT_PARAM].value <= 0.0f);
 	oscillator.setPulseWidth(0.5f);
 	oscillator.step(1.0f / engineGetSampleRate());
 
-	float wave = clampf( params[WAVE_PARAM].value + inputs[WAVE_CV_INPUT].value, 0.0f, 1.0f );
-	float interp = crossf(oscillator.sin(), oscillator.tri(), wave);
+	float wave = clamp( params[WAVE_PARAM].value + inputs[WAVE_CV_INPUT].value, 0.0f, 1.0f );
+	float interp = crossfade(oscillator.sin(), oscillator.tri(), wave);
 
 	lfo_modulation = 5.0f * interp;
 
@@ -168,21 +168,28 @@ void TremoloFx::step() {
 	if (fx_bypass){
 		outputs[SIGNAL_OUTPUT].value = input_signal;
 	}else {
-		tremolo_signal = input_signal * clampf(lfo_modulation/10.0f, 0.0f, 1.0f);
-		blend_control = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		output_signal = crossf(input_signal,tremolo_signal,blend_control);
+		tremolo_signal = input_signal * clamp(lfo_modulation/10.0f, 0.0f, 1.0f);
+		blend_control = clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+		output_signal = crossfade(input_signal,tremolo_signal,blend_control);
 		outputs[SIGNAL_OUTPUT].value = output_signal;
 	}
 
 	lights[PHASE_POS_LIGHT].setBrightnessSmooth(fmaxf(0.0f, oscillator.light()));
 	lights[PHASE_NEG_LIGHT].setBrightnessSmooth(fmaxf(0.0f, -oscillator.light()));
-	lights[BLEND_LIGHT].value = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[BLEND_LIGHT].value = clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 }
 
-TremoloFxWidget::TremoloFxWidget() {
-	TremoloFx *module = new TremoloFx();
-	setModule(module);
+
+
+struct TremoloFxWidget : ModuleWidget 
+{ 
+    TremoloFxWidget(TremoloFx *module);
+};
+
+
+TremoloFxWidget::TremoloFxWidget(TremoloFx *module) : ModuleWidget(module) {
+
     box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 	{
 		SVGPanel *panel = new SVGPanel();
@@ -192,28 +199,30 @@ TremoloFxWidget::TremoloFxWidget() {
 	}
 
  	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//phase switch
-	addParam(createParam<as_CKSS>(Vec(13, 100), module, TremoloFx::INVERT_PARAM, 0.0f, 1.0f, 1.0f));
+	addParam(ParamWidget::create<as_CKSS>(Vec(13, 100), module, TremoloFx::INVERT_PARAM, 0.0f, 1.0f, 1.0f));
     //KNOBS  
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, TremoloFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, TremoloFx::FREQ_PARAM, 0.0f, 3.5f, 1.75f));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 190), module, TremoloFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 60), module, TremoloFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 125), module, TremoloFx::FREQ_PARAM, 0.0f, 3.5f, 1.75f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 190), module, TremoloFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f));
 	//LIGHTS
-	addChild(createLight<SmallLight<YellowRedLight>>(Vec(39, 122), module, TremoloFx::PHASE_POS_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, TremoloFx::BLEND_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowRedLight>>(Vec(39, 122), module, TremoloFx::PHASE_POS_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, TremoloFx::BLEND_LIGHT));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, TremoloFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, TremoloFx::BYPASS_LED));
     //INS/OUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, TremoloFx::SIGNAL_INPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, TremoloFx::SIGNAL_OUTPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, TremoloFx::SIGNAL_INPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, TremoloFx::SIGNAL_OUTPUT));
 	//CV INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, TremoloFx::WAVE_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, TremoloFx::FREQ_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, TremoloFx::BLEND_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, TremoloFx::WAVE_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, TremoloFx::FREQ_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, TremoloFx::BLEND_CV_INPUT));
  
 }
+
+Model *modelTremoloFx = Model::create<TremoloFx, TremoloFxWidget>("AS", "TremoloFx", "Tremolo FX", EFFECT_TAG);

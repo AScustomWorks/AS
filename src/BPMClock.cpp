@@ -189,7 +189,7 @@ void BPMClock::step()
     }
   
     clock.step(1.0 / engineGetSampleRate());
-    outputs[SIXTEENTHS_OUT].value = clampf(10.0f * clock.sqr(), 0.0f, 10.0f);
+    outputs[SIXTEENTHS_OUT].value = clamp(10.0f * clock.sqr(), 0.0f, 10.0f);
  
     if (eighths_trig.process(clock.sqr()) && eighths_count <= eighths_count_limit)
       eighths_count++;
@@ -315,9 +315,13 @@ struct SigDisplayWidget : TransparentWidget {
 };
 //////////////////////////////////
 
-BPMClockWidget::BPMClockWidget() {
-	BPMClock *module = new BPMClock();
-	setModule(module);
+struct BPMClockWidget : ModuleWidget 
+{ 
+    BPMClockWidget(BPMClock *module);
+};
+
+
+BPMClockWidget::BPMClockWidget(BPMClock *module) : ModuleWidget(module) {
 	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
   
 	{
@@ -328,10 +332,10 @@ BPMClockWidget::BPMClockWidget() {
 		addChild(panel);
 	}
   //SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
   //BPM DISPLAY 
   BpmDisplayWidget *display = new BpmDisplayWidget();
   display->box.pos = Vec(23,50);
@@ -339,7 +343,7 @@ BPMClockWidget::BPMClockWidget() {
   display->value = &module->tempo;
   addChild(display); 
   //TEMPO KNOB
-  addParam(createParam<as_KnobBlack>(Vec(26, 74), module, BPMClock::TEMPO_PARAM, 40.0f, 250.0f, 120.0f));
+  addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 74), module, BPMClock::TEMPO_PARAM, 40.0f, 250.0f, 120.0f));
   //SIG TOP DISPLAY 
   SigDisplayWidget *display2 = new SigDisplayWidget();
   display2->box.pos = Vec(54,123);
@@ -347,7 +351,7 @@ BPMClockWidget::BPMClockWidget() {
   display2->value = &module->time_sig_top;
   addChild(display2);
   //SIG TOP KNOB
-  addParam(createParam<as_KnobBlack>(Vec(8, 110), module, BPMClock::TIMESIGTOP_PARAM,2.0f, 15.0f, 4.0f));
+  addParam(ParamWidget::create<as_KnobBlack>(Vec(8, 110), module, BPMClock::TIMESIGTOP_PARAM,2.0f, 15.0f, 4.0f));
   //SIG BOTTOM DISPLAY    
   SigDisplayWidget *display3 = new SigDisplayWidget();
   display3->box.pos = Vec(54,155);
@@ -355,20 +359,22 @@ BPMClockWidget::BPMClockWidget() {
   display3->value = &module->time_sig_bottom;
   addChild(display3); 
   //SIG BOTTOM KNOB
-  addParam(createParam<as_KnobBlack>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f));
+  addParam(ParamWidget::create<as_KnobBlack>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f));
   //RESET & RUN LEDS
-  addParam(createParam<LEDBezel>(Vec(55, 202), module, BPMClock::RUN_SWITCH , 0.0f, 1.0f, 0.0f));
-  addChild(createLight<LedLight<RedLight>>(Vec(57.2, 204.3), module, BPMClock::RUN_LED));
-  addParam(createParam<LEDBezel>(Vec(10.5, 202), module, BPMClock::RESET_SWITCH , 0.0f, 1.0f, 0.0f));
-  addChild(createLight<LedLight<RedLight>>(Vec(12.7, 204.3), module, BPMClock::RESET_LED));
+  addParam(ParamWidget::create<LEDBezel>(Vec(55, 202), module, BPMClock::RUN_SWITCH , 0.0f, 1.0f, 0.0f));
+  addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 204.3), module, BPMClock::RUN_LED));
+  addParam(ParamWidget::create<LEDBezel>(Vec(10.5, 202), module, BPMClock::RESET_SWITCH , 0.0f, 1.0f, 0.0f));
+  addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(12.7, 204.3), module, BPMClock::RESET_LED));
   //RESET INPUT
-  addInput(createInput<as_PJ301MPort>(Vec(10, 240), module, BPMClock::RESET_INPUT));
+  addInput(Port::create<as_PJ301MPort>(Vec(10, 240), Port::INPUT, module, BPMClock::RESET_INPUT));
   //RESET OUTPUT
-  addOutput(createOutput<as_PJ301MPort>(Vec(55, 240), module, BPMClock::RESET_OUTPUT));
+  addOutput(Port::create<as_PJ301MPort>(Vec(55, 240), Port::OUTPUT, module, BPMClock::RESET_OUTPUT));
   //TEMPO OUTPUTS
-  addOutput(createOutput<as_PJ301MPort>(Vec(10, 280), module, BPMClock::BAR_OUT));
-  addOutput(createOutput<as_PJ301MPort>(Vec(55, 280), module, BPMClock::BEAT_OUT));
-  addOutput(createOutput<as_PJ301MPort>(Vec(10, 320), module, BPMClock::EIGHTHS_OUT));
-  addOutput(createOutput<as_PJ301MPort>(Vec(55, 320), module, BPMClock::SIXTEENTHS_OUT));
+  addOutput(Port::create<as_PJ301MPort>(Vec(10, 280), Port::OUTPUT, module, BPMClock::BAR_OUT));
+  addOutput(Port::create<as_PJ301MPort>(Vec(55, 280), Port::OUTPUT, module, BPMClock::BEAT_OUT));
+  addOutput(Port::create<as_PJ301MPort>(Vec(10, 320), Port::OUTPUT, module, BPMClock::EIGHTHS_OUT));
+  addOutput(Port::create<as_PJ301MPort>(Vec(55, 320), Port::OUTPUT, module, BPMClock::SIXTEENTHS_OUT));
 
 }
+
+Model *modelBPMClock = Model::create<BPMClock, BPMClockWidget>("AS", "BPMClock", "BPM Clock", CLOCK_TAG);

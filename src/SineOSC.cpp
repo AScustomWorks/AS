@@ -6,7 +6,7 @@
 //**************************************************************************************
 #include "AS.hpp"
 
-struct SineOSC : Module {
+struct SineOsc : Module {
 	enum ParamIds {
 		FREQ_PARAM,
 		NUM_PARAMS
@@ -28,17 +28,17 @@ struct SineOSC : Module {
 	float phase = 0.0f;
 	float blinkPhase = 0.0f;
 
-	SineOSC() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+	SineOsc() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
 };
 
 
-void SineOSC::step() {
+void SineOsc::step() {
 	// Implement a simple sine oscillator
 	// Compute the frequency from the pitch parameter and input
 	float pitch = params[FREQ_PARAM].value;
 	pitch += inputs[FREQ_CV].value;
-	pitch = clampf(pitch, -4.0f, 4.0f);
+	pitch = clamp(pitch, -4.0f, 4.0f);
 	float freq = 440.0f * powf(2.0f, pitch);
 	// Accumulate the phase
 	phase += freq / engineGetSampleRate();
@@ -56,9 +56,13 @@ void SineOSC::step() {
 
 }
 
-SineOscWidget::SineOscWidget() {
-	SineOSC *module = new SineOSC();
-	setModule(module);
+struct SineOscWidget : ModuleWidget 
+{ 
+    SineOscWidget(SineOsc *module);
+};
+
+
+SineOscWidget::SineOscWidget(SineOsc *module) : ModuleWidget(module) {
 	box.size = Vec(4 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 	
 
@@ -69,17 +73,19 @@ SineOscWidget::SineOscWidget() {
 		addChild(panel);
 	}
 	//SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
-	addChild(createScrew<as_HexScrew>(Vec(0, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(0, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//LIGHT
-	addChild(createLight<SmallLight<RedLight>>(Vec(22-15, 57), module, SineOSC::FREQ_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(22-15, 57), module, SineOsc::FREQ_LIGHT));
 	//PARAMS
-	addParam(createParam<as_KnobBlack>(Vec(26-15, 60), module, SineOSC::FREQ_PARAM, -3.0f, 3.0f, 0.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26-15, 60), module, SineOsc::FREQ_PARAM, -3.0f, 3.0f, 0.0f));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33-15, 260), module, SineOSC::FREQ_CV));
+	addInput(Port::create<as_PJ301MPort>(Vec(33-15, 260), Port::INPUT, module, SineOsc::FREQ_CV));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(33-15, 310), module, SineOSC::OSC_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(33-15, 310), Port::OUTPUT, module, SineOsc::OSC_OUTPUT));
 	
 }
+
+Model *modelSineOsc = Model::create<SineOsc, SineOscWidget>("AS", "SineOSC", "TinySine", OSCILLATOR_TAG);

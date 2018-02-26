@@ -169,9 +169,9 @@ void PhaserFx::step() {
     lights[BYPASS_LED].value = fx_bypass ? 1.00 : 0.0;
 
 
-	float rate = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float feedback = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 0.95f);
-	float depth = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float rate = clamp(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float feedback = clamp(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 0.95f);
+	float depth = clamp(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 	float input = inputs[INPUT].value / 5.0f;
 
@@ -188,14 +188,19 @@ void PhaserFx::step() {
 		outputs[OUT].value = out * 5.0f;
 	}
 
-	lights[RATE_LIGHT].value = clampf(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[FBK_LIGHT].value = clampf(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[DEPTH_LIGHT].value = clampf(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[RATE_LIGHT].value = clamp(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[FBK_LIGHT].value = clamp(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[DEPTH_LIGHT].value = clamp(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 }
 
-PhaserFxWidget::PhaserFxWidget() {
-	PhaserFx *module = new PhaserFx();
-	setModule(module);
+
+struct PhaserFxWidget : ModuleWidget 
+{ 
+    PhaserFxWidget(PhaserFx *module);
+};
+
+
+PhaserFxWidget::PhaserFxWidget(PhaserFx *module) : ModuleWidget(module) {
     box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 	{
 		SVGPanel *panel = new SVGPanel();
@@ -205,27 +210,29 @@ PhaserFxWidget::PhaserFxWidget() {
 	}
 
 	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
     //KNOBS  
-	addParam(createParam<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f));
-	addParam(createParam<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f));
-	addParam(createParam<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f));
+	addParam(ParamWidget::create<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f));
+	addParam(ParamWidget::create<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f));
+	addParam(ParamWidget::create<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f));
 	//LIGHTS
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 57), module, PhaserFx::RATE_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 57), module, PhaserFx::RATE_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, PhaserFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, PhaserFx::BYPASS_LED));
     //INS/OUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, PhaserFx::INPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, PhaserFx::OUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, PhaserFx::INPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, PhaserFx::OUT));
 	//CV INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, PhaserFx::RATE_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, PhaserFx::FEEDBACK_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, PhaserFx::DEPTH_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, PhaserFx::RATE_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, PhaserFx::FEEDBACK_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, PhaserFx::DEPTH_CV_INPUT));
  
 }
+
+Model *modelPhaserFx = Model::create<PhaserFx, PhaserFxWidget>("AS", "PhaserFx", "Phaser FX", EFFECT_TAG);

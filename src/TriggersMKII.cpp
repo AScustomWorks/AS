@@ -183,11 +183,14 @@ struct LabelDisplayWidget : TransparentWidget {
   }
 };
 ////////////////////////////////////
-//0.6 update
-//TriggersMKIIWidget::TriggersMKIIWidget(TriggersMKII *module) : ModuleWidget(module) {
-TriggersMKIIWidget::TriggersMKIIWidget() {
-    TriggersMKII *module = new TriggersMKII();
-    setModule(module);
+
+struct TriggersMKIIWidget : ModuleWidget 
+{ 
+    TriggersMKIIWidget(TriggersMKII *module);
+};
+
+TriggersMKIIWidget::TriggersMKIIWidget(TriggersMKII *module) : ModuleWidget(module) {
+
     box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
     {
@@ -197,10 +200,10 @@ TriggersMKIIWidget::TriggersMKIIWidget() {
         addChild(panel);
     }
 	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
     static const float led_offset = 3.3;
     static const float led_center = 15;
@@ -214,13 +217,13 @@ TriggersMKIIWidget::TriggersMKIIWidget() {
 	addChild(display1); 	
 
     //PARAM
-	addParam(createParam<as_KnobBlack>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1, 0.0, 35.0, 0.0));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1, 0.0, 35.0, 0.0));
     //SWITCH
-    addParam(createParam<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1, 0.0, 1.0, 0.0));
-    addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
+    addParam(ParamWidget::create<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1, 0.0, 1.0, 0.0));
+    addChild(ModuleLightWidget::create<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
     //PORTS
-    addOutput(createOutput<as_PJ301MPort>(Vec(7, 78), module, TriggersMKII::TRIGGER_OUT1));
-    addInput(createInput<as_PJ301MPort>(Vec(7, 104), module, TriggersMKII::CV_TRIG_INPUT_1));
+    addOutput(Port::create<as_PJ301MPort>(Vec(7, 78), Port::OUTPUT, module, TriggersMKII::TRIGGER_OUT1));
+    addInput(Port::create<as_PJ301MPort>(Vec(7, 104), Port::INPUT, module, TriggersMKII::CV_TRIG_INPUT_1));
 
     //TRIGGER 2
     //LABEL DISPLAY 
@@ -231,15 +234,15 @@ TriggersMKIIWidget::TriggersMKIIWidget() {
 	addChild(display2); 	
 
     //PARAM
-	addParam(createParam<as_KnobBlack>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2, 0.0, 35.0, 0.0));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2, 0.0, 35.0, 0.0));
     //SWITCH
-    addParam(createParam<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2, 0.0, 1.0, 0.0));
-    addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));
+    addParam(ParamWidget::create<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2, 0.0, 1.0, 0.0));
+    addChild(ModuleLightWidget::create<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));
     //PORTS
-    addOutput(createOutput<as_PJ301MPort>(Vec(7, 78+y_offset), module, TriggersMKII::MOMENTARY_OUT2));
-    addInput(createInput<as_PJ301MPort>(Vec(7, 104+y_offset), module, TriggersMKII::CV_TRIG_INPUT_2));
+    addOutput(Port::create<as_PJ301MPort>(Vec(7, 78+y_offset), Port::OUTPUT, module, TriggersMKII::MOMENTARY_OUT2));
+    addInput(Port::create<as_PJ301MPort>(Vec(7, 104+y_offset), Port::INPUT, module, TriggersMKII::CV_TRIG_INPUT_2));
     
 }
 
-//p->addModel(createModel<TriggersMKIIWidget>("AS", "TriggersMKII", "Triggers MKII", SWITCH_TAG, UTILITY_TAG));
-//Model *modelTriggersMKII = Model::create<TriggersMKII, TriggersMKIIWidget>("AS", "TriggersMKII", "Triggers MKII",  SWITCH_TAG, UTILITY_TAG);
+
+Model *modelTriggersMKII = Model::create<TriggersMKII, TriggersMKIIWidget>("AS", "TriggersMKII", "Triggers MKII",  SWITCH_TAG, UTILITY_TAG);

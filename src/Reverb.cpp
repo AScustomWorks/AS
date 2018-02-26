@@ -106,10 +106,10 @@ void ReverbFx::step() {
 	float old_roomsize = roomsize;
 	float old_damp = damp;
 
-	float input_signal = clampf(inputs[SIGNAL_INPUT].value,-10.0f,10.0f);
+	float input_signal = clamp(inputs[SIGNAL_INPUT].value,-10.0f,10.0f);
 	//float input_signal = inputs[SIGNAL_INPUT].value;
-	roomsize = clampf(params[DECAY_PARAM].value + inputs[DECAY_CV_INPUT].value / 10.0f, 0.0f, 0.88f);
-	damp = clampf(params[DAMP_PARAM].value + inputs[DAMP_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	roomsize = clamp(params[DECAY_PARAM].value + inputs[DECAY_CV_INPUT].value / 10.0f, 0.0f, 0.88f);
+	damp = clamp(params[DAMP_PARAM].value + inputs[DAMP_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 	if( old_damp != damp ) reverb.setdamp(damp);
 	if( old_roomsize != roomsize) reverb.setroomsize(roomsize);
@@ -120,19 +120,23 @@ void ReverbFx::step() {
 	if (fx_bypass){
 		outputs[SIGNAL_OUTPUT].value = inputs[SIGNAL_INPUT].value;
 	}else {
-		outputs[SIGNAL_OUTPUT].value = input_signal + out1 * clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		//outputs[SIGNAL_OUTPUT2].value = input_signal + out2 * clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
+		outputs[SIGNAL_OUTPUT].value = input_signal + out1 * clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+		//outputs[SIGNAL_OUTPUT2].value = input_signal + out2 * clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
 	}
 
-	lights[DECAY_LIGHT].value = clampf(params[DECAY_PARAM].value + inputs[DECAY_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[DAMP_LIGHT].value = clampf(params[DAMP_PARAM].value + inputs[DAMP_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[BLEND_LIGHT].value = clampf(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[DECAY_LIGHT].value = clamp(params[DECAY_PARAM].value + inputs[DECAY_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[DAMP_LIGHT].value = clamp(params[DAMP_PARAM].value + inputs[DAMP_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[BLEND_LIGHT].value = clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 }
 
-ReverbFxWidget::ReverbFxWidget() {
-	ReverbFx *module = new ReverbFx();
-	setModule(module);
+struct ReverbFxWidget : ModuleWidget 
+{ 
+    ReverbFxWidget(ReverbFx *module);
+};
+
+
+ReverbFxWidget::ReverbFxWidget(ReverbFx *module) : ModuleWidget(module) {
 	box.size = Vec(15 * 6, 380);
 
 	{
@@ -144,27 +148,29 @@ ReverbFxWidget::ReverbFxWidget() {
 	}
 
  	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS  
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, ReverbFx::DECAY_PARAM, 0.0f, 0.9f, 0.5f));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, ReverbFx::DAMP_PARAM, 0.0f, 1.0f, 0.0f));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 190), module, ReverbFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 60), module, ReverbFx::DECAY_PARAM, 0.0f, 0.9f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 125), module, ReverbFx::DAMP_PARAM, 0.0f, 1.0f, 0.0f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 190), module, ReverbFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f));
 	//LIGHTS
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 57), module, ReverbFx::DECAY_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 122), module, ReverbFx::DAMP_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, ReverbFx::BLEND_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 57), module, ReverbFx::DECAY_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, ReverbFx::DAMP_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, ReverbFx::BLEND_LIGHT));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, ReverbFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, ReverbFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, ReverbFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, ReverbFx::BYPASS_LED));
     //INS/OUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, ReverbFx::SIGNAL_INPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, ReverbFx::SIGNAL_OUTPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, ReverbFx::SIGNAL_INPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, ReverbFx::SIGNAL_OUTPUT));
 	//CV INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, ReverbFx::DECAY_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, ReverbFx::DAMP_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, ReverbFx::BLEND_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, ReverbFx::DECAY_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, ReverbFx::DAMP_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, ReverbFx::BLEND_CV_INPUT));
 	
 }
+
+Model *modelReverbFx = Model::create<ReverbFx, ReverbFxWidget>("AS", "ReverbFx", "Reverb FX", REVERB_TAG, EFFECT_TAG);

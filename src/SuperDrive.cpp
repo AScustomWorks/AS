@@ -91,7 +91,7 @@ void SuperDriveFx::step() {
 	float input_signal = inputs[SIGNAL_INPUT].value;
 	//OVERDRIVE SIGNAL
 	//float drive = params[DRIVE_PARAM].value;
-	drive = clampf(params[DRIVE_PARAM].value + inputs[DRIVE_CV_INPUT].value / 10.0f, 0.1f, 1.0f);
+	drive = clamp(params[DRIVE_PARAM].value + inputs[DRIVE_CV_INPUT].value / 10.0f, 0.1f, 1.0f);
 
 	drive = drive * drive_scale;
 	//precalc
@@ -99,15 +99,15 @@ void SuperDriveFx::step() {
 	//process
 	process = inv_atan_drive * atan(input_signal*drive);
 	//output_signal = process * params[OUTPUT_GAIN_PARAM].value;
-	output_signal = process * clampf(params[OUTPUT_GAIN_PARAM].value + inputs[GAIN_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	output_signal = process * clamp(params[OUTPUT_GAIN_PARAM].value + inputs[GAIN_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 	//TONE CONTROL
-	float tone = clampf(params[TONE_PARAM].value + inputs[TONE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float lowpassFreq = 10000.0f * powf(10.0f, clampf(2.0f*tone, 0.0f, 1.0f));
+	float tone = clamp(params[TONE_PARAM].value + inputs[TONE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float lowpassFreq = 10000.0f * powf(10.0f, clamp(2.0f*tone, 0.0f, 1.0f));
 	lowpassFilter.setCutoff(lowpassFreq / engineGetSampleRate());
 	lowpassFilter.process(output_signal);
 	output_signal = lowpassFilter.lowpass();
-	float highpassFreq = 10.0f * powf(100.0f, clampf(2.0f*tone - 1.0f, 0.0f, 1.0f));
+	float highpassFreq = 10.0f * powf(100.0f, clamp(2.0f*tone - 1.0f, 0.0f, 1.0f));
 	highpassFilter.setCutoff(highpassFreq / engineGetSampleRate());
 	highpassFilter.process(output_signal);
 	output_signal = highpassFilter.highpass();
@@ -122,15 +122,20 @@ void SuperDriveFx::step() {
 	//lights[DRIVE_LIGHT].value = params[DRIVE_PARAM].value;
 	//lights[GAIN_LIGHT].value = params[OUTPUT_GAIN_PARAM].value;
 
-	lights[DRIVE_LIGHT].value = clampf(params[DRIVE_PARAM].value + inputs[DRIVE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[TONE_LIGHT].value = clampf(params[TONE_PARAM].value + inputs[TONE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[GAIN_LIGHT].value = clampf(params[OUTPUT_GAIN_PARAM].value + inputs[GAIN_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[DRIVE_LIGHT].value = clamp(params[DRIVE_PARAM].value + inputs[DRIVE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[TONE_LIGHT].value = clamp(params[TONE_PARAM].value + inputs[TONE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[GAIN_LIGHT].value = clamp(params[OUTPUT_GAIN_PARAM].value + inputs[GAIN_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 
 }
 
-SuperDriveFxWidget::SuperDriveFxWidget() {
-	SuperDriveFx *module = new SuperDriveFx();
-	setModule(module);
+struct SuperDriveFxWidget : ModuleWidget 
+{ 
+    SuperDriveFxWidget(SuperDriveFx *module);
+};
+
+
+SuperDriveFxWidget::SuperDriveFxWidget(SuperDriveFx *module) : ModuleWidget(module) {
+	
     box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 	{
 		SVGPanel *panel = new SVGPanel();
@@ -140,27 +145,29 @@ SuperDriveFxWidget::SuperDriveFxWidget() {
 	}
 
  	//SCREWS
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
     //KNOBS  
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, SuperDriveFx::DRIVE_PARAM, 0.1f, 1.0f, 0.1f));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, SuperDriveFx::TONE_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(createParam<as_FxKnobWhite>(Vec(43, 190), module, SuperDriveFx::OUTPUT_GAIN_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 60), module, SuperDriveFx::DRIVE_PARAM, 0.1f, 1.0f, 0.1f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 125), module, SuperDriveFx::TONE_PARAM, 0.0f, 1.0f, 0.5f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(43, 190), module, SuperDriveFx::OUTPUT_GAIN_PARAM, 0.0f, 1.0f, 0.5f));
 	//LIGHTS
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 57), module, SuperDriveFx::DRIVE_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 122), module, SuperDriveFx::TONE_LIGHT));
-	addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, SuperDriveFx::GAIN_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 57), module, SuperDriveFx::DRIVE_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, SuperDriveFx::TONE_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, SuperDriveFx::GAIN_LIGHT));
     //BYPASS SWITCH
-  	addParam(createParam<LEDBezel>(Vec(33, 260), module, SuperDriveFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(createLight<LedLight<RedLight>>(Vec(35.2, 262), module, SuperDriveFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, SuperDriveFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, SuperDriveFx::BYPASS_LED));
     //INS/OUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, SuperDriveFx::SIGNAL_INPUT));
-	addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, SuperDriveFx::SIGNAL_OUTPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, SuperDriveFx::SIGNAL_INPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, SuperDriveFx::SIGNAL_OUTPUT));
 	//CV INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, SuperDriveFx::DRIVE_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, SuperDriveFx::TONE_CV_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, SuperDriveFx::GAIN_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, SuperDriveFx::DRIVE_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, SuperDriveFx::TONE_CV_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, SuperDriveFx::GAIN_CV_INPUT));
  
 }
+
+Model *modelSuperDriveFx = Model::create<SuperDriveFx, SuperDriveFxWidget>("AS", "SuperDriveFx", "Super Drive FX", AMPLIFIER_TAG, EFFECT_TAG);

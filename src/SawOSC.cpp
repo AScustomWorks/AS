@@ -1,12 +1,12 @@
 //**************************************************************************************
-//SawOSC module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
+//SawOsc module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Code taken from RODENTCAT https://github.com/RODENTCAT/RODENTMODULES
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
 #include "AS.hpp"
 
-struct SawOSC : Module {
+struct SawOsc : Module {
 	enum ParamIds {
 		PITCH_PARAM,
 		 PW_PARAM,
@@ -29,17 +29,17 @@ struct SawOSC : Module {
 	float phase = 0.0f;
 	float blinkPhase = 0.0f;
 
-	SawOSC() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+	SawOsc() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 	void step() override;
 };
 
-void SawOSC::step() {
+void SawOsc::step() {
 	// Implement a simple sine oscillator
 	float deltaTime = 1.0f / engineGetSampleRate();
 	// Compute the frequency from the pitch parameter and input
 	float pitch = params[PITCH_PARAM].value;
 	pitch += inputs[PITCH_INPUT].value;
-	pitch = clampf(pitch, -4.0f, 4.0f);
+	pitch = clamp(pitch, -4.0f, 4.0f);
 	float freq = 440.0f * powf(2.0f, pitch);
 
 	// Accumulate the phase
@@ -73,9 +73,13 @@ void SawOSC::step() {
 	lights[FREQ_LIGHT].value = (outputs[OSC_OUTPUT].value > 0.0f) ? 1.0f : 0.0f;
 }
 
-SawOscWidget::SawOscWidget() {
-	SawOSC *module = new SawOSC();
-	setModule(module);
+struct SawOscWidget : ModuleWidget 
+{ 
+    SawOscWidget(SawOsc *module);
+};
+
+
+SawOscWidget::SawOscWidget(SawOsc *module) : ModuleWidget(module) {
 	box.size = Vec(4 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
 	{
@@ -85,20 +89,22 @@ SawOscWidget::SawOscWidget() {
 		addChild(panel);
 	}
 	//SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
-	addChild(createScrew<as_HexScrew>(Vec(0, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(0, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//LIGHT
-	addChild(createLight<SmallLight<RedLight>>(Vec(22-15, 57), module, SawOSC::FREQ_LIGHT));
+	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(22-15, 57), module, SawOsc::FREQ_LIGHT));
 	//PARAMS
-	//addParam(createParam<as_KnobBlack>(Vec(26, 60), module, SawOSC::PITCH_PARAM, -3.0, 3.0, 0.0));
-	addParam(createParam<as_KnobBlack>(Vec(26-15, 60), module, SawOSC::PITCH_PARAM, -4.0, 4.0, 0.0));
-	//addParam(createParam<as_KnobBlack>(Vec(26, 125), module, SawOSC::PW_PARAM, -4.0, 5.0, -4.0));
-	addParam(createParam<as_KnobBlack>(Vec(26-15, 125), module, SawOSC::PW_PARAM, -4.2, 5.0, -4.2));
+	//addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 60), module, SawOsc::PITCH_PARAM, -3.0, 3.0, 0.0));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26-15, 60), module, SawOsc::PITCH_PARAM, -4.0, 4.0, 0.0));
+	//addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 125), module, SawOsc::PW_PARAM, -4.0, 5.0, -4.0));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26-15, 125), module, SawOsc::PW_PARAM, -4.2, 5.0, -4.2));
 	//INPUTS
-	addInput(createInput<as_PJ301MPort>(Vec(33-15, 200), module, SawOSC::PW_INPUT));
-	addInput(createInput<as_PJ301MPort>(Vec(33-15, 260), module, SawOSC::PITCH_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(33-15, 200), Port::INPUT, module, SawOsc::PW_INPUT));
+	addInput(Port::create<as_PJ301MPort>(Vec(33-15, 260), Port::INPUT, module, SawOsc::PITCH_INPUT));
 	//OUTPUTS
-	addOutput(createOutput<as_PJ301MPort>(Vec(33-15, 310), module, SawOSC::OSC_OUTPUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(33-15, 310), Port::OUTPUT, module, SawOsc::OSC_OUTPUT));
 }
+
+Model *modelSawOsc = Model::create<SawOsc, SawOscWidget>("AS", "SawOSC", "TinySawish", OSCILLATOR_TAG);

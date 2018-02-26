@@ -7,126 +7,38 @@ extern Plugin *plugin;
 ////////////////////
 // module widgets
 ////////////////////
-struct SineOscWidget : ModuleWidget {
-	SineOscWidget();
-};
-struct SawOscWidget : ModuleWidget {
-	SawOscWidget();
-};
 
-struct Multiple2_5Widget : ModuleWidget {
-	Multiple2_5Widget();
-};
+extern Model *modelSineOsc;
+extern Model *modelSawOsc;
 
-struct Merge2_5Widget : ModuleWidget {
-	Merge2_5Widget();
-};
-struct BPMClockWidget : ModuleWidget {
-	BPMClockWidget();
-};
+extern Model *modelADSR;
+extern Model *modelVCA;
+extern Model *modelQuadVCA;
+extern Model *modelTriLFO;
+extern Model *modelBPMClock;
+extern Model *modelSEQ16;
+extern Model *modelMixer8ch;
+extern Model *modelMonoVUmeter;
+extern Model *modelStereoVUmeter;
+extern Model *modelMultiple2_5;
+extern Model *modelMerge2_5;
+extern Model *modelSteps;
+extern Model *modelTriggersMKI;
+extern Model *modelTriggersMKII;
+extern Model *modelLaunchGate;
+extern Model *modelKillGate;
+extern Model *modelSignalDelay;
 
-struct ADSRWidget : ModuleWidget {
-	ADSRWidget();
-};
+extern Model *modelDelayPlusFx;
+extern Model *modelPhaserFx;
+extern Model *modelReverbFx;
+extern Model *modelSuperDriveFx;
+extern Model *modelTremoloFx;
+extern Model *modelWaveShaper;
 
-struct VCAWidget : ModuleWidget {
-	VCAWidget();
-};
-struct TriLFOWidget : ModuleWidget 
-{ 
-    TriLFOWidget();
-};
-struct SEQ16Widget : ModuleWidget { 
-    SEQ16Widget();
-	Menu *createContextMenu() override;
-};
-
-struct Mixer8chWidget : ModuleWidget {
-	Mixer8chWidget();
-};
-
-struct QuadVCAWidget : ModuleWidget {
-	QuadVCAWidget();
-};
-
-struct TriggersWidget : ModuleWidget 
-{ 
-    TriggersWidget();
-};
-
-struct TriggersMKIWidget : ModuleWidget 
-{ 
-    TriggersMKIWidget();
-};
-struct TriggersMKIIWidget : ModuleWidget 
-{ 
-    TriggersMKIIWidget();
-};
-
-struct StepsWidget : ModuleWidget 
-{ 
-    StepsWidget();
-};
-struct monoVUmeterWidget : ModuleWidget 
-{ 
-    monoVUmeterWidget();
-};
-struct stereoVUmeterWidget : ModuleWidget 
-{ 
-    stereoVUmeterWidget();
-};
-
-struct LaunchGateWidget : ModuleWidget {
-	LaunchGateWidget();
-};
-
-struct KillGateWidget : ModuleWidget {
-	KillGateWidget();
-};
-
-struct SignalDelayWidget : ModuleWidget {
-	SignalDelayWidget();
-};
-
-struct DelayPlusFxWidget : ModuleWidget {
-	DelayPlusFxWidget();
-};
-
-struct PhaserFxWidget : ModuleWidget {
-	PhaserFxWidget();
-};
-
-struct ReverbFxWidget : ModuleWidget {
-	ReverbFxWidget();
-};
-
-struct SuperDriveFxWidget : ModuleWidget {
-	SuperDriveFxWidget();
-};
-
-struct TremoloFxWidget : ModuleWidget 
-{ 
-    TremoloFxWidget();
-};
-
-struct WaveShaperWidget : ModuleWidget {
-	WaveShaperWidget();
-};
-
-struct BlankPanel4Widget : ModuleWidget 
-{ 
-    BlankPanel4Widget();
-};
-
-struct BlankPanel6Widget : ModuleWidget 
-{ 
-    BlankPanel6Widget();
-};
-
-struct BlankPanel8Widget : ModuleWidget 
-{ 
-    BlankPanel8Widget();
-};
+extern Model *modelBlankPanel4;
+extern Model *modelBlankPanel6;
+extern Model *modelBlankPanel8;
 
 //////////////////////////////////////
 //MODULE COMPONENTS
@@ -235,7 +147,7 @@ template <typename BASE>
  	}
  };
 
- struct OrangeLight : ModuleLightWidget {
+ struct OrangeLight : GrayModuleLightWidget {
 	OrangeLight() {
 		addBaseColor(COLOR_ORANGE);
 	}
@@ -250,7 +162,7 @@ struct LedLight : BASE {
 };
 
 /** Reads two adjacent lightIds, so `lightId` and `lightId + 1` must be defined */
-struct YellowRedLight : ModuleLightWidget {
+struct YellowRedLight : GrayModuleLightWidget {
 	YellowRedLight() {
 		addBaseColor(COLOR_YELLOW);
 		addBaseColor(COLOR_RED);
@@ -265,7 +177,7 @@ struct as_PJ301MPort : SVGPort {
 	}
 };
 
-struct as_SlidePot : SVGSlider {
+struct as_SlidePot : SVGFader {
 	as_SlidePot() {
 		Vec margin = Vec(4, 4);
 		maxHandlePos = Vec(-1.5, -8).plus(margin);
@@ -279,7 +191,7 @@ struct as_SlidePot : SVGSlider {
 	}
 };
 
-struct as_FaderPot : SVGSlider {
+struct as_FaderPot : SVGFader {
 	as_FaderPot() {
 		Vec margin = Vec(4, 4);
 		maxHandlePos = Vec(-1.5, -8).plus(margin);

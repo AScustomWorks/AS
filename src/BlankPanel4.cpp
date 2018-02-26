@@ -23,10 +23,12 @@ void BlankPanel4::step()
 {
 }
 
-BlankPanel4Widget::BlankPanel4Widget() 
-{
-	BlankPanel4 *module = new BlankPanel4();
-	setModule(module);
+struct BlankPanel4Widget : ModuleWidget 
+{ 
+    BlankPanel4Widget(BlankPanel4 *module);
+};
+
+BlankPanel4Widget::BlankPanel4Widget(BlankPanel4 *module) : ModuleWidget(module) {
 	box.size = Vec(4 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
 	{
@@ -37,8 +39,10 @@ BlankPanel4Widget::BlankPanel4Widget()
 	}
 
 	//SCREWS - MOD SPACING FOR RACK WIDTH*4
-	addChild(createScrew<as_HexScrew>(Vec(0, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
-	addChild(createScrew<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(createScrew<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(0, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+	addChild(Widget::create<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 }
+
+Model *modelBlankPanel4 = Model::create<BlankPanel4, BlankPanel4Widget>("AS", "BlankPanel4", "BlankPanel 4", BLANK_TAG);
