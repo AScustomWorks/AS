@@ -27,6 +27,7 @@ extern Model *modelTriggersMKI;
 extern Model *modelTriggersMKII;
 extern Model *modelLaunchGate;
 extern Model *modelKillGate;
+extern Model *modelFlow;
 extern Model *modelSignalDelay;
 
 extern Model *modelDelayPlusFx;
