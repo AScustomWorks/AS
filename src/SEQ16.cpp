@@ -133,7 +133,7 @@ struct SEQ16 : Module {
 
 	void randomize() override {
 		for (int i = 0; i < 16; i++) {
-			gateState[i] = (random() > 0.5);
+			gateState[i] = (randomUniform() > 0.5);
 		}
 	}
 };
