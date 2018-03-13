@@ -294,7 +294,7 @@ struct StepsDisplayWidget : TransparentWidget {
     font = Font::load(assetPlugin(plugin, "res/Segment7Standard.ttf"));
   };
 
-  void draw(NVGcontext *vg) {
+  void draw(NVGcontext *vg) override {
     // Background
     //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
 	 NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);

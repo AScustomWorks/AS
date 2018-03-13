@@ -56,18 +56,14 @@ struct as_Knob : SVGKnob {
 	as_Knob() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		sw->svg = SVG::load(assetPlugin(plugin, "res/as-knob.svg"));
-		sw->wrap();
-		box.size = sw->box.size;
+		setSVG( SVG::load(assetPlugin(plugin, "res/as-knob.svg")) );
 	}
 };
 struct as_KnobBlack : SVGKnob {
 	as_KnobBlack() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		sw->svg = SVG::load(assetPlugin(plugin, "res/as-knobBlack.svg"));
-		sw->wrap();
-		box.size = sw->box.size;
+		setSVG( SVG::load(assetPlugin(plugin, "res/as-knobBlack.svg")) );
 	}
 };
 
@@ -75,18 +71,14 @@ struct as_FxKnobWhite : SVGKnob {
 	as_FxKnobWhite() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		sw->svg = SVG::load(assetPlugin(plugin, "res/as-FxKnobWhite.svg"));
-		sw->wrap();
-		box.size = sw->box.size;
+		setSVG( SVG::load(assetPlugin(plugin, "res/as-FxKnobWhite.svg")) );
 	}
 };
 struct as_FxKnobBlack : SVGKnob {
 	as_FxKnobBlack() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		sw->svg = SVG::load(assetPlugin(plugin, "res/as-FxKnobBlack.svg"));
-		sw->wrap();
-		box.size = sw->box.size;
+		setSVG( SVG::load(assetPlugin(plugin, "res/as-FxKnobBlack.svg")) );
 	}
 };
 
