@@ -169,6 +169,8 @@ V 0.5.2: added back the voltage range switch.
 V 0.5.4: Updated look.
 
 ### Blank Panel
-Blank panels in 4,6 & 8 HP.
+Blank panels in 4, 6 & 8 HP.
+
+New special "blank" panel 8 HP added for v0.6.0.
 
 ### Have fun!
