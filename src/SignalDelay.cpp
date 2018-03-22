@@ -6,6 +6,7 @@
 #include "AS.hpp"
 #include "dsp/samplerate.hpp"
 #include "dsp/ringbuffer.hpp"
+#include "samplerate.h"
 
 #include <sstream>
 #include <iomanip>
@@ -36,20 +37,30 @@ struct SignalDelay : Module {
 
 	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer1;
 	DoubleRingBuffer<float, 16> outBuffer1;
-	SampleRateConverter<1> src1;
+	SRC_STATE *src1;
 	float lastWet1 = 0.0f;
 
 	int lcd_tempo1 = 0;
 
 	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer2;
 	DoubleRingBuffer<float, 16> outBuffer2;
-	SampleRateConverter<1> src2;
+	SRC_STATE *src2;
 	float lastWet2 = 0.0f;
 
 	int lcd_tempo2 = 0;
 
-	SignalDelay() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {}
+	SignalDelay() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS) {
+		src1 = src_new(SRC_SINC_FASTEST, 1, NULL);
+		assert(src1);
+		src2 = src_new(SRC_SINC_FASTEST, 1, NULL);
+		assert(src2);
 
+	}
+
+	~SignalDelay() {
+		src_delete(src1);
+		src_delete(src2);
+	}
 	void step() override;
 
 };
@@ -73,19 +84,23 @@ void SignalDelay::step() {
 	}
 	// How many samples do we need consume1 to catch up?
 	float consume1 = index1 - historyBuffer1.size();
-	if (outBuffer1.empty()) {
-		double ratio1 = 1.0;
-		if (consume1 <= -16)
-			ratio1 = 0.5;
-		else if (consume1 >= 16)
-			ratio1 = 2.0;
 
-		int inFrames1 = min(historyBuffer1.size(), 16);
-		int outFrames1 = outBuffer1.capacity();
-		src1.setRates(ratio1 * engineGetSampleRate(), engineGetSampleRate());
-		src1.process((const Frame<1>*)historyBuffer1.startData(), &inFrames1, (Frame<1>*)outBuffer1.endData(), &outFrames1);
-		historyBuffer1.startIncr(inFrames1);
-		outBuffer1.endIncr(outFrames1);
+	if (outBuffer1.empty()) {
+		double ratio1 = 1.f;
+		if (fabsf(consume1) >= 16.f) {
+			ratio1 = powf(10.f, clamp(consume1 / 10000.f, -1.f, 1.f));
+		}
+
+		SRC_DATA srcData1;
+		srcData1.data_in = (const float*) historyBuffer1.startData();
+		srcData1.data_out = (float*) outBuffer1.endData();
+		srcData1.input_frames = min(historyBuffer1.size(), 16);
+		srcData1.output_frames = outBuffer1.capacity();
+		srcData1.end_of_input = false;
+		srcData1.src_ratio = ratio1;
+		src_process(src1, &srcData1);
+		historyBuffer1.startIncr(srcData1.input_frames_used);
+		outBuffer1.endIncr(srcData1.output_frames_gen);
 	}
 
 	float wet1 = 0.0f;
@@ -114,18 +129,21 @@ void SignalDelay::step() {
 	// How many samples do we need consume1 to catch up?
 	float consume2 = index2 - historyBuffer2.size();
 	if (outBuffer2.empty()) {
-		double ratio2 = 1.0;
-		if (consume2 <= -16)
-			ratio2 = 0.5;
-		else if (consume2 >= 16)
-			ratio2 = 2.0;
+		double ratio2 = 1.f;
+		if (fabsf(consume2) >= 16.f) {
+			ratio2 = powf(10.f, clamp(consume2 / 10000.f, -1.f, 1.f));
+		}
 
-		int inFrames2 = min(historyBuffer2.size(), 16);
-		int outFrames2 = outBuffer2.capacity();
-		src2.setRates(ratio2 * engineGetSampleRate(), engineGetSampleRate());
-		src2.process((const Frame<1>*)historyBuffer2.startData(), &inFrames2, (Frame<1>*)outBuffer2.endData(), &outFrames2);
-		historyBuffer2.startIncr(inFrames2);
-		outBuffer2.endIncr(outFrames2);
+		SRC_DATA srcData2;
+		srcData2.data_in = (const float*) historyBuffer2.startData();
+		srcData2.data_out = (float*) outBuffer2.endData();
+		srcData2.input_frames = min(historyBuffer2.size(), 16);
+		srcData2.output_frames = outBuffer2.capacity();
+		srcData2.end_of_input = false;
+		srcData2.src_ratio = ratio2;
+		src_process(src2, &srcData2);
+		historyBuffer2.startIncr(srcData2.input_frames_used);
+		outBuffer2.endIncr(srcData2.output_frames_gen);
 	}
 
 	float wet2 = 0.0;
@@ -195,14 +213,9 @@ struct SignalDelayWidget : ModuleWidget
 
 
 SignalDelayWidget::SignalDelayWidget(SignalDelay *module) : ModuleWidget(module) {
-	box.size = Vec(RACK_GRID_WIDTH*6, RACK_GRID_HEIGHT);
 
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/SignalDelay.svg")));
-		addChild(panel);
-	}
+	setPanel(SVG::load(assetPlugin(plugin, "res/SignalDelay.svg")));
+
 	//DELAY 1
 	//MS DISPLAY 
 	MsDisplayWidget *display1 = new MsDisplayWidget();

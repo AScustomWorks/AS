@@ -348,14 +348,8 @@ struct SEQ16Widget : ModuleWidget {
 
 SEQ16Widget::SEQ16Widget(SEQ16 *module) : ModuleWidget(module) {
 
-	box.size = Vec(44 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
-
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/SEQ16.svg")));
-		addChild(panel);
-	}
+  setPanel(SVG::load(assetPlugin(plugin, "res/SEQ16.svg")));
+  
 	//LCD STEPS SCREEN
 	StepsDisplayWidget *display = new StepsDisplayWidget();
 	display->box.pos = Vec(341,60);

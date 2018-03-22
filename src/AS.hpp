@@ -1,5 +1,7 @@
 #include "rack.hpp"
 
+#pragma once
+
 using namespace rack;
 
 extern Plugin *plugin;
@@ -40,6 +42,7 @@ extern Model *modelWaveShaper;
 extern Model *modelBlankPanel4;
 extern Model *modelBlankPanel6;
 extern Model *modelBlankPanel8;
+extern Model *modelBlankPanelSpecial;
 
 //////////////////////////////////////
 //MODULE COMPONENTS

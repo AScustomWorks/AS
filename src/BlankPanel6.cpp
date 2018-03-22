@@ -29,15 +29,9 @@ struct BlankPanel6Widget : ModuleWidget
 };
 
 BlankPanel6Widget::BlankPanel6Widget(BlankPanel6 *module) : ModuleWidget(module) {
-	box.size = Vec(6 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/BlankPanel6.svg")));
-		panel->box.size = box.size;
-		addChild(panel);
-	}
-
+	setPanel(SVG::load(assetPlugin(plugin, "res/Blanks/BlankPanel6.svg")));
+	
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));

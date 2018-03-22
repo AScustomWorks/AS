@@ -322,15 +322,8 @@ struct Mixer8chWidget : ModuleWidget
 
 
 Mixer8chWidget::Mixer8chWidget(Mixer8ch *module) : ModuleWidget(module) {
-	//box.size = Vec(15*37, 380);
-	box.size = Vec(RACK_GRID_WIDTH*26, RACK_GRID_HEIGHT);
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/8chMixer.svg")));
-		
-		addChild(panel);
-	} 
+
+  setPanel(SVG::load(assetPlugin(plugin, "res/8chMixer.svg")));
 
 	//SCREWS
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));

@@ -6,3 +6,4 @@
 *dylib
 slug.txt
 .gitignore
+/dep/*

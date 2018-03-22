@@ -137,16 +137,8 @@ struct ReverbFxWidget : ModuleWidget
 
 
 ReverbFxWidget::ReverbFxWidget(ReverbFx *module) : ModuleWidget(module) {
-	box.size = Vec(15 * 6, 380);
 
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		
-        panel->setBackground(SVG::load(assetPlugin(plugin, "res/Reverb.svg")));
-		addChild(panel);
-	}
-
+  setPanel(SVG::load(assetPlugin(plugin, "res/Reverb.svg")));
  	//SCREWS
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));

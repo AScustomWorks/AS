@@ -54,13 +54,9 @@ struct MonoVUmeterWidget : ModuleWidget
 
 
 MonoVUmeterWidget::MonoVUmeterWidget(MonoVUmeter *module) : ModuleWidget(module) {
-	box.size = Vec(2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/MonoVUmeter.svg")));
-		addChild(panel);
-	}
+
+  setPanel(SVG::load(assetPlugin(plugin, "res/MonoVUmeter.svg")));
+  
 	//SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
 	addChild(Widget::create<as_HexScrew>(Vec(0, 0)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));

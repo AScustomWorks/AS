@@ -7,6 +7,7 @@
 #include "dsp/samplerate.hpp"
 #include "dsp/ringbuffer.hpp"
 #include "dsp/filter.hpp"
+#include "samplerate.h"
 
 #include "dsp/digital.hpp"
 
@@ -46,7 +47,7 @@ struct DelayPlusFx : Module {
 
 	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer;
 	DoubleRingBuffer<float, 16> outBuffer;
-	SampleRateConverter<1> src;
+	SRC_STATE *src;
 	float lastWet = 0.0f;
 	RCFilter lowpassFilter;
 	RCFilter highpassFilter;
@@ -55,7 +56,14 @@ struct DelayPlusFx : Module {
 	SchmittTrigger bypass_button_trig;
 
 	bool fx_bypass = false;
-	DelayPlusFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+	DelayPlusFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
+		src = src_new(SRC_SINC_FASTEST, 1, NULL);
+		assert(src);
+	}
+
+	~DelayPlusFx() {
+		src_delete(src);
+	}
 
 	void step() override;
 
@@ -104,8 +112,6 @@ void DelayPlusFx::step() {
 	// Number of delay samples
 	float index = delay * engineGetSampleRate();
 
-	// TODO This is a horrible digital delay algorithm. Rewrite later.
-
 	// Push dry sample into history buffer
 	if (!historyBuffer.full()) {
 		historyBuffer.push(dry);
@@ -113,27 +119,23 @@ void DelayPlusFx::step() {
 
 	// How many samples do we need consume to catch up?
 	float consume = index - historyBuffer.size();
-	//printf("%f\t%d\t%f\n", index, historyBuffer.size(), consume);
-	// printf("wanted: %f\tactual: %d\tdiff: %d\tratio: %f\n", index, historyBuffer.size(), consume, index / historyBuffer.size());
+
 	if (outBuffer.empty()) {
+		double ratio = 1.f;
+		if (fabsf(consume) >= 16.f) {
+			ratio = powf(10.f, clamp(consume / 10000.f, -1.f, 1.f));
+		}
 
-		double ratio = 1.0;
-		if (consume <= -16)
-			ratio = 0.5;
-		else if (consume >= 16)
-			ratio = 2.0;
-
-		// printf("%f\t%lf\n", consume, ratio);
-		int inFrames = min(historyBuffer.size(), 16);
-		int outFrames = outBuffer.capacity();
-		// printf(">\t%d\t%d\n", inFrames, outFrames);
-
-		src.setRates(ratio * engineGetSampleRate(), engineGetSampleRate());
-		src.process((const Frame<1>*)historyBuffer.startData(), &inFrames, (Frame<1>*)outBuffer.endData(), &outFrames);
-		historyBuffer.startIncr(inFrames);
-		outBuffer.endIncr(outFrames);
-		// printf("<\t%d\t%d\n", inFrames, outFrames);
-		// printf("====================================\n");
+		SRC_DATA srcData;
+		srcData.data_in = (const float*) historyBuffer.startData();
+		srcData.data_out = (float*) outBuffer.endData();
+		srcData.input_frames = min(historyBuffer.size(), 16);
+		srcData.output_frames = outBuffer.capacity();
+		srcData.end_of_input = false;
+		srcData.src_ratio = ratio;
+		src_process(src, &srcData);
+		historyBuffer.startIncr(srcData.input_frames_used);
+		outBuffer.endIncr(srcData.output_frames_gen);
 	}
 	float out;
 	float mix;
@@ -167,6 +169,7 @@ void DelayPlusFx::step() {
 	if (fx_bypass){
 		outputs[OUT_OUTPUT].value = in;
 	}else{
+		//do the delay calculations
 		outputs[OUT_OUTPUT].value = out;
 	}
 }
@@ -184,8 +187,7 @@ struct MsDisplayWidget : TransparentWidget {
   void draw(NVGcontext *vg) override
   {
     // Background
-   // NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
-	 NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
+	NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
@@ -225,14 +227,7 @@ struct DelayPlusFxWidget : ModuleWidget
 
 DelayPlusFxWidget::DelayPlusFxWidget(DelayPlusFx *module) : ModuleWidget(module) {
 
-	box.size = Vec(RACK_GRID_WIDTH*8, RACK_GRID_HEIGHT);
-
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/DelayPlus.svg")));
-		addChild(panel);
-	}
+	setPanel(SVG::load(assetPlugin(plugin, "res/DelayPlus.svg")));
 
 	//MS DISPLAY 
 	MsDisplayWidget *display = new MsDisplayWidget();

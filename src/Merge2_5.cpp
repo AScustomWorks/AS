@@ -59,14 +59,9 @@ struct Merge2_5Widget : ModuleWidget
 
 
 Merge2_5Widget::Merge2_5Widget(Merge2_5 *module) : ModuleWidget(module) {
-	box.size = Vec(5 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/Merge2_5.svg")));
-		addChild(panel);
-	}
+  setPanel(SVG::load(assetPlugin(plugin, "res/Merge2_5.svg"))); 
+   
 	//SCREWS
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));

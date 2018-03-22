@@ -29,14 +29,8 @@ struct BlankPanel4Widget : ModuleWidget
 };
 
 BlankPanel4Widget::BlankPanel4Widget(BlankPanel4 *module) : ModuleWidget(module) {
-	box.size = Vec(4 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT);
 
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/BlankPanel4.svg")));
-		panel->box.size = box.size;
-		addChild(panel);
-	}
+	setPanel(SVG::load(assetPlugin(plugin, "res/Blanks/BlankPanel4.svg")));
 
 	//SCREWS - MOD SPACING FOR RACK WIDTH*4
 	addChild(Widget::create<as_HexScrew>(Vec(0, 0)));

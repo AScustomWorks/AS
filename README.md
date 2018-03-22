@@ -9,7 +9,7 @@ Derivative works may not use the AS logo or panel graphics including custom comp
 
 ### Releases
 
-AS is compatible with VCV Rack 0.5.X. releases for Mac, Win and Linux are found on the [Release Page](https://github.com/AScustomWorks/as/releases)
+AS is compatible with VCV Rack 0.6.X. releases, (see previous releases for 0.5.X. binaries and source files).  You can download Mac, Win and Linux binary files and source on the [Release Page](https://github.com/AScustomWorks/as/releases)
 
 If you enjoy those modules you can support the development by making a donation, it will be appreciated!. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
@@ -123,6 +123,11 @@ V 0.5.5: First relase of this module.
 Cut the flow of signals after a set number of clock ticks (TAOS request).
 
 V 0.5.6: First relase of this module.
+
+### Flow
+Cut the flow of signals with a switch or a cv signal  (TAOS request).
+
+V 0.6.0: First relase of this module.
 
 ### Signal Delay
 Delay the incomming CV signal by set milliseconds, with signal thru and delayed output. You can chain several Signal Delay modules together for unlimited length of delays. (TAOS request).

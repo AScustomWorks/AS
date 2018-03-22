@@ -1,5 +1,6 @@
 #include "AS.hpp"
 
+
 Plugin *plugin;
 
 void init(rack::Plugin *p) {
@@ -39,5 +40,6 @@ void init(rack::Plugin *p) {
 	p->addModel(modelBlankPanel4);
 	p->addModel(modelBlankPanel6);
 	p->addModel(modelBlankPanel8);
+	p->addModel(modelBlankPanelSpecial);
 
 }
