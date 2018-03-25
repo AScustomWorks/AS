@@ -193,25 +193,17 @@ struct Mixer8ch : Module {
 	}
 	//PAN LEVEL
 	float PanL(float balance, float cv) { // -1...+1
-		float p, gl;
-		p = M_PI * (balance + 1) / 4;
-		if (cv) {
-			gl = ::cos(p) * (1 - ((cv + 1) / 5));
-		} else {
-			gl = ::cos(p);
-		}
-		return gl;
+		float p, inp;
+		inp = balance + clamp(cv, -5.0f, 5.0f) / 5;
+		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
+		return ::cos(p);
 	}
 
 	float PanR(float balance , float cv) {
-		float p, gr;
-		p = M_PI * (balance + 1) / 4;
-		if (cv) {
-			gr = ::sin(p) * ((cv + 1) / 5);
-		} else {
-			gr = ::sin(p);
-		}
-		return gr;
+		float p, inp;
+		inp = balance + clamp(cv, -5.0f, 5.0f) / 5;
+		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
+		return ::sin(p);
 	}
 };
 
