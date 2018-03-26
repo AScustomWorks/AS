@@ -18,7 +18,7 @@ struct Mixer8ch : Module {
 		CH5_PARAM,
 		CH6_PARAM,
 		CH7_PARAM,
-		CH8_PARAM, 
+		CH8_PARAM,
 
 		CH1_PAN_PARAM,
 		CH2_PAN_PARAM,
@@ -28,7 +28,7 @@ struct Mixer8ch : Module {
 		CH6_PAN_PARAM,
 		CH7_PAN_PARAM,
 		CH8_PAN_PARAM,
- 
+
 		CH1MUTE,
 		CH2MUTE,
 		CH3MUTE,
@@ -73,7 +73,7 @@ struct Mixer8ch : Module {
 
 		CH8_INPUT,
 		CH8_CV_INPUT,
-		CH8_CV_PAN_INPUT,		
+		CH8_CV_PAN_INPUT,
 
 		LINK_L,
 		LINK_R,
@@ -90,7 +90,7 @@ struct Mixer8ch : Module {
 		CH6_OUTPUT,
 		CH7_OUTPUT,
 		CH8_OUTPUT,
-		
+
 		NUM_OUTPUTS
 	};
 
@@ -119,7 +119,7 @@ struct Mixer8ch : Module {
 	SchmittTrigger ch6mute;
 	SchmittTrigger ch7mute;
 	SchmittTrigger ch8mute;
-	SchmittTrigger chMmute;	
+	SchmittTrigger chMmute;
 
 	float ch1m = false;
 	float ch2m = false;
@@ -129,7 +129,7 @@ struct Mixer8ch : Module {
 	float ch6m = false;
 	float ch7m = false;
 	float ch8m = false;
-	float chMm = false;	
+	float chMm = false;
 
 	float mixL = 0.0f;
 	float mixR = 0.0f;
@@ -139,7 +139,7 @@ struct Mixer8ch : Module {
 		json_t *rootJm = json_object();
 
 		json_t *mutesJ = json_array();
-		
+
 			json_t *muteJ1 = json_integer((int) ch1m);
 			json_t *muteJ2 = json_integer((int) ch2m);
 			json_t *muteJ3 = json_integer((int) ch3m);
@@ -159,7 +159,7 @@ struct Mixer8ch : Module {
 			json_array_append_new(mutesJ, muteJ7);
 			json_array_append_new(mutesJ, muteJ8);
 			json_array_append_new(mutesJ, muteJ9);
-		
+
 		json_object_set_new(rootJm, "as_MixerMutes", mutesJ);
 
 		return rootJm;
@@ -167,7 +167,7 @@ struct Mixer8ch : Module {
 
 	void fromJson(json_t *rootJm)override {
 		json_t *mutesJ = json_object_get(rootJm, "as_MixerMutes");
-		
+
 			json_t *muteJ1 = json_array_get(mutesJ, 0);
 			json_t *muteJ2 = json_array_get(mutesJ, 1);
 			json_t *muteJ3 = json_array_get(mutesJ, 2);
@@ -189,39 +189,32 @@ struct Mixer8ch : Module {
 			ch7m = !!json_integer_value(muteJ7);
 			ch8m = !!json_integer_value(muteJ8);
 			chMm = !!json_integer_value(muteJ9);
-		
+
 	}
 	//PAN LEVEL
-	float PanL(float balance, float cv){ // -1...+1
-			float p, gl;
-			p=M_PI*(balance+1)/4;
-			if(cv){
-				gl=::cos(p)*(1-((cv+1)/5));
-			}else 
-				{gl=::cos(p);
-			}
-			return gl;
+	float PanL(float balance, float cv) { // -1...+1
+		float p, inp;
+		inp = balance + cv / 5;
+		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
+		return ::cos(p);
 	}
-	
-	float PanR(float balance , float cv){
-			float p, gr;
-			p=M_PI*(balance+1)/4;
-			if(cv){gr=::sin(p)*((cv+1)/5);
-			}else{
-				gr=::sin(p);
-			}
-			return gr;
+
+	float PanR(float balance , float cv) {
+		float p, inp;
+		inp = balance + cv / 5;
+		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
+		return ::sin(p);
 	}
 };
 
 void Mixer8ch::step() {
-	//MUTE BUTTONS	
+	//MUTE BUTTONS
 	if (ch1mute.process(params[CH1MUTE].value)) {
-		ch1m = !ch1m;	
+		ch1m = !ch1m;
 	}
 	lights[MUTE_LIGHT1].value = ch1m ? 1.0f : 0.0f;
 	if (ch2mute.process(params[CH2MUTE].value)) {
-		ch2m = !ch2m;	
+		ch2m = !ch2m;
 	}
 	lights[MUTE_LIGHT2].value = ch2m ? 1.0f : 0.0f;
 	if (ch3mute.process(params[CH3MUTE].value)) {
@@ -233,7 +226,7 @@ void Mixer8ch::step() {
 	}
 	lights[MUTE_LIGHT4].value = ch4m ? 1.0f : 0.0f;
 	if (ch5mute.process(params[CH5MUTE].value)) {
-		ch5m = !ch5m;	
+		ch5m = !ch5m;
 	}
 	lights[MUTE_LIGHT5].value = ch5m ? 1.0f : 0.0f;
 	if (ch6mute.process(params[CH6MUTE].value)) {
@@ -256,10 +249,10 @@ void Mixer8ch::step() {
 	//CHANNEL RESULTS
 	float ch1L =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanL(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value))* clamp(inputs[CH1_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 	float ch1R =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanR(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value)) * clamp(inputs[CH1_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-	
+
 	float ch2L = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanL(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clamp(inputs[CH2_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 	float ch2R = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanR(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clamp(inputs[CH2_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-	
+
 	float ch3L = (1-ch3m) *(inputs[CH3_INPUT].value) * params[CH3_PARAM].value * PanL(params[CH3_PAN_PARAM].value,(inputs[CH3_CV_PAN_INPUT].value)) * clamp(inputs[CH3_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 	float ch3R = (1-ch3m) *(inputs[CH3_INPUT].value) * params[CH3_PARAM].value * PanR(params[CH3_PAN_PARAM].value,(inputs[CH3_CV_PAN_INPUT].value)) * clamp(inputs[CH3_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
 
@@ -291,7 +284,7 @@ void Mixer8ch::step() {
 		mixR = 0.0f;
 	}
 
-	outputs[CH1_OUTPUT].value= ch1L+ch1R; 
+	outputs[CH1_OUTPUT].value= ch1L+ch1R;
 	outputs[CH2_OUTPUT].value= ch2L+ch2R;
 	outputs[CH3_OUTPUT].value= ch3L+ch3R;
 	outputs[CH4_OUTPUT].value= ch4L+ch4R;
@@ -315,8 +308,8 @@ void Mixer8ch::step() {
 }
 
 
-struct Mixer8chWidget : ModuleWidget 
-{ 
+struct Mixer8chWidget : ModuleWidget
+{
     Mixer8chWidget(Mixer8ch *module);
 };
 
@@ -342,7 +335,7 @@ Mixer8chWidget::Mixer8chWidget(Mixer8ch *module) : ModuleWidget(module) {
 	addParam(ParamWidget::create<as_KnobBlack>(Vec(columnPos[6]-5, panPosY), module, Mixer8ch::CH7_PAN_PARAM, -1.0f, 1.0f, 0.0f));
 	addParam(ParamWidget::create<as_KnobBlack>(Vec(columnPos[7]-5, panPosY), module, Mixer8ch::CH8_PAN_PARAM, -1.0f, 1.0f, 0.0f));
 	//VOLUME FADERS
-	static const float volPosY = 223; 
+	static const float volPosY = 223;
 	addParam(ParamWidget::create<as_FaderPot>(Vec(columnPos[0]+2, volPosY), module, Mixer8ch::CH1_PARAM, 0.0f, 1.0f, 0.8f));
 	addParam(ParamWidget::create<as_FaderPot>(Vec(columnPos[1]+2, volPosY), module, Mixer8ch::CH2_PARAM, 0.0f, 1.0f, 0.8f));
 	addParam(ParamWidget::create<as_FaderPot>(Vec(columnPos[2]+2, volPosY), module, Mixer8ch::CH3_PARAM, 0.0f, 1.0f, 0.8f));
@@ -405,11 +398,11 @@ Mixer8chWidget::Mixer8chWidget(Mixer8ch *module) : ModuleWidget(module) {
 
 	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[0], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH1_OUTPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[1], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH2_OUTPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[2], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH3_OUTPUT)); 
+	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[2], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH3_OUTPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[3], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH4_OUTPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[4], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH5_OUTPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[5], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH6_OUTPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[6], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH7_OUTPUT)); 
+	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[6], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH7_OUTPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[7], portsY[3]), Port::OUTPUT, module, Mixer8ch::CH8_OUTPUT));
 	//OUTPUT
 	addOutput(Port::create<as_PJ301MPort>(Vec(356, portsY[0]), Port::OUTPUT, module, Mixer8ch::MIX_OUTPUTL));
