@@ -140,6 +140,7 @@ template <typename BASE>
  struct MeterLight : BASE {
  	MeterLight() {
  		this->box.size = Vec(8, 8);
+		 this->bgColor = nvgRGB(0x14, 0x14, 0x14);
  	}
  };
 
