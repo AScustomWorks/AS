@@ -67,6 +67,18 @@ struct BPMClock : Module {
 	SchmittTrigger reset_btn_trig;
   SchmittTrigger reset_ext_trig;
 
+  // PULSES FOR TRIGGER OUTPUTS INSTEAD OF GATES
+	PulseGenerator clockPulse8s;
+  bool pulse8s = false;
+  PulseGenerator clockPulse4s;
+  bool pulse4s = false;
+	PulseGenerator clockPulse1s;
+  bool pulse1s = false;
+	PulseGenerator clockPulse16s;
+  bool pulse16s = false;
+
+	float trigger_length = 0.0001f;
+
   const float lightLambda = 0.075f;
   float resetLight = 0.0f;
 
@@ -82,21 +94,11 @@ struct BPMClock : Module {
   int eighths_count_limit = 2;
   int bars_count_limit = 16;
   
-	BPMClock() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-    /*
-    params.resize(NUM_PARAMS);
-    inputs.resize(NUM_INPUTS);
-    outputs.resize(NUM_OUTPUTS);
-    lights.resize(NUM_LIGHTS);
-    eighths_trig.setThresholds(0.0, 1.0);
-    quarters_trig.setThresholds(0.0, 1.0);
-    bars_trig.setThresholds(0.0, 1.0);
-*/
-  }
+	BPMClock() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+
 	void step() override;
 
-  json_t *toJson() override
-  {
+  json_t *toJson() override{
 		json_t *rootJ = json_object();
     json_t *button_statesJ = json_array();
 		json_t *button_stateJ = json_integer((int)running);
@@ -105,23 +107,23 @@ struct BPMClock : Module {
     return rootJ;
   }
   
-  void fromJson(json_t *rootJ) override
-  {
+  void fromJson(json_t *rootJ) override{
     json_t *button_statesJ = json_object_get(rootJ, "run");
-		if (button_statesJ)
-    {			
+		if (button_statesJ){			
 				json_t *button_stateJ = json_array_get(button_statesJ,0);
 				if (button_stateJ)
 					running = !!json_integer_value(button_stateJ);			
 		}  
-  }  
+  } 
+
 };
 
-void BPMClock::step()
-{
+void BPMClock::step() {
+
   if (run_button_trig.process(params[RUN_SWITCH].value)){
 		  running = !running;
 	}
+
   lights[RUN_LED].value = running ? 1.0f : 0.0f;
     
   tempo = std::round(params[TEMPO_PARAM].value);
@@ -132,14 +134,14 @@ void BPMClock::step()
   frequency = tempo/60.0f;
   //RESET TRIGGERS
   //EXTERNAL RESET TRIGGER
-	if (reset_ext_trig.process(inputs[RESET_INPUT].value)) {
+	if(reset_ext_trig.process(inputs[RESET_INPUT].value)) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
     outputs[RESET_OUTPUT].value = 10.0f;
   //INTERNAL RESET TRIGGER
-  }else  if (reset_btn_trig.process(params[RESET_SWITCH].value)) {
+  }else if(reset_btn_trig.process(params[RESET_SWITCH].value)) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
@@ -152,72 +154,101 @@ void BPMClock::step()
   resetLight -= resetLight / lightLambda / engineGetSampleRate();
   lights[RESET_LED].value = resetLight;
 
-  if (!running) {
+  if(!running){
+
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0; 
-    outputs[BAR_OUT].value = 0.0;
-    outputs[BEAT_OUT].value = 0.0;
-    outputs[EIGHTHS_OUT].value = 0.0;
-    outputs[SIXTEENTHS_OUT].value = 0.0;
-    outputs[SIXTEENTHS_OUT].value = 0.0; 
-  } else{
+    outputs[BAR_OUT].value = 0.0f;
+    outputs[BEAT_OUT].value = 0.0f;
+    outputs[EIGHTHS_OUT].value = 0.0f;
+    outputs[SIXTEENTHS_OUT].value = 0.0f;
+
+  }else{
+
     if (time_sig_top == time_sig_bottom){
       clock.setFreq(frequency*4);
       quarters_count_limit = 4;
       eighths_count_limit = 2;
       bars_count_limit = 16;    
-    } else{
-      if (time_sig_bottom == 4){
+    }else{
+      if(time_sig_bottom == 4){
         quarters_count_limit = 4;
         eighths_count_limit = 2;
         bars_count_limit = time_sig_top * 4;  
-        clock.setFreq(frequency*4); 
+        clock.setFreq(frequency*4);
       }
-      if (time_sig_bottom == 8){
+      if(time_sig_bottom == 8){
         quarters_count_limit = 4;
         eighths_count_limit = 2;
         bars_count_limit = time_sig_top * 2;
         clock.setFreq(frequency*4);
-        if ((time_sig_top % 3) == 0){
-          quarters_count_limit = 6;
-          eighths_count_limit = 2;
-          bars_count_limit = (time_sig_top/3) * 6;
-          clock.setFreq(frequency*6);
-        }      
       }
+      if((time_sig_top % 3) == 0){
+        quarters_count_limit = 6;
+        eighths_count_limit = 2;
+        bars_count_limit = (time_sig_top/3) * 6;
+        clock.setFreq(frequency*6);
+      }      
     }
-  
-    clock.step(1.0 / engineGetSampleRate());
-    outputs[SIXTEENTHS_OUT].value = clamp(10.0f * clock.sqr(), 0.0f, 10.0f);
+  }
  
-    if (eighths_trig.process(clock.sqr()) && eighths_count <= eighths_count_limit)
+  if(running){
+    clock.step(1.0 / engineGetSampleRate());
+
+    //16ths
+    float clock16s = clamp(10.0f * clock.sqr(), 0.0f, 10.0f);
+
+    if(clock16s>0){
+      clockPulse16s.trigger(trigger_length);
+    }
+
+    //8ths
+    if (eighths_trig.process(clock.sqr()) && eighths_count <= eighths_count_limit){
       eighths_count++;
-    if (eighths_count >= eighths_count_limit)
-    {
+    }
+    if (eighths_count >= eighths_count_limit){
       eighths_count = 0;    
     }
-    if (eighths_count == 0) outputs[EIGHTHS_OUT].value = 10.0f;
-    else outputs[EIGHTHS_OUT].value = 0.0f;
-    
-    if (quarters_trig.process(clock.sqr()) && quarters_count <= quarters_count_limit)
+
+    if(eighths_count == 0){
+      clockPulse8s.trigger(trigger_length);
+    }
+    //4ths
+    if (quarters_trig.process(clock.sqr()) && quarters_count <= quarters_count_limit){
       quarters_count++;
-    if (quarters_count >= quarters_count_limit)
-    {
+    }
+    if (quarters_count >= quarters_count_limit){
       quarters_count = 0;    
     }
-    if (quarters_count == 0) outputs[BEAT_OUT].value = 10.0f;
-    else outputs[BEAT_OUT].value = 0.0f;
+
+    if(quarters_count == 0){
+      clockPulse4s.trigger(trigger_length);
+    }
     
-    if (bars_trig.process(clock.sqr()) && bars_count <= bars_count_limit)
+    //bars
+    if (bars_trig.process(clock.sqr()) && bars_count <= bars_count_limit){
       bars_count++;
-    if (bars_count >= bars_count_limit)
-    {
+    }
+    if (bars_count >= bars_count_limit){
       bars_count = 0;    
     }
-    if (bars_count == 0) outputs[BAR_OUT].value = 10.0f;
-    else outputs[BAR_OUT].value = 0.0f; 
+
+    if(bars_count == 0){
+      clockPulse1s.trigger(trigger_length);
     }
+  }
+
+    pulse1s = clockPulse1s.process(1.0 / engineGetSampleRate());
+    pulse4s = clockPulse4s.process(1.0 / engineGetSampleRate());
+    pulse8s = clockPulse8s.process(1.0 / engineGetSampleRate());
+    pulse16s = clockPulse16s.process(1.0 / engineGetSampleRate());
+    
+    outputs[BAR_OUT].value = (pulse1s ? 10.0f : 0.0f);
+    outputs[BEAT_OUT].value = (pulse4s ? 10.0f : 0.0f);
+    outputs[EIGHTHS_OUT].value = (pulse8s ? 10.0f : 0.0f);
+    outputs[SIXTEENTHS_OUT].value = (pulse16s ? 10.0f : 0.0f);
+
 }
 
 ////////////////////////////////////
@@ -315,11 +346,9 @@ struct SigDisplayWidget : TransparentWidget {
 };
 //////////////////////////////////
 
-struct BPMClockWidget : ModuleWidget 
-{ 
+struct BPMClockWidget : ModuleWidget { 
     BPMClockWidget(BPMClock *module);
 };
-
 
 BPMClockWidget::BPMClockWidget(BPMClock *module) : ModuleWidget(module) {
 
