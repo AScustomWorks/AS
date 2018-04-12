@@ -15,6 +15,8 @@ void init(rack::Plugin *p) {
 	p->addModel(modelVCA);
 	p->addModel(modelQuadVCA);
 	p->addModel(modelTriLFO);
+	p->addModel(modelAtNuVrTr);
+	
 	p->addModel(modelBPMClock);
 	p->addModel(modelSEQ16);
 	p->addModel(modelMixer8ch);

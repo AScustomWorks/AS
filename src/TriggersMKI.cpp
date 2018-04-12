@@ -37,6 +37,8 @@ struct TriggersMKI: Module {
     float resetLight = 0.0f;
     float volts = 0.0f;
     bool running = false;
+    float display_volts = 0.0f;
+    bool negative_volts = false;
 
     TriggersMKI() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
     void step() override;
@@ -67,8 +69,25 @@ struct TriggersMKI: Module {
 
 void TriggersMKI::step() {
 
-    volts = clamp(params[VOLTAGE_PARAM].value, 0.0f, 10.0f);
+    display_volts = 0.0f;
 
+    volts = params[VOLTAGE_PARAM].value;
+    display_volts = volts;
+    negative_volts = false;
+    if(volts< 0.0){
+        negative_volts = true;
+    }
+    if(negative_volts){
+        display_volts = - display_volts;
+        //doesn't update fast enough to get rid of the negative 0 display color
+        /*
+        if(display_volts == -0.0){
+            display_volts = 0.0;
+        }
+        */
+    }else{
+        display_volts = volts;
+    }
     //LATCH TRIGGER
     //EXTERNAL TRIGGER
     if (LatchTrigger.process(params[RUN_SWITCH].value)||LatchExtTrigger.process(inputs[CV_RUN_INPUT].value)) {
@@ -104,6 +123,7 @@ void TriggersMKI::step() {
 struct VoltsDisplayWidget : TransparentWidget {
 
   float *value;
+  bool *negative;
   std::shared_ptr<Font> font;
 
   VoltsDisplayWidget() {
@@ -140,10 +160,16 @@ struct VoltsDisplayWidget : TransparentWidget {
     nvgFillColor(vg, nvgTransRGBA(textColor, 16));
     nvgText(vg, textPos.x, textPos.y, "\\\\\\\\\\", NULL);
 
-    textColor = nvgRGB(0xf0, 0x00, 0x00);
+    if(*negative){
+        textColor = nvgRGB(0xf0, 0x00, 0x00);
+    }else{
+        //textColor = nvgRGB(0x90, 0xc6, 0x3e);
+        textColor = nvgRGB(0x00, 0xaf, 0x25);
+    }
+    
     nvgFillColor(vg, textColor);
     nvgText(vg, textPos.x, textPos.y, display_string, NULL);
-    //nvgText(vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+
   }
 };
 ////////////////////////////////////
@@ -168,11 +194,12 @@ TriggersMKIWidget::TriggersMKIWidget(TriggersMKI *module) : ModuleWidget(module)
 	VoltsDisplayWidget *display1 = new VoltsDisplayWidget();
 	display1->box.pos = Vec(10,50);
 	display1->box.size = Vec(70, 20);
-	display1->value = &module->volts;
+	display1->value = &module->display_volts;
+    display1->negative = &module->negative_volts;
 	addChild(display1); 
 
     //PARAMS
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 77), module, TriggersMKI::VOLTAGE_PARAM, 0.0f, 10.0f, 5.0f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 77), module, TriggersMKI::VOLTAGE_PARAM, -10.0f, 10.0f, 0.0f));
     //SWITCHES
     static const float led_offset = 3.3;
     static const float led_center = 15;

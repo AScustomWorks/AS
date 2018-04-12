@@ -40,6 +40,8 @@ V 0.5.4: Fixed a reset signal issue.
 
 V 0.5.5: 16th clock output now sends unipolar signal, just as the other outputs.
 
+V 0.6.1: Now BPM Clock outputs a short length trigger signal, as most of the available clocks.
+
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
 
@@ -87,15 +89,21 @@ V 0.5.7 Module size reduced to 4HP
 ### TriLFO
 Fundamental LFO module. Mods:graphics, controls stripped to the basics but you get 3 LFOS on the same space.
 
-### Triggers
+### AtNuVrTr Dual attenuverter module
+Just like Befaco Attenuverter module but with added cv inputs to modulate both Attenueverter and Offset parameters.
+
+V 0.6.1: First relase of this module.
+
+### Triggers REMOVED
 A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigger outputs, trigger volts knob going from 1 to 10 v output.
 
 (NOTICE: Triggers MKI will supersede Triggers, so Triggers will be removed from the plugin by v0.6 but you have time now to replace it on your current patches and keep everything working fine).
 
 ### Triggers MKI
-A manual CV signal trigger module with latch and temporary triggers, volts knob lets you adjust from 0 to 10 v output.
+A manual CV signal trigger module with latch and temporary triggers, volts knob lets you adjust the range from -10v to 10v output.
 
 V 0.5.7: First relase of this module.
+V 0.6.1: Changed the volts range to -10v +10v and now the display shows positive values in green, and negative values in red.
 
 ### Triggers MKII
 A manual CV signal temporary trigger module with labeling integrated, so you remember where the signal is going.

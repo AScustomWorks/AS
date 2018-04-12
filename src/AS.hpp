@@ -17,6 +17,8 @@ extern Model *modelADSR;
 extern Model *modelVCA;
 extern Model *modelQuadVCA;
 extern Model *modelTriLFO;
+extern Model *modelAtNuVrTr;
+
 extern Model *modelBPMClock;
 extern Model *modelSEQ16;
 extern Model *modelMixer8ch;
