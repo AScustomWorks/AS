@@ -67,6 +67,9 @@ struct BPMClock : Module {
 	SchmittTrigger reset_btn_trig;
   SchmittTrigger reset_ext_trig;
 
+  PulseGenerator resetPulse;
+  bool reset_pulse = false;
+
   // PULSES FOR TRIGGER OUTPUTS INSTEAD OF GATES
 	PulseGenerator clockPulse8s;
   bool pulse8s = false;
@@ -132,27 +135,21 @@ void BPMClock::step() {
   time_sig_bottom = std::pow(2,time_sig_bottom+1);
  
   frequency = tempo/60.0f;
-  //RESET TRIGGERS
-  //EXTERNAL RESET TRIGGER
-	if(reset_ext_trig.process(inputs[RESET_INPUT].value)) {
+
+  //RESET TRIGGER
+	if(reset_ext_trig.process(inputs[RESET_INPUT].value) || reset_btn_trig.process(params[RESET_SWITCH].value)) {
     eighths_count = 0;
     quarters_count = 0;
     bars_count = 0;
     resetLight = 1.0;
-    outputs[RESET_OUTPUT].value = 10.0f;
-  //INTERNAL RESET TRIGGER
-  }else if(reset_btn_trig.process(params[RESET_SWITCH].value)) {
-    eighths_count = 0;
-    quarters_count = 0;
-    bars_count = 0;
-    resetLight = 1.0;
-    outputs[RESET_OUTPUT].value = 10.0f;
-  }else{
-    outputs[RESET_OUTPUT].value = 0.0f;
+    resetPulse.trigger(0.01f);
   }
 
   resetLight -= resetLight / lightLambda / engineGetSampleRate();
   lights[RESET_LED].value = resetLight;
+  reset_pulse = resetPulse.process(1.0 / engineGetSampleRate());
+  outputs[RESET_OUTPUT].value = (reset_pulse ? 10.0f : 0.0f);
+
 
   if(!running){
 
