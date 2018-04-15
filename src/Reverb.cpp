@@ -25,6 +25,7 @@ struct ReverbFx : Module{
 		DECAY_CV_INPUT,
 		DAMP_CV_INPUT,
 		BLEND_CV_INPUT,
+		BYPASS_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -43,6 +44,7 @@ struct ReverbFx : Module{
 	float roomsize, damp; 
 
 	SchmittTrigger bypass_button_trig;
+	SchmittTrigger bypass_cv_trig;
 
 	bool fx_bypass = false;
 
@@ -94,7 +96,7 @@ void ReverbFx::onSampleRateChange() {
 
 void ReverbFx::step() {
 
-	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)){
+	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		fx_bypass = !fx_bypass;
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
@@ -153,8 +155,8 @@ ReverbFxWidget::ReverbFxWidget(ReverbFx *module) : ModuleWidget(module) {
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, ReverbFx::DAMP_LIGHT));
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, ReverbFx::BLEND_LIGHT));
     //BYPASS SWITCH
-  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, ReverbFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, ReverbFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(55, 260), module, ReverbFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 262), module, ReverbFx::BYPASS_LED));
     //INS/OUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, ReverbFx::SIGNAL_INPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, ReverbFx::SIGNAL_OUTPUT));
@@ -162,6 +164,9 @@ ReverbFxWidget::ReverbFxWidget(ReverbFx *module) : ModuleWidget(module) {
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, ReverbFx::DECAY_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, ReverbFx::DAMP_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, ReverbFx::BLEND_CV_INPUT));
+
+	//BYPASS CV INPUT
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 259), Port::INPUT, module, ReverbFx::BYPASS_CV_INPUT));
 	
 }
 

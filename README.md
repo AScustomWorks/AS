@@ -42,6 +42,8 @@ V 0.5.5: 16th clock output now sends unipolar signal, just as the other outputs.
 
 V 0.6.1: Now BPM Clock outputs a short length trigger signal, as most of the available clocks.
 
+V 0.6.2: Small fix on the reset signal.
+
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
 
@@ -149,25 +151,35 @@ V 0.5.4: Updated look.
 
 V 0.5.5 CHanged the time knob reading from exponential to linear, now you can set any value precisely at the whole 1 to 10k ms range.
 
+V 0.6.3: bypass CV input added.
+
 ### Phaser
 Autodafe's Phaser Fx module. Mods: graphics, bypass switch.
 
 V 0.5.4: Added CV inputs for each parameter, updated look.
+
+V 0.6.3: bypass CV input added.
 
 ### SuperDrive
 Overdrive/clipping Fx module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
 
 V 0.5.4: First relase of this module.
 
+V 0.6.3: bypass CV input added.
+
 ### Reverb
 Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP and BLEND parameters, a little bit tamed Reverb with mixed output signal.
 
 0.5.4: First relase of this module.
 
+V 0.6.3: bypass CV input added.
+
 ### Tremolo
 Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (set your effect, duplicate the module and invert the phase for stereo tremolo setup)your Tremolo to go!.
 
 0.5.6: First relase of this module.
+
+V 0.6.3: bypass CV input added.
 
 ### WaveShaper
 HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
@@ -175,6 +187,8 @@ HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
 V 0.5.2: added back the voltage range switch.
 
 V 0.5.4: Updated look.
+
+V 0.6.3: bypass CV input added.
 
 ### Blank Panel
 Blank panels in 4, 6 & 8 HP.

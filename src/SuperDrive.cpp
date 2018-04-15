@@ -25,6 +25,7 @@ struct SuperDriveFx : Module{
 		DRIVE_CV_INPUT,
 		GAIN_CV_INPUT,
 		TONE_CV_INPUT,
+		BYPASS_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -40,6 +41,8 @@ struct SuperDriveFx : Module{
 	};
 
 	SchmittTrigger bypass_button_trig;
+	SchmittTrigger bypass_cv_trig;
+
 	int drive_scale=50;//to handle cv parameters properly
 
 	RCFilter lowpassFilter;
@@ -82,7 +85,7 @@ struct SuperDriveFx : Module{
 
 void SuperDriveFx::step() {
 
-  if (bypass_button_trig.process(params[BYPASS_SWITCH].value))
+  if (bypass_button_trig.process(params[BYPASS_SWITCH].value) 	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) )
     {
 		  fx_bypass = !fx_bypass;
 	  }
@@ -152,8 +155,8 @@ SuperDriveFxWidget::SuperDriveFxWidget(SuperDriveFx *module) : ModuleWidget(modu
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, SuperDriveFx::TONE_LIGHT));
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, SuperDriveFx::GAIN_LIGHT));
     //BYPASS SWITCH
-  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, SuperDriveFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, SuperDriveFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(55, 260), module, SuperDriveFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 262), module, SuperDriveFx::BYPASS_LED));
     //INS/OUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, SuperDriveFx::SIGNAL_INPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, SuperDriveFx::SIGNAL_OUTPUT));
@@ -161,6 +164,9 @@ SuperDriveFxWidget::SuperDriveFxWidget(SuperDriveFx *module) : ModuleWidget(modu
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, SuperDriveFx::DRIVE_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, SuperDriveFx::TONE_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, SuperDriveFx::GAIN_CV_INPUT));
+
+	//BYPASS CV INPUT
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 259), Port::INPUT, module, SuperDriveFx::BYPASS_CV_INPUT));
  
 }
 

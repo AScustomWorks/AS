@@ -25,6 +25,7 @@ struct PhaserFx : Module{
 		RATE_CV_INPUT,
 		FEEDBACK_CV_INPUT,
 		DEPTH_CV_INPUT,
+		BYPASS_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -40,6 +41,7 @@ struct PhaserFx : Module{
 	};
 
 	SchmittTrigger bypass_button_trig;
+	SchmittTrigger bypass_cv_trig;
 
 	bool fx_bypass = false;
 	PhaserFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
@@ -75,7 +77,7 @@ struct PhaserFx : Module{
 
 class Phaser{
 public:
-	Phaser()  //initialise to some usefull defaults...
+	Phaser()  //initialise to some useful defaults...
     	: _fb( 0.7f )
     	, _lfoPhase( 0.0f )
     	, _depth( 1.0f )
@@ -162,10 +164,10 @@ Phaser *pha = new Phaser();
 
 void PhaserFx::step() {
 
-  if (bypass_button_trig.process(params[BYPASS_SWITCH].value))
-    {
+	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		  fx_bypass = !fx_bypass;
-	  }
+	}
+
     lights[BYPASS_LED].value = fx_bypass ? 1.00 : 0.0;
 
 
@@ -218,8 +220,8 @@ PhaserFxWidget::PhaserFxWidget(PhaserFx *module) : ModuleWidget(module) {
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
     //BYPASS SWITCH
-  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, PhaserFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(55, 260), module, PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 262), module, PhaserFx::BYPASS_LED));
     //INS/OUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, PhaserFx::INPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, PhaserFx::OUT));
@@ -227,6 +229,9 @@ PhaserFxWidget::PhaserFxWidget(PhaserFx *module) : ModuleWidget(module) {
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, PhaserFx::RATE_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, PhaserFx::FEEDBACK_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, PhaserFx::DEPTH_CV_INPUT));
+
+	//BYPASS CV INPUT
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 259), Port::INPUT, module, PhaserFx::BYPASS_CV_INPUT));
  
 }
 

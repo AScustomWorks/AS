@@ -88,6 +88,7 @@ struct TremoloFx : Module{
 		WAVE_CV_INPUT,
 		FREQ_CV_INPUT,
 		BLEND_CV_INPUT,
+		BYPASS_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -106,6 +107,7 @@ struct TremoloFx : Module{
 	LowFrequencyOscillator oscillator;
 
 	SchmittTrigger bypass_button_trig;
+	SchmittTrigger bypass_cv_trig;
 
 	bool fx_bypass = false;
 
@@ -145,7 +147,7 @@ struct TremoloFx : Module{
 
 void TremoloFx::step() {
 
-	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)){
+	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		  fx_bypass = !fx_bypass;
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
@@ -207,8 +209,8 @@ TremoloFxWidget::TremoloFxWidget(TremoloFx *module) : ModuleWidget(module) {
 	addChild(ModuleLightWidget::create<SmallLight<YellowRedLight>>(Vec(39, 122), module, TremoloFx::PHASE_POS_LIGHT));
 	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, TremoloFx::BLEND_LIGHT));
     //BYPASS SWITCH
-  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, TremoloFx::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(55, 260), module, TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 262), module, TremoloFx::BYPASS_LED));
     //INS/OUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, TremoloFx::SIGNAL_INPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, TremoloFx::SIGNAL_OUTPUT));
@@ -216,6 +218,9 @@ TremoloFxWidget::TremoloFxWidget(TremoloFx *module) : ModuleWidget(module) {
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, TremoloFx::WAVE_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, TremoloFx::FREQ_CV_INPUT));
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, TremoloFx::BLEND_CV_INPUT));
+
+	//BYPASS CV INPUT
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 259), Port::INPUT, module, TremoloFx::BYPASS_CV_INPUT));
  
 }
 

@@ -18,6 +18,7 @@ struct WaveShaper : Module {
 	enum InputIds {
 		INPUT,
 		AMOUNT_INPUT,
+		BYPASS_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -30,6 +31,7 @@ struct WaveShaper : Module {
 	};
 
 	SchmittTrigger bypass_button_trig;
+	SchmittTrigger bypass_cv_trig;
 	bool fx_bypass = false;
 
 	WaveShaper() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
@@ -62,7 +64,7 @@ struct WaveShaper : Module {
 
 void WaveShaper::step() {
 
-	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)){
+	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		fx_bypass = !fx_bypass;
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
@@ -113,11 +115,14 @@ WaveShaperWidget::WaveShaperWidget(WaveShaper *module) : ModuleWidget(module) {
 	//RANGE SWITCH
 	addParam(ParamWidget::create<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM, 0.0f, 1.0f, 0.0f));
     //BYPASS SWITCH
-  	addParam(ParamWidget::create<LEDBezel>(Vec(33, 260), module, WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(35.2, 262), module, WaveShaper::BYPASS_LED));
+  	addParam(ParamWidget::create<LEDBezel>(Vec(55, 260), module, WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
+  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 262), module, WaveShaper::BYPASS_LED));
     //INS/OUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, WaveShaper::INPUT));
 	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, WaveShaper::OUTPUT));
+
+	//BYPASS CV INPUT
+	addInput(Port::create<as_PJ301MPort>(Vec(10, 259), Port::INPUT, module, WaveShaper::BYPASS_CV_INPUT));
 
 }
 
