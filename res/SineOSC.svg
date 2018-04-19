@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.1789474"
-     inkscape:cx="118.07946"
+     inkscape:cx="123.11257"
      inkscape:cy="227.74834"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -85,12 +85,12 @@
          transform="matrix(1,0,0,1.8212547,0,-22.815527)" />
     </g>
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.21034651;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.18216541;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1759-2"
        width="15.874999"
-       height="5.2916665"
+       height="3.96875"
        x="5.0153608e-07"
-       y="95.25" />
+       y="96.572914" />
     <g
        transform="matrix(2.0981223,0,0,2.0981223,-117.89568,-706.23001)"
        data-name="Layer 2"
@@ -109,14 +109,14 @@
       </g>
     </g>
     <rect
-       y="2.6458333e-06"
+       y="0"
        x="5.0153608e-07"
-       height="5.2916665"
+       height="3.96875"
        width="15.874999"
        id="rect1806-4"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.21034651;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.18216541;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
-       style="opacity:1;vector-effect:none;fill:#3f3b38;fill-opacity:1;stroke:none;stroke-width:0.19682446;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.19682446;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path1686-1"
        cx="7.9375"
        cy="95.218727"
@@ -193,7 +193,7 @@
          id="path191" />
     </g>
     <g
-       transform="matrix(0.26458333,0,0,0.26458333,-1.995082,201.05939)"
+       transform="matrix(0.26458333,0,0,0.26458333,-1.995082,198.94271)"
        id="g20"
        style="display:inline;fill:#fff7d4;fill-opacity:1">
       <path

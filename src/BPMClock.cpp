@@ -91,7 +91,8 @@ struct BPMClock : Module {
 	int quarters_count = 0;
   int bars_count = 0;
   
-  int tempo, time_sig_top, time_sig_bottom = 0;
+  float tempo =120.0f;
+  int time_sig_top, time_sig_bottom = 0;
   float frequency = 2.0f;
   int quarters_count_limit = 4;
   int eighths_count_limit = 2;
@@ -250,7 +251,7 @@ void BPMClock::step() {
 
 ////////////////////////////////////
 struct BpmDisplayWidget : TransparentWidget {
-  int *value;
+  float *value;
   std::shared_ptr<Font> font;
 
   BpmDisplayWidget() {
@@ -261,7 +262,7 @@ struct BpmDisplayWidget : TransparentWidget {
   {
     // Background
     //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
-     NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
+    NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
     nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
@@ -371,7 +372,7 @@ BPMClockWidget::BPMClockWidget(BPMClock *module) : ModuleWidget(module) {
   display2->value = &module->time_sig_top;
   addChild(display2);
   //SIG TOP KNOB
-  addParam(ParamWidget::create<as_KnobBlack>(Vec(8, 110), module, BPMClock::TIMESIGTOP_PARAM,2.0f, 15.0f, 4.0f));
+  addParam(ParamWidget::create<as_Knob>(Vec(8, 110), module, BPMClock::TIMESIGTOP_PARAM,2.0f, 15.0f, 4.0f));
   //SIG BOTTOM DISPLAY    
   SigDisplayWidget *display3 = new SigDisplayWidget();
   display3->box.pos = Vec(54,155);
@@ -379,7 +380,7 @@ BPMClockWidget::BPMClockWidget(BPMClock *module) : ModuleWidget(module) {
   display3->value = &module->time_sig_bottom;
   addChild(display3); 
   //SIG BOTTOM KNOB
-  addParam(ParamWidget::create<as_KnobBlack>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f));
+  addParam(ParamWidget::create<as_Knob>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f));
   //RESET & RUN LEDS
   addParam(ParamWidget::create<LEDBezel>(Vec(55, 202), module, BPMClock::RUN_SWITCH , 0.0f, 1.0f, 0.0f));
   addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 204.3), module, BPMClock::RUN_LED));

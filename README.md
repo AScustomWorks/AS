@@ -42,7 +42,12 @@ V 0.5.5: 16th clock output now sends unipolar signal, just as the other outputs.
 
 V 0.6.1: Now BPM Clock outputs a short length trigger signal, as most of the available clocks.
 
-V 0.6.2: Small fix on the reset signal.
+V 0.6.2: Small fix on the reset signal length.
+
+### BPM to delay/hz calculator
+A BPM to delay/hz calculator to setup easier those nice delay effects.
+
+V 0.6.4: First relase of this module.
 
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.

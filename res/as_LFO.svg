@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.9380962"
-     inkscape:cx="116.06454"
-     inkscape:cy="98.913681"
+     inkscape:cx="121.51024"
+     inkscape:cy="71.685165"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -98,19 +98,19 @@
        x="6.6526909e-06"
        y="-6.0816699e-15" />
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.33258703;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.28802884;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1759"
        width="39.6875"
-       height="5.2916665"
+       height="3.96875"
        x="6.6526909e-06"
-       y="95.25" />
+       y="96.572914" />
     <rect
-       y="-6.0816699e-15"
+       y="0"
        x="6.6526909e-06"
-       height="5.2916665"
+       height="3.96875"
        width="39.6875"
        id="rect1806"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.33258703;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.28802884;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <g
        transform="matrix(2.0981223,0,0,2.0981223,-105.98943,-706.23001)"
        data-name="Layer 2"
@@ -578,7 +578,7 @@
          style="fill:#fff7d4;fill-opacity:1;stroke:none;stroke-width:0.27602378" />
     </g>
     <g
-       transform="matrix(0.26458333,0,0,0.26458333,-41.595423,7.7715854)"
+       transform="matrix(0.26458333,0,0,0.26458333,-41.595423,5.6549181)"
        id="g1811">
       <path
          inkscape:connector-curvature="0"

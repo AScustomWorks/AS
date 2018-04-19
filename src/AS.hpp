@@ -33,6 +33,7 @@ extern Model *modelLaunchGate;
 extern Model *modelKillGate;
 extern Model *modelFlow;
 extern Model *modelSignalDelay;
+extern Model *modelBPMCalc;
 
 extern Model *modelDelayPlusFx;
 extern Model *modelPhaserFx;

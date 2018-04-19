@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="10.287403"
-     inkscape:cx="63.082557"
-     inkscape:cy="82.560398"
+     inkscape:zoom="2.7644161"
+     inkscape:cx="93.219432"
+     inkscape:cy="188.36489"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -131,19 +131,19 @@
       </g>
     </g>
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:1.12431455;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.97368497;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1759"
        width="120"
-       height="20"
+       height="15"
        x="0"
-       y="360" />
+       y="365" />
     <rect
-       y="3.0008952e-05"
+       y="8.0744421e-06"
        x="0"
-       height="20"
+       height="15"
        width="120"
        id="rect1806"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:1.12431455;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.97368497;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        inkscape:connector-curvature="0"
        style="fill:#202020"
@@ -382,7 +382,7 @@
     </g>
     <g
        id="g10289"
-       transform="translate(-1640.964,-685.86901)">
+       transform="translate(-1640.964,-693.86901)">
       <path
          d="m 1661.59,729.77 a 1,1 0 0 1 0.17,0.52 0.66,0.66 0 0 1 -0.27,0.54 1,1 0 0 1 -1.1,0.1 0.9,0.9 0 0 1 -0.35,-0.35 l -0.72,-1.2 a 0.85,0.85 0 0 0 -0.38,-0.35 1.61,1.61 0 0 0 -0.65,-0.11 4.32,4.32 0 0 1 -2.19,-0.53 3.61,3.61 0 0 1 -1.43,-1.51 5.49,5.49 0 0 1 0,-4.6 3.57,3.57 0 0 1 1.43,-1.51 4.81,4.81 0 0 1 4.38,0 3.57,3.57 0 0 1 1.43,1.51 5,5 0 0 1 0.5,2.3 4.9,4.9 0 0 1 -0.55,2.38 3.47,3.47 0 0 1 -1.55,1.49 1.67,1.67 0 0 1 0.95,0.77 z m -1.65,-3 a 3.33,3.33 0 0 0 0.61,-2.15 3.32,3.32 0 0 0 -0.6,-2.14 2.25,2.25 0 0 0 -3.33,0 3.35,3.35 0 0 0 -0.59,2.14 3.35,3.35 0 0 0 0.6,2.15 2.22,2.22 0 0 0 3.32,0 z"
          style="fill:#fff7d4"

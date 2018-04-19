@@ -4,11 +4,10 @@
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
 #include "AS.hpp"
+
 #include "dsp/samplerate.hpp"
 #include "dsp/ringbuffer.hpp"
 #include "dsp/filter.hpp"
-#include "samplerate.h"
-
 #include "dsp/digital.hpp"
 
 #include <sstream>
@@ -46,25 +45,23 @@ struct DelayPlusFx : Module {
 		NUM_LIGHTS
 	}; 
 
-	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer;
-	DoubleRingBuffer<float, 16> outBuffer;
-	SRC_STATE *src;
-	float lastWet = 0.0f;
 	RCFilter lowpassFilter;
 	RCFilter highpassFilter;
 
-	int lcd_tempo = 0;
+	DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer;
+	DoubleRingBuffer<float, 16> outBuffer;
+	
+	SampleRateConverter<1> src;
+
 	SchmittTrigger bypass_button_trig;
 	SchmittTrigger bypass_cv_trig;
 
+	int lcd_tempo = 0;
 	bool fx_bypass = false;
-	DelayPlusFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		src = src_new(SRC_SINC_FASTEST, 1, NULL);
-		assert(src);
-	}
+	float lastWet = 0.0f;
 
-	~DelayPlusFx() {
-		src_delete(src);
+	DelayPlusFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
+
 	}
 
 	void step() override;
@@ -101,9 +98,9 @@ void DelayPlusFx::step() {
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
 	// Get input to delay block
-	float in = inputs[IN_INPUT].value;
+	float signal_input = inputs[IN_INPUT].value;
 	float feedback = clamp(params[FEEDBACK_PARAM].value + inputs[FEEDBACK_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float dry = in + lastWet * feedback;
+	float dry = signal_input + lastWet * feedback;
 
 	// Compute delay time in seconds
 	//float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM].value + inputs[TIME_INPUT].value / 10.0, 0.0, 1.0));
@@ -121,23 +118,24 @@ void DelayPlusFx::step() {
 	// How many samples do we need consume to catch up?
 	float consume = index - historyBuffer.size();
 
-	if (outBuffer.empty()) {
-		double ratio = 1.f;
-		if (fabsf(consume) >= 16.f) {
-			ratio = powf(10.f, clamp(consume / 10000.f, -1.f, 1.f));
-		}
+    if (outBuffer.empty()) {
+        double ratio = 1.0;
+        if (consume <= -16)
+            ratio = 0.5;
+        else if (consume >= 16)
+            ratio = 2.0;
 
-		SRC_DATA srcData;
-		srcData.data_in = (const float*) historyBuffer.startData();
-		srcData.data_out = (float*) outBuffer.endData();
-		srcData.input_frames = min(historyBuffer.size(), 16);
-		srcData.output_frames = outBuffer.capacity();
-		srcData.end_of_input = false;
-		srcData.src_ratio = ratio;
-		src_process(src, &srcData);
-		historyBuffer.startIncr(srcData.input_frames_used);
-		outBuffer.endIncr(srcData.output_frames_gen);
-	}
+        float inSR = engineGetSampleRate();
+        float outSR = ratio * inSR;
+
+        int inFrames = min(historyBuffer.size(), 16);
+        int outFrames = outBuffer.capacity();
+        src.setRates(inSR, outSR);
+        src.process((const Frame<1>*)historyBuffer.startData(), &inFrames, (Frame<1>*)outBuffer.endData(), &outFrames);
+        historyBuffer.startIncr(inFrames);
+        outBuffer.endIncr(outFrames);
+    }
+
 	float out;
 	float mix;
 	float wet = 0.0f;
@@ -165,10 +163,10 @@ void DelayPlusFx::step() {
 	}
 	lastWet = wet;
 	mix = clamp(params[MIX_PARAM].value + inputs[MIX_INPUT].value / 10.0f, 0.0f, 1.0f);
-	out = crossfade(in, wet, mix);
+	out = crossfade(signal_input, wet, mix);
 	//check bypass switch status
 	if (fx_bypass){
-		outputs[OUT_OUTPUT].value = in;
+		outputs[OUT_OUTPUT].value = signal_input;
 	}else{
 		//do the delay calculations
 		outputs[OUT_OUTPUT].value = out;

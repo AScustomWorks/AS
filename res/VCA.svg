@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.1921055"
-     inkscape:cx="44.999989"
-     inkscape:cy="190.00001"
+     inkscape:cx="12.419612"
+     inkscape:cy="177.4691"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -106,17 +106,17 @@
       </g>
     </g>
     <rect
-       y="148.99429"
+       y="150.31721"
        x="61.978046"
-       height="5.2916665"
+       height="3.96875"
        width="23.8125"
        id="rect1759"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.22310618;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.22310618;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1806"
        width="23.8125"
-       height="5.2916665"
+       height="3.96875"
        x="61.978046"
        y="53.744301" />
     <g
@@ -174,7 +174,7 @@
        d="m 78.70919,54.48582 c -0.771423,0 -1.392165,0.55756 -1.392165,1.250061 0,0.692499 0.620742,1.250049 1.392165,1.250049 h 2.21537 c 0.77142,0 1.392159,-0.55755 1.392159,-1.250049 0,-0.692501 -0.620739,-1.250061 -1.392159,-1.250061 z"
        style="display:inline;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15187517;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <g
-       transform="matrix(0.26458333,0,0,0.26458333,-22.621169,-11.249864)"
+       transform="matrix(0.26458333,0,0,0.26458333,-22.621169,-13.366532)"
        id="g2289">
       <path
          inkscape:connector-curvature="0"

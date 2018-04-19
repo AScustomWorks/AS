@@ -110,10 +110,10 @@ StereoVUmeterWidget::StereoVUmeterWidget(StereoVUmeter *module) : ModuleWidget(m
 	
 	//INPUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(3, 270), Port::INPUT, module, StereoVUmeter::INPUT_LEFT));
-	addInput(Port::create<as_PJ301MPort>(Vec(3, 307), Port::INPUT, module, StereoVUmeter::INPUT_RIGHT));
+	addInput(Port::create<as_PJ301MPort>(Vec(3, 310), Port::INPUT, module, StereoVUmeter::INPUT_RIGHT));
 	//OUTPUTS
 	addOutput(Port::create<as_PJ301MPort>(Vec(33,270), Port::OUTPUT, module, StereoVUmeter::OUT_LEFT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(33,307), Port::OUTPUT, module, StereoVUmeter::OUT_RIGHT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(33,310), Port::OUTPUT, module, StereoVUmeter::OUT_RIGHT));
 }
 
 Model *modelStereoVUmeter = Model::create<StereoVUmeter, StereoVUmeterWidget>("AS", "StereoVUmeter", "Stereo VU meter", VISUAL_TAG, UTILITY_TAG);

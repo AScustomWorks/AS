@@ -47,11 +47,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.3161758"
-     inkscape:cx="43.956591"
-     inkscape:cy="115.12609"
+     inkscape:zoom="3.1605263"
+     inkscape:cx="-13.218167"
+     inkscape:cy="190"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -135,12 +135,12 @@
        d="M 0,-6.7027873 H 23.812501 V 93.838881 H 0 Z"
        style="display:inline;fill:url(#linear-gradient-4);stroke-width:0.26458332" />
     <rect
-       y="88.547211"
+       y="89.870125"
        x="6.6526909e-06"
-       height="5.2916665"
+       height="3.96875"
        width="23.8125"
        id="rect1996"
-       style="opacity:1;vector-effect:none;fill:#952d2d;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#952d2d;fill-opacity:1;stroke:none;stroke-width:0.22310618;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        r="4"
        cy="88.515938"
@@ -165,12 +165,12 @@
       </g>
     </g>
     <rect
-       style="opacity:1;vector-effect:none;fill:#952d2d;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#952d2d;fill-opacity:1;stroke:none;stroke-width:0.22310618;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1998"
        width="23.8125"
-       height="5.2916665"
+       height="3.96875"
        x="6.6526909e-06"
-       y="-6.7027845" />
+       y="-6.7027874" />
     <rect
        style="display:inline;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.15187515;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect861"
@@ -422,7 +422,7 @@
          id="path1009" />
     </g>
     <g
-       transform="matrix(0.26458334,0,0,0.26458334,-84.604722,-38.352546)"
+       transform="matrix(0.26458334,0,0,0.26458334,-84.604722,-40.469214)"
        id="g1725"
        style="fill:#ffffff;fill-opacity:1">
       <path
@@ -515,7 +515,7 @@
          d="m 69.27,163.41 a 0.5,0.5 0 0 1 -0.14,-0.37 v -4.84 a 0.5,0.5 0 0 1 0.14,-0.37 0.52,0.52 0 0 1 0.38,-0.13 h 3 a 0.58,0.58 0 0 1 0.37,0.11 0.37,0.37 0 0 1 0.13,0.31 0.4,0.4 0 0 1 -0.13,0.32 0.56,0.56 0 0 1 -0.37,0.11 h -2.47 v 1.61 h 2.3 a 0.58,0.58 0 0 1 0.37,0.11 0.38,0.38 0 0 1 0.13,0.32 0.37,0.37 0 0 1 -0.13,0.31 0.58,0.58 0 0 1 -0.37,0.11 h -2.3 v 1.71 h 2.46 a 0.56,0.56 0 0 1 0.37,0.11 0.39,0.39 0 0 1 0.13,0.32 0.37,0.37 0 0 1 -0.13,0.31 0.58,0.58 0 0 1 -0.37,0.11 h -3 a 0.52,0.52 0 0 1 -0.37,-0.16 z" />
     </g>
     <g
-       transform="matrix(0.26458334,0,0,0.26458334,-83.169161,-38.455053)"
+       transform="matrix(0.26458334,0,0,0.26458334,-83.169161,-40.571721)"
        id="g4657"
        style="fill:#fff7d4;fill-opacity:1">
       <path

@@ -31,6 +31,8 @@ void init(rack::Plugin *p) {
 	p->addModel(modelMerge2_5);
 	p->addModel(modelTriggersMKI);
 	p->addModel(modelTriggersMKII);
+	p->addModel(modelBPMCalc);
+	
 	//EFFECTS	
 	p->addModel(modelDelayPlusFx);
 	p->addModel(modelPhaserFx);

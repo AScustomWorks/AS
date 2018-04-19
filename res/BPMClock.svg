@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.0332085"
-     inkscape:cx="24.966043"
-     inkscape:cy="91.175564"
+     inkscape:cx="19.015446"
+     inkscape:cy="279.61115"
      inkscape:document-units="mm"
-     inkscape:current-layer="g1652"
+     inkscape:current-layer="layer3"
      showgrid="true"
      units="px"
      inkscape:window-width="1894"
@@ -105,19 +105,19 @@
       </g>
     </g>
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.22310618;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1759"
        width="23.8125"
-       height="5.2916665"
+       height="3.96875"
        x="3.7916682e-06"
-       y="95.249992" />
+       y="96.572906" />
     <rect
-       y="7.9375004e-06"
+       y="0"
        x="3.7916682e-06"
-       height="5.2916665"
+       height="3.96875"
        width="23.8125"
        id="rect1806"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.22310618;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <g
        transform="matrix(0.26458333,0,0,0.26458333,3.1779159e-6,-3.667036e-6)"
        id="g1614">
@@ -312,7 +312,7 @@
          id="path1378" />
     </g>
     <g
-       transform="matrix(0.26458333,0,0,0.26458333,-84.720181,-25.304018)"
+       transform="matrix(0.2645825,0,0,0.26458333,-84.719903,-27.420684)"
        id="g1436">
       <path
          inkscape:connector-curvature="0"

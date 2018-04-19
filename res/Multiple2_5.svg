@@ -42,12 +42,12 @@
      id="namedview25"
      showgrid="false"
      inkscape:zoom="2.379907"
-     inkscape:cx="-0.10150046"
+     inkscape:cx="90.658349"
      inkscape:cy="171.647"
      inkscape:window-x="106"
      inkscape:window-y="19"
      inkscape:window-maximized="0"
-     inkscape:current-layer="svg8"
+     inkscape:current-layer="layer2"
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:lockguides="false" />
@@ -87,12 +87,12 @@
       </g>
     </g>
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.88884872;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.76976556;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect2016"
        width="75"
-       height="20"
+       height="15"
        x="9.9999997e-06"
-       y="360.00003" />
+       y="365.00003" />
     <circle
        style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.74390346;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="circle1788"
@@ -117,12 +117,12 @@
       </g>
     </g>
     <rect
-       y="4.0517578e-05"
+       y="3.0517578e-05"
        x="9.9999997e-06"
-       height="20"
+       height="15"
        width="75"
        id="rect2018"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.88884872;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.76976556;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <g
        id="g933"
        transform="translate(-2.523613,3.3e-5)">
@@ -344,7 +344,7 @@
        style="opacity:1;vector-effect:none;fill:#251e1e;fill-opacity:1;stroke:none;stroke-width:0.57401633;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
   <g
-     transform="translate(-0.45476383,-28.350769)"
+     transform="translate(-0.45476383,-36.350769)"
      id="g70"
      style="fill:#fff7d4;fill-opacity:1">
     <path

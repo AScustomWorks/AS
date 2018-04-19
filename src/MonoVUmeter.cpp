@@ -86,7 +86,7 @@ MonoVUmeterWidget::MonoVUmeterWidget(MonoVUmeter *module) : ModuleWidget(module)
 	//INPUTS
 	addInput(Port::create<as_PJ301MPort>(Vec(3, 270), Port::INPUT, module, MonoVUmeter::INPUT));
 	//OUTPUTS
-	addOutput(Port::create<as_PJ301MPort>(Vec(3,307), Port::OUTPUT, module, MonoVUmeter::OUT));
+	addOutput(Port::create<as_PJ301MPort>(Vec(3,310), Port::OUTPUT, module, MonoVUmeter::OUT));
 }
 
 Model *modelMonoVUmeter = Model::create<MonoVUmeter, MonoVUmeterWidget>("AS", "MonoVUmeter", "Mono VU meter", VISUAL_TAG, UTILITY_TAG);

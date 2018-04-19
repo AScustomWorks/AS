@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.9710526"
-     inkscape:cx="19.61026"
-     inkscape:cy="163.07352"
+     inkscape:cx="92.311767"
+     inkscape:cy="136.14704"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -37,8 +37,8 @@
      fit-margin-bottom="0"
      inkscape:window-width="1243"
      inkscape:window-height="1384"
-     inkscape:window-x="158"
-     inkscape:window-y="3"
+     inkscape:window-x="116"
+     inkscape:window-y="5"
      inkscape:window-maximized="0"
      units="px"
      showguides="true"
@@ -85,19 +85,19 @@
       </g>
     </g>
     <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.29747489;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect1759"
        width="31.75"
-       height="5.2916665"
+       height="3.96875"
        x="3.6811375e-06"
-       y="95.250008" />
+       y="96.572922" />
     <rect
        y="8.0744421e-06"
        x="3.6811375e-06"
-       height="5.2916665"
+       height="3.96875"
        width="31.75"
        id="rect1806"
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.29747489;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.25762081;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <g
        transform="matrix(0.26458333,0,0,0.26458333,3.6811375e-6,8.0744425e-6)"
        id="g1810">
@@ -303,7 +303,7 @@
        id="g1503"
        transform="matrix(0.90584922,0,0,0.9908646,9.4528518,3.8571261)" />
     <g
-       transform="matrix(0.26458333,0,0,0.26458333,90.588027,21.771455)"
+       transform="matrix(0.26458333,0,0,0.26458333,90.588027,19.654788)"
        id="g52"
        style="fill:#fff7d4;fill-opacity:1">
       <path
