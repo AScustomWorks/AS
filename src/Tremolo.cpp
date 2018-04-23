@@ -53,21 +53,6 @@ struct LowFrequencyOscillator {
 		else
 			return -1.0f + tri(invert ? phase - 0.25f : phase - 0.75f);
 	}
-	/*
-	float saw(float x) {
-		return 2.0 * (x - roundf(x));
-	}
-	float saw() {
-		if (offset)
-			return invert ? 2.0 * (1.0 - phase) : 2.0 * phase;
-		else
-			return saw(phase) * (invert ? -1.0 : 1.0);
-	}
-	float sqr() {
-		float sqr = (phase < pw) ^ invert ? 1.0 : -1.0;
-		return offset ? sqr + 1.0 : sqr;
-	}
-	*/
 	float light() {
 		return sinf(2.0f*M_PI * phase);
 	}
@@ -111,6 +96,12 @@ struct TremoloFx : Module{
 
 	bool fx_bypass = false;
 
+	float fade_in_fx = 0.0f;
+	float fade_in_dry = 0.0f;
+	float fade_out_fx = 1.0f;
+	float fade_out_dry = 1.0f;
+    const float fade_speed = 0.001f;
+
 	TremoloFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
 	void step() override;
@@ -137,7 +128,14 @@ struct TremoloFx : Module{
 		
 	}
 	
-	float input_signal =0.0f;
+	void resetFades(){
+		fade_in_fx = 0.0f;
+		fade_in_dry = 0.0f;
+		fade_out_fx = 1.0f;
+		fade_out_dry = 1.0f;
+	}
+
+	float input_signal = 0.0f;
 	float output_signal = 0.0f;
 	float tremolo_signal = 0.0f;
 	float blend_control = 0.0f;
@@ -149,6 +147,7 @@ void TremoloFx::step() {
 
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		  fx_bypass = !fx_bypass;
+		  resetFades();
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
@@ -166,14 +165,31 @@ void TremoloFx::step() {
 
 	lfo_modulation = 5.0f * interp;
 
+	tremolo_signal = input_signal * clamp(lfo_modulation/10.0f, 0.0f, 1.0f);
+	blend_control = clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	output_signal = crossfade(input_signal,tremolo_signal,blend_control);
+
 	//check bypass switch status
 	if (fx_bypass){
-		outputs[SIGNAL_OUTPUT].value = input_signal;
-	}else {
-		tremolo_signal = input_signal * clamp(lfo_modulation/10.0f, 0.0f, 1.0f);
-		blend_control = clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		output_signal = crossfade(input_signal,tremolo_signal,blend_control);
-		outputs[SIGNAL_OUTPUT].value = output_signal;
+		fade_in_dry += fade_speed;
+		if ( fade_in_dry > 1.0f ) {
+			fade_in_dry = 1.0f;
+		}
+		fade_out_fx -= fade_speed;
+		if ( fade_out_fx < 0.0f ) {
+			fade_out_fx = 0.0f;
+		}
+        outputs[SIGNAL_OUTPUT].value = ( input_signal * fade_in_dry ) + ( output_signal * fade_out_fx );
+    }else{
+		fade_in_fx += fade_speed;
+		if ( fade_in_fx > 1.0f ) {
+			fade_in_fx = 1.0f;
+		}
+		fade_out_dry -= fade_speed;
+		if ( fade_out_dry < 0.0f ) {
+			fade_out_dry = 0.0f;
+		}
+        outputs[SIGNAL_OUTPUT].value = ( input_signal * fade_out_dry ) + ( output_signal * fade_in_fx );
 	}
 
 	lights[PHASE_POS_LIGHT].setBrightnessSmooth(fmaxf(0.0f, oscillator.light()));

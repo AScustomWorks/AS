@@ -44,6 +44,13 @@ struct PhaserFx : Module{
 	SchmittTrigger bypass_cv_trig;
 
 	bool fx_bypass = false;
+
+	float fade_in_fx = 0.0f;
+	float fade_in_dry = 0.0f;
+	float fade_out_fx = 1.0f;
+	float fade_out_dry = 1.0f;
+    const float fade_speed = 0.001f;
+
 	PhaserFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
 	void step() override;
@@ -68,6 +75,13 @@ struct PhaserFx : Module{
 
 			fx_bypass = !!json_boolean_value(bypassJ);
 		
+	}
+
+	void resetFades(){
+		fade_in_fx = 0.0f;
+		fade_in_dry = 0.0f;
+		fade_out_fx = 1.0f;
+		fade_out_dry = 1.0f;
 	}
 
 };
@@ -165,7 +179,8 @@ Phaser *pha = new Phaser();
 void PhaserFx::step() {
 
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
-		  fx_bypass = !fx_bypass;
+			fx_bypass = !fx_bypass;
+			resetFades();
 	}
 
     lights[BYPASS_LED].value = fx_bypass ? 1.00 : 0.0;
@@ -184,10 +199,33 @@ void PhaserFx::step() {
 	float out = pha->Update(input);
 
 	//check bypass switch status
+	/*
 	if (fx_bypass){
 		outputs[OUT].value = input * 5.0f;
 	}else{
 		outputs[OUT].value = out * 5.0f;
+	}
+*/
+	if (fx_bypass){
+		fade_in_dry += fade_speed;
+		if ( fade_in_dry > 1.0f ) {
+			fade_in_dry = 1.0f;
+		}
+		fade_out_fx -= fade_speed;
+		if ( fade_out_fx < 0.0f ) {
+			fade_out_fx = 0.0f;
+		}
+        outputs[OUT].value = ( (input * 5.0f) * fade_in_dry ) + ( (out*5.0f) * fade_out_fx );
+    }else{
+		fade_in_fx += fade_speed;
+		if ( fade_in_fx > 1.0f ) {
+			fade_in_fx = 1.0f;
+		}
+		fade_out_dry -= fade_speed;
+		if ( fade_out_dry < 0.0f ) {
+			fade_out_dry = 0.0f;
+		}
+        outputs[OUT].value = ( (input * 5.0f) * fade_out_dry ) + ( (out*5.0f) * fade_in_fx );
 	}
 
 	lights[RATE_LIGHT].value = clamp(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);

@@ -40,6 +40,11 @@ struct Flow: Module {
 
     bool on_1 = false;
     bool on_2 = false;
+
+    float mute_fade1 =0.0f;
+    float mute_fade2 =0.0f;
+    const float fade_speed = 0.001f;
+
     Flow() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
     void step() override;
  
@@ -81,11 +86,14 @@ void Flow::step() {
     if (extReset1.process(inputs[RESET_1].value)) {
         on_1 = false; 
     }
-    if(on_1){
-        outputs[OUTPUT_1].value = inputs[INPUT_1].value;
-    }else{
-        outputs[OUTPUT_1].value = 0.0f;
+  //SOFT MUTE/UNMUTE
+    mute_fade1 -= on_1 ? fade_speed : -fade_speed;
+    if ( mute_fade1 < 0.0f ) {
+      mute_fade1 = 0.0f;
+    } else if ( mute_fade1 > 1.0f ) {
+      mute_fade1 = 1.0f;
     }
+    outputs[OUTPUT_1].value = inputs[INPUT_1].value * mute_fade1;
     lights[TRIGGER_LED_1].value = on_1 ? 1.0f : 0.0f;
     //TRIGGER 2
     if (btnTrigger2.process(params[SWITCH_2].value)||extTrigger2.process(inputs[CV_TRIG_INPUT_2].value)) {
@@ -94,14 +102,15 @@ void Flow::step() {
     if (extReset2.process(inputs[RESET_2].value)) {
         on_2 = false; 
     }
-    if(on_2){
-        outputs[OUTPUT_2].value = inputs[INPUT_2].value;
-    }else{
-        outputs[OUTPUT_2].value = 0.0f;
+    //SOFT MUTE/UNMUTE
+    mute_fade2 -= on_2 ? fade_speed : -fade_speed;
+    if ( mute_fade2 < 0.0f ) {
+      mute_fade2 = 0.0f;
+    } else if ( mute_fade2 > 1.0f ) {
+      mute_fade2 = 1.0f;
     }
+    outputs[OUTPUT_2].value = inputs[INPUT_2].value * mute_fade2;
     lights[TRIGGER_LED_2].value = on_2 ? 1.0f : 0.0f;
-
-    
 }
 
 ////////////////////////////////////

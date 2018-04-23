@@ -33,7 +33,8 @@ struct LFOGenerator {
 
 struct BPMClock : Module {
 	enum ParamIds {    
-    TEMPO_PARAM,    
+    TEMPO_PARAM,
+    MODE_PARAM,    
     TIMESIGTOP_PARAM,
     TIMESIGBOTTOM_PARAM,
     RESET_SWITCH,
@@ -66,6 +67,7 @@ struct BPMClock : Module {
   SchmittTrigger run_button_trig;
 	SchmittTrigger reset_btn_trig;
   SchmittTrigger reset_ext_trig;
+  SchmittTrigger bpm_mode_trig;
 
   PulseGenerator resetPulse;
   bool reset_pulse = false;
@@ -129,8 +131,16 @@ void BPMClock::step() {
 	}
 
   lights[RUN_LED].value = running ? 1.0f : 0.0f;
-    
-  tempo = std::round(params[TEMPO_PARAM].value);
+
+  if (params[MODE_PARAM].value){
+    //regular 40 to 250 bpm mode
+    tempo = std::round(params[TEMPO_PARAM].value);
+	}else{
+    //extended 30 to 300 mode
+    tempo = std::round(rescale(params[TEMPO_PARAM].value,40.0f,250.0f, 30.0f, 300.0f) );
+  }
+  //tempo = std::round(params[TEMPO_PARAM].value);
+
   time_sig_top = std::round(params[TIMESIGTOP_PARAM].value);
   time_sig_bottom = std::round(params[TIMESIGBOTTOM_PARAM].value);
   time_sig_bottom = std::pow(2,time_sig_bottom+1);
@@ -283,11 +293,11 @@ struct BpmDisplayWidget : TransparentWidget {
 
     NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
     nvgFillColor(vg, nvgTransRGBA(textColor, 16));
-    nvgText(vg, textPos.x, textPos.y, "~~", NULL);
+    nvgText(vg, textPos.x, textPos.y, "~~~", NULL);
 
     textColor = nvgRGB(0xda, 0xe9, 0x29);
     nvgFillColor(vg, nvgTransRGBA(textColor, 16));
-    nvgText(vg, textPos.x, textPos.y, "\\\\", NULL);
+    nvgText(vg, textPos.x, textPos.y, "\\\\\\", NULL);
 
     textColor = nvgRGB(0xf0, 0x00, 0x00);
     nvgFillColor(vg, textColor);
@@ -327,7 +337,7 @@ struct SigDisplayWidget : TransparentWidget {
     std::stringstream to_display;   
     to_display << std::setw(2) << *value;
 
-    Vec textPos = Vec(3, 17); 
+    Vec textPos = Vec(3.0f, 17.0f); 
 
     NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
     nvgFillColor(vg, nvgTransRGBA(textColor, 16));
@@ -359,12 +369,14 @@ BPMClockWidget::BPMClockWidget(BPMClock *module) : ModuleWidget(module) {
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
   //BPM DISPLAY 
   BpmDisplayWidget *display = new BpmDisplayWidget();
-  display->box.pos = Vec(23,50);
+  display->box.pos = Vec(23,45);
   display->box.size = Vec(45, 20);
   display->value = &module->tempo;
   addChild(display); 
   //TEMPO KNOB
-  addParam(ParamWidget::create<as_KnobBlack>(Vec(26, 74), module, BPMClock::TEMPO_PARAM, 40.0f, 250.0f, 120.0f));
+  addParam(ParamWidget::create<as_KnobBlack>(Vec(8, 69), module, BPMClock::TEMPO_PARAM, 40.0f, 250.0f, 120.0f));
+  //OLD/NEW SWITCH FROM 40-250 TO 30-300
+	addParam(ParamWidget::create<as_CKSS>(Vec(67, 77), module, BPMClock::MODE_PARAM, 0.0f, 1.0f, 1.0f));
   //SIG TOP DISPLAY 
   SigDisplayWidget *display2 = new SigDisplayWidget();
   display2->box.pos = Vec(54,123);

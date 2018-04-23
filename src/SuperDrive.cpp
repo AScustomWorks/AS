@@ -49,6 +49,13 @@ struct SuperDriveFx : Module{
 	RCFilter highpassFilter;
 
 	bool fx_bypass = false;
+
+	float fade_in_fx = 0.0f;
+	float fade_in_dry = 0.0f;
+	float fade_out_fx = 1.0f;
+	float fade_out_dry = 1.0f;
+    const float fade_speed = 0.001f;
+
 	SuperDriveFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
 	void step() override;
@@ -75,6 +82,13 @@ struct SuperDriveFx : Module{
 		
 	}
 	
+	void resetFades(){
+		fade_in_fx = 0.0f;
+		fade_in_dry = 0.0f;
+		fade_out_fx = 1.0f;
+		fade_out_dry = 1.0f;
+	}
+
 	float input_signal=0.0f;
 	float drive = 0.1f;
 	float process= 0.0f;
@@ -85,10 +99,10 @@ struct SuperDriveFx : Module{
 
 void SuperDriveFx::step() {
 
-  if (bypass_button_trig.process(params[BYPASS_SWITCH].value) 	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) )
-    {
+  	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		  fx_bypass = !fx_bypass;
-	  }
+		  resetFades();
+	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
 	float input_signal = inputs[SIGNAL_INPUT].value;
@@ -117,13 +131,26 @@ void SuperDriveFx::step() {
 
 	//check bypass switch status
 	if (fx_bypass){
-		outputs[SIGNAL_OUTPUT].value = inputs[SIGNAL_INPUT].value;
-	}else {
-		outputs[SIGNAL_OUTPUT].value = output_signal*3.5f;// 3.5;
+		fade_in_dry += fade_speed;
+		if ( fade_in_dry > 1.0f ) {
+			fade_in_dry = 1.0f;
+		}
+		fade_out_fx -= fade_speed;
+		if ( fade_out_fx < 0.0f ) {
+			fade_out_fx = 0.0f;
+		}
+        outputs[SIGNAL_OUTPUT].value = ( input_signal * fade_in_dry ) + ( (output_signal*3.5f) * fade_out_fx );
+    }else{
+		fade_in_fx += fade_speed;
+		if ( fade_in_fx > 1.0f ) {
+			fade_in_fx = 1.0f;
+		}
+		fade_out_dry -= fade_speed;
+		if ( fade_out_dry < 0.0f ) {
+			fade_out_dry = 0.0f;
+		}
+        outputs[SIGNAL_OUTPUT].value = ( input_signal * fade_out_dry ) + ( (output_signal*3.5f) * fade_in_fx );
 	}
-	//lights without cv input - old
-	//lights[DRIVE_LIGHT].value = params[DRIVE_PARAM].value;
-	//lights[GAIN_LIGHT].value = params[OUTPUT_GAIN_PARAM].value;
 
 	lights[DRIVE_LIGHT].value = clamp(params[DRIVE_PARAM].value + inputs[DRIVE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 	lights[TONE_LIGHT].value = clamp(params[TONE_PARAM].value + inputs[TONE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);

@@ -1,10 +1,12 @@
 //**************************************************************************************
 //
 //BPM Calculator module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
-//
+//### BPM detect portions of code by Tomasz Sosnowski - KoralFX
 //**************************************************************************************
 
 #include "AS.hpp"
+
+#include "dsp/digital.hpp"
 
 #include <sstream>
 #include <iomanip>
@@ -12,20 +14,39 @@
 
 struct BPMCalc : Module {
 	enum ParamIds {    
-    TEMPO_PARAM,       
+    TEMPO_PARAM,      
 		NUM_PARAMS
 	};  
-	enum InputIds {  
+	enum InputIds {
+    CLOCK_INPUT,  
 		NUM_INPUTS
 	};
 	enum OutputIds {     
 		NUM_OUTPUTS
 	};
   enum LightIds {
+    CLOCK_LOCK_LIGHT,
+    CLOCK_LIGHT,
 		NUM_LIGHTS
 	};
 
+  //bpm detector variables
+  bool inMemory = false;
+  bool beatLock = false;
+  float beatTime = 0.0f;
+  int beatCount = 0;
+  int beatCountMemory = 0;
+  float beatOld = 0.0f;
+
+  std::string tempo = "---";
+
+  SchmittTrigger clockTrigger;
+  PulseGenerator LightPulse;
+  bool pulse = false;
+
+  //calculator variables
   float bpm = 120;
+  float last_bpm = 0;
   float millisecs = 60000;
   float mult = 1000;
   float millisecondsPerBeat;
@@ -75,92 +96,204 @@ struct BPMCalc : Module {
   float trth_hz_d = 1.0f;
   float trth_hz = 1.0f;
   float trth_hz_t = 1.0f;
+
+
+  void calculateValues(float bpm){ 
+
+        millisecondsPerBeat = millisecs/bpm;
+        millisecondsPerMeasure = millisecondsPerBeat * 4;
+
+        secondsPerBeat = 60 / bpm;
+        secondsPerMeasure = secondsPerBeat * 4;
+
+        bar = (millisecondsPerMeasure);
+
+        half_note_d = ( millisecondsPerBeat * 3 );
+        half_note = ( millisecondsPerBeat * 2 );
+        half_note_t = ( millisecondsPerBeat * 2 * 2 / 3 );
+
+        qt_note_d = ( millisecondsPerBeat / 2 ) * 3;
+        qt_note = millisecondsPerBeat;
+        qt_note_t = ( millisecondsPerBeat * 2 ) / 3;
+
+        eight_note_d = ( millisecondsPerBeat / 4 ) * 3;
+        eight_note = millisecondsPerBeat / 2;
+        eight_note_t = millisecondsPerBeat / 3;
+
+        sixth_note_d = ( millisecondsPerBeat / 4 ) * 1.5;
+        sixth_note = millisecondsPerBeat / 4;
+        sixth_note_t = millisecondsPerBeat / 6;
+
+        trth_note_d = ( millisecondsPerBeat / 8 ) * 1.5;
+        trth_note = millisecondsPerBeat / 8;
+        trth_note_t = millisecondsPerBeat / 8 * 2 / 3;
+        //hz measures
+        hz_bar = (1/secondsPerMeasure);
+
+        half_hz_d = mult / half_note_d;
+        half_hz = mult / half_note;
+        half_hz_t = mult / half_note_t;
+
+        qt_hz_d = mult / qt_note_d;
+        qt_hz = mult / qt_note;
+        qt_hz_t = mult / qt_note_t;
+
+        eight_hz_d = mult / eight_note_d;
+        eight_hz = mult / eight_note;
+        eight_hz_t = mult / eight_note_t;
+
+        sixth_hz_d = mult / sixth_note_d;
+        sixth_hz = mult / sixth_note;
+        sixth_hz_t = mult / sixth_note_t;
+
+        trth_hz_d = mult / trth_note_d;
+        trth_hz = mult / trth_note;
+        trth_hz_t = mult / trth_note_t;
+
+         last_bpm = bpm;
+        //seems like round calcs are not really needed:
+        /*
+        half_note_d = std::round(millisecondsPerBeat * 3 * mult)/mult;
+        half_note = std::round(millisecondsPerBeat * 2 * mult)/mult;
+        half_note_t = std::round(millisecondsPerBeat * 2 * 2 / 3 * mult)/mult;
+        */
+  }
+
+  void refreshDetector() {
+
+      inMemory = false;
+      beatLock = false;
+      beatTime = 0.0f;
+      beatCount = 0;
+      beatCountMemory = 0;
+      beatOld = 0.0f;
+      tempo = "---";
+      pulse = false;
+
+	}
+
   
 	BPMCalc() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
 
 	void step() override;
 
+  void onReset() override {
+
+    refreshDetector();
+
+	}
+
+	void onInitialize() {
+
+    refreshDetector();
+
+	}
 
 };
 
 void BPMCalc::step() {
-  bpm = params[TEMPO_PARAM].value;
-  if (bpm<30){
-    bpm = 30;
+
+  //BPM detection code
+  float deltaTime = engineGetSampleTime();
+
+  if ( inputs[CLOCK_INPUT].active ) {
+
+    float clockInput = inputs[CLOCK_INPUT].value;
+    //A rising slope
+    if ( ( clockTrigger.process( inputs[CLOCK_INPUT].value ) ) && !inMemory ) {
+      beatCount++;
+      if(!beatLock){
+        lights[CLOCK_LIGHT].value = 1.0f;
+         LightPulse.trigger( 0.1f );
+      }
+      inMemory = true;
+     
+      //BPM is locked
+      if ( beatCount == 2 ) {
+        lights[CLOCK_LOCK_LIGHT].value = 1.0f;
+        beatLock = true;
+        beatOld = beatTime;
+      }
+      //BPM is lost
+      if ( beatCount > 2 ) {
+
+        if ( fabs( beatOld - beatTime ) > 0.0005f ) {
+          beatLock = false;
+          beatCount = 0;
+          lights[CLOCK_LOCK_LIGHT].value = 0.0f;
+          tempo = "---";
+        }
+
+      }
+
+      beatTime = 0;
+
+    }
+
+    //Falling slope
+    if ( clockInput <= 0 && inMemory ) {
+      inMemory = false;
+    }
+    //When BPM is locked
+    if ( beatLock ) {
+      bpm = (int)round( 60 / beatOld );
+      tempo = std::to_string( (int)round(bpm) );
+      if(bpm!=last_bpm){
+        if(bpm<999){
+          calculateValues(bpm);
+        }else{
+          tempo = "OOR";
+        }
+      }
+   
+    } //end of beatLock routine
+
+    beatTime += deltaTime;
+
+    //when beat is lost
+    if ( beatTime > 2 ) {
+      beatLock = false;
+      beatCount = 0;
+      lights[CLOCK_LOCK_LIGHT].value = 0.0f;
+      tempo = "---";
+    }
+    beatCountMemory = beatCount;
+
+  } else {
+    beatLock = false;
+    beatCount = 0;
+    //tempo = "OFF";
+    lights[CLOCK_LOCK_LIGHT].value = 0.0f;
+    //caluculate with knob value instead of bmp detector value
+    bpm = params[TEMPO_PARAM].value;
+    if (bpm<30){
+      bpm = 30;
+    }
+    bpm = (int)round(bpm);
+    tempo = std::to_string( (int)round(bpm) );
+    if(bpm!=last_bpm){
+        calculateValues(bpm);
+    }
+
   }
-  bpm = std::round(bpm);
-  millisecondsPerBeat = millisecs/bpm;
-	millisecondsPerMeasure = millisecondsPerBeat * 4;
 
-  secondsPerBeat = 60 / bpm;
-	secondsPerMeasure = secondsPerBeat * 4;
+  pulse = LightPulse.process( 1.0 / engineGetSampleRate() );
+  lights[CLOCK_LIGHT].value = (pulse ? 1.0f : 0.0f);
 
-  bar = (millisecondsPerMeasure);
-
-  half_note_d = ( millisecondsPerBeat * 3 );
-  half_note = ( millisecondsPerBeat * 2 );
-  half_note_t = ( millisecondsPerBeat * 2 * 2 / 3 );
-
-  qt_note_d = ( millisecondsPerBeat / 2 ) * 3;
-  qt_note = millisecondsPerBeat;
-  qt_note_t = ( millisecondsPerBeat * 2 ) / 3;
-
-  eight_note_d = ( millisecondsPerBeat / 4 ) * 3;
-  eight_note = millisecondsPerBeat / 2;
-  eight_note_t = millisecondsPerBeat / 3;
-
-  sixth_note_d = ( millisecondsPerBeat / 4 ) * 1.5;
-  sixth_note = millisecondsPerBeat / 4;
-  sixth_note_t = millisecondsPerBeat / 6;
-
-  trth_note_d = ( millisecondsPerBeat / 8 ) * 1.5;
-  trth_note = millisecondsPerBeat / 8;
-  trth_note_t = millisecondsPerBeat / 8 * 2 / 3;
-  //hz measures
-  hz_bar = (1/secondsPerMeasure);
-
-  half_hz_d = mult / half_note_d;
-  half_hz = mult / half_note;
-  half_hz_t = mult / half_note_t;
-
-  qt_hz_d = mult / qt_note_d;
-  qt_hz = mult / qt_note;
-  qt_hz_t = mult / qt_note_t;
-
-  eight_hz_d = mult / eight_note_d;
-  eight_hz = mult / eight_note;
-  eight_hz_t = mult / eight_note_t;
-
-  sixth_hz_d = mult / sixth_note_d;
-  sixth_hz = mult / sixth_note;
-  sixth_hz_t = mult / sixth_note_t;
-
-  trth_hz_d = mult / trth_note_d;
-  trth_hz = mult / trth_note;
-  trth_hz_t = mult / trth_note_t;
-
-
-  //seems like round calcs are not really needed:
-  /*
-  half_note_d = std::round(millisecondsPerBeat * 3 * mult)/mult;
-  half_note = std::round(millisecondsPerBeat * 2 * mult)/mult;
-  half_note_t = std::round(millisecondsPerBeat * 2 * 2 / 3 * mult)/mult;
-  */
 }
 
 ////////////////////////////////////
-struct BpmDisplayWidget : TransparentWidget {
-  float *value;
+struct TempodisplayWidget : TransparentWidget {
+ std::string *value;
   std::shared_ptr<Font> font;
 
-  BpmDisplayWidget() {
+  TempodisplayWidget() {
     font = Font::load(assetPlugin(plugin, "res/Segment7Standard.ttf"));
   };
 
   void draw(NVGcontext *vg) override
   {
     // Background
-    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
     NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
     NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
     nvgBeginPath(vg);
@@ -178,15 +311,15 @@ struct BpmDisplayWidget : TransparentWidget {
     std::stringstream to_display;   
     to_display << std::setw(3) << *value;
 
-    Vec textPos = Vec(4.0f, 17.0f); 
+    Vec textPos = Vec(14.0f, 17.0f); 
 
     NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
     nvgFillColor(vg, nvgTransRGBA(textColor, 16));
-    nvgText(vg, textPos.x, textPos.y, "~~", NULL);
+    nvgText(vg, textPos.x, textPos.y, "~~~", NULL);
 
     textColor = nvgRGB(0xda, 0xe9, 0x29);
     nvgFillColor(vg, nvgTransRGBA(textColor, 16));
-    nvgText(vg, textPos.x, textPos.y, "\\\\", NULL);
+    nvgText(vg, textPos.x, textPos.y, "\\\\\\", NULL);
 
     textColor = nvgRGB(0xf0, 0x00, 0x00);
     nvgFillColor(vg, textColor);
@@ -416,16 +549,22 @@ BPMCalcWidget::BPMCalcWidget(BPMCalc *module) : ModuleWidget(module) {
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-  //BPM DISPLAY 
-  BpmDisplayWidget *display = new BpmDisplayWidget();
-  display->box.pos = Vec(43,54);
-  display->box.size = Vec(45, 20);
-  display->value = &module->bpm;
-  addChild(display); 
-    //TEMPO KNOB
-  addParam(ParamWidget::create<as_KnobBlack>(Vec(130, 45), module, BPMCalc::TEMPO_PARAM, 30.0f, 300.0f, 120.0f));
 
-   //LABEL DISPLAY 
+  //BPM DETECTOR PORT
+  addInput(Port::create<as_PJ301MPort>(Vec(20, 52), Port::INPUT, module, BPMCalc::CLOCK_INPUT));
+
+  //BPM DISPLAY 
+  TempodisplayWidget *display = new TempodisplayWidget();
+  display->box.pos = Vec(73,54);
+  display->box.size = Vec(55, 20);
+  display->value = &module->tempo;
+  addChild(display);
+  //DETECTOR LEDS
+  addChild(ModuleLightWidget::create<DisplayLedLight<RedLight>>(Vec(77, 56), module, BPMCalc::CLOCK_LOCK_LIGHT));
+  addChild(ModuleLightWidget::create<DisplayLedLight<RedLight>>(Vec(77, 66), module, BPMCalc::CLOCK_LIGHT)); 
+  //TEMPO KNOB
+  addParam(ParamWidget::create<as_KnobBlack>(Vec(156, 45), module, BPMCalc::TEMPO_PARAM, 30.0f, 300.0f, 120.0f));
+  //CALCULATOR DISPLAY 
   TxtDisplay *display1 = new TxtDisplay();
   display1->module = module;
   display1->box.pos = Vec(7, 120);

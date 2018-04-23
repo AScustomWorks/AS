@@ -59,6 +59,10 @@ struct LaunchGate : Module {
     bool gate1_open= false;
     bool gate2_open= false;
 
+    float mute_fade1 = 0.0f;
+    float mute_fade2 = 0.0f;
+    const float fade_speed = 0.001f;
+
     LaunchGate() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 
     }
@@ -87,71 +91,63 @@ void LaunchGate::step(){
   bool reset1 = false;
   bool reset_2 = false;
   ///////////// counter 1
-  if (reset_trigger_1.process(params[RST_BUTTON1].value)){
-      reset1 = true;
-      count1 = 0;
-      gate1_open=false;
-      resetLight1 = 1.0f;
-
+  if ( reset_trigger_1.process( params[RST_BUTTON1].value ) || reset_ext_trigger_1.process( inputs[RESET_IN_1].value ) ) {
+    reset1 = true;
+    count1 = 0;
+    gate1_open = false;
+    resetLight1 = 1.0f;
+    mute_fade1 = 0.0f;
   }
-  if (reset_ext_trigger_1.process(inputs[RESET_IN_1].value)){
-      reset1 = true;
-      count1 = 0;
-      gate1_open = false;
-      resetLight1 = 1.0f;
-
-  } 
 
   resetLight1 -= resetLight1 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT1].value = resetLight1;
 
-  if (reset1 == false){
-		if (clock_trigger_1.process(inputs[CLK_IN_1].value) && count1 <= count_limit1){
-      if (!gate1_open){
-					count1++;
+  if ( reset1 == false ) {
+    if ( clock_trigger_1.process( inputs[CLK_IN_1].value ) && count1 <= count_limit1 ) {
+      if ( !gate1_open ) {
+        count1++;
       }
     }
   }
-  if (count1 == count_limit1){
-      gate1_open = true;
+  if ( count1 == count_limit1 ) {
+    gate1_open = true;
   }
-  if (gate1_open){
-      outputs[OUTPUT_1].value = inputs[INPUT_1].value;
-  }else{
-    outputs[OUTPUT_1].value = 0.0f;
+  //SOFT MUTE/UNMUTE
+  mute_fade1 += gate1_open ? fade_speed : -fade_speed;
+  if ( mute_fade1 < 0.0f ) {
+    mute_fade1 = 0.0f;
+  } else if ( mute_fade1 > 1.0f ) {
+    mute_fade1 = 1.0f;
   }
+  outputs[OUTPUT_1].value = inputs[INPUT_1].value * mute_fade1;
   ///////////// counter 2
-  if (reset_trigger_2.process(params[RST_BUTTON2].value)){
+  if ( reset_trigger_2.process( params[RST_BUTTON2].value ) || reset_ext_trigger_2.process( inputs[RESET_IN_2].value ) ) {
     reset_2 = true;
     count_2 = 0;
-    gate2_open=false;
+    gate2_open = false;
     resetLight2 = 1.0f;
   }
-  if (reset_ext_trigger_2.process(inputs[RESET_IN_2].value)){
-    reset_2 = true;
-    count_2 = 0;
-    gate2_open=false;
-    resetLight2 = 1.0f;
-  } 
   resetLight2 -= resetLight2 / lightLambda / engineGetSampleRate();
   lights[RESET_LIGHT2].value = resetLight2;
 
-  if (reset_2 == false){
-		if (clock_trigger_2.process(inputs[CLK_IN_2].value) && count_2 <= count_limit_2){
-      if (!gate2_open){
-					count_2++;
+  if ( reset_2 == false ) {
+    if ( clock_trigger_2.process( inputs[CLK_IN_2].value ) && count_2 <= count_limit_2 ) {
+      if ( !gate2_open ) {
+        count_2++;
       }
     }
   }
-  if (count_2 == count_limit_2){
-      gate2_open = true;
+  if ( count_2 == count_limit_2 ) {
+    gate2_open = true;
   }
-  if (gate2_open){
-      outputs[OUTPUT_2].value = inputs[INPUT_2].value;
-  }else{
-    outputs[OUTPUT_2].value = 0.0f;
+  //SOFT MUTE/UNMUTE
+  mute_fade2 += gate2_open ? fade_speed : -fade_speed;
+  if ( mute_fade2 < 0.0f ) {
+    mute_fade2 = 0.0f;
+  } else if ( mute_fade2 > 1.0f ) {
+    mute_fade2 = 1.0f;
   }
-
+  outputs[OUTPUT_2].value = inputs[INPUT_2].value * mute_fade2;
 }
 
 ///////////////////////////////////

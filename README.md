@@ -44,10 +44,14 @@ V 0.6.1: Now BPM Clock outputs a short length trigger signal, as most of the ava
 
 V 0.6.2: Small fix on the reset signal length.
 
+V 0.6.5: Added a Regular/Extended switch to change the clock from 40-250 to 30-300 range. Had to add the switch instead of simply changing the default settings to avoid changing the bpm tempo on the patches already using the clock.
+
 ### BPM to delay/hz calculator
 A BPM to delay/hz calculator to setup easier those nice delay effects.
 
 V 0.6.4: First relase of this module.
+
+V 0.6.5: Added an external input to detect a BPM from a LFO or some other sources, BPM detection code based on Koralfx Beatovnik from Tomek Sosnowski, nice work Tomek!.
 
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
@@ -134,15 +138,21 @@ Delay the start of a flow of signals by a set number of clock ticks (TAOS reques
 
 V 0.5.5: First relase of this module.
 
+V 0.6.5: Now it features soft mute, so you can use it both for audio and cv signals without any switching noise.
+
 ### Kill Gate
 Cut the flow of signals after a set number of clock ticks (TAOS request).
 
 V 0.5.6: First relase of this module.
 
+V 0.6.5: Now it features soft mute, so you can use it both for audio and cv signals without any switching noise.
+
 ### Flow
 Cut the flow of signals with a switch or a cv signal  (TAOS request).
 
 V 0.6.0: First relase of this module.
+
+V 0.6.5: Now it features soft mute, so you can use it both for audio and cv signals without any switching noise.
 
 ### Signal Delay
 Delay the incomming CV signal by set milliseconds, with signal thru and delayed output. You can chain several Signal Delay modules together for unlimited length of delays. (TAOS request).
@@ -158,12 +168,16 @@ V 0.5.5 CHanged the time knob reading from exponential to linear, now you can se
 
 V 0.6.3: bypass CV input added.
 
+V 0.6.5: Now it features soft bypass to avoid switching noise.
+
 ### Phaser
 Autodafe's Phaser Fx module. Mods: graphics, bypass switch.
 
 V 0.5.4: Added CV inputs for each parameter, updated look.
 
 V 0.6.3: bypass CV input added.
+
+V 0.6.5: Now it features soft bypass to avoid switching noise.
 
 ### SuperDrive
 Overdrive/clipping Fx module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
@@ -172,6 +186,8 @@ V 0.5.4: First relase of this module.
 
 V 0.6.3: bypass CV input added.
 
+V 0.6.5: Now it features soft bypass to avoid switching noise(Results may change according to signal levels).
+
 ### Reverb
 Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP and BLEND parameters, a little bit tamed Reverb with mixed output signal.
 
@@ -179,12 +195,16 @@ Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP 
 
 V 0.6.3: bypass CV input added.
 
+V 0.6.5: Now it features soft bypass to avoid switching noise.
+
 ### Tremolo
 Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (set your effect, duplicate the module and invert the phase for stereo tremolo setup)your Tremolo to go!.
 
 0.5.6: First relase of this module.
 
 V 0.6.3: bypass CV input added.
+
+V 0.6.5: Now it features soft bypass to avoid switching noise.
 
 ### WaveShaper
 HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
@@ -194,6 +214,8 @@ V 0.5.2: added back the voltage range switch.
 V 0.5.4: Updated look.
 
 V 0.6.3: bypass CV input added.
+
+V 0.6.5: Now it features soft bypass to avoid switching noise.
 
 ### Blank Panel
 Blank panels in 4, 6 & 8 HP.

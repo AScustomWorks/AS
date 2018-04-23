@@ -48,6 +48,12 @@ struct ReverbFx : Module{
 
 	bool fx_bypass = false;
 
+	float fade_in_fx = 0.0f;
+	float fade_in_dry = 0.0f;
+	float fade_out_fx = 1.0f;
+	float fade_out_dry = 1.0f;
+    const float fade_speed = 0.001f;
+
 	ReverbFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 
 		float gSampleRate = engineGetSampleRate();
@@ -79,6 +85,13 @@ struct ReverbFx : Module{
 			fx_bypass = !!json_boolean_value(bypassJ);
 		
 	}
+
+	void resetFades(){
+		fade_in_fx = 0.0f;
+		fade_in_dry = 0.0f;
+		fade_out_fx = 1.0f;
+		fade_out_dry = 1.0f;
+	}
 	
 };
 
@@ -98,6 +111,7 @@ void ReverbFx::step() {
 
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		fx_bypass = !fx_bypass;
+		resetFades();
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
@@ -118,12 +132,29 @@ void ReverbFx::step() {
 
 	reverb.process(input_signal, out1, out2);
 
+	float out = input_signal + out1 * clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+
 	//check bypass switch status
 	if (fx_bypass){
-		outputs[SIGNAL_OUTPUT].value = inputs[SIGNAL_INPUT].value;
-	}else {
-		outputs[SIGNAL_OUTPUT].value = input_signal + out1 * clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		//outputs[SIGNAL_OUTPUT2].value = input_signal + out2 * clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0, 0.0, 1.0);
+		fade_in_dry += fade_speed;
+		if ( fade_in_dry > 1.0f ) {
+			fade_in_dry = 1.0f;
+		}
+		fade_out_fx -= fade_speed;
+		if ( fade_out_fx < 0.0f ) {
+			fade_out_fx = 0.0f;
+		}
+        outputs[SIGNAL_OUTPUT].value = ( input_signal * fade_in_dry ) + ( out * fade_out_fx );
+    }else{
+		fade_in_fx += fade_speed;
+		if ( fade_in_fx > 1.0f ) {
+			fade_in_fx = 1.0f;
+		}
+		fade_out_dry -= fade_speed;
+		if ( fade_out_dry < 0.0f ) {
+			fade_out_dry = 0.0f;
+		}
+        outputs[SIGNAL_OUTPUT].value = ( input_signal * fade_out_dry ) + ( out * fade_in_fx );
 	}
 
 	lights[DECAY_LIGHT].value = clamp(params[DECAY_PARAM].value + inputs[DECAY_CV_INPUT].value / 10.0f, 0.0f, 1.0f);

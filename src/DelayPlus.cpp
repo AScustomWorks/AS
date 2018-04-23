@@ -1,7 +1,7 @@
 //**************************************************************************************
 //Delay Plus module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
-//Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
+//Code based on Fundamental plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
 #include "AS.hpp"
 
@@ -60,6 +60,12 @@ struct DelayPlusFx : Module {
 	bool fx_bypass = false;
 	float lastWet = 0.0f;
 
+	float fade_in_fx = 0.0f;
+	float fade_in_dry = 0.0f;
+	float fade_out_fx = 1.0f;
+	float fade_out_dry = 1.0f;
+    const float fade_speed = 0.001f;
+
 	DelayPlusFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
 
 	}
@@ -88,12 +94,20 @@ struct DelayPlusFx : Module {
 		
 	}
 
+	void resetFades(){
+		fade_in_fx = 0.0f;
+		fade_in_dry = 0.0f;
+		fade_out_fx = 1.0f;
+		fade_out_dry = 1.0f;
+	}
+
 };
 
 void DelayPlusFx::step() {
 
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].value) || bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
 		  fx_bypass = !fx_bypass;
+		  resetFades();
 	}
     lights[BYPASS_LED].value = fx_bypass ? 1.0f : 0.0f;
 
@@ -166,10 +180,25 @@ void DelayPlusFx::step() {
 	out = crossfade(signal_input, wet, mix);
 	//check bypass switch status
 	if (fx_bypass){
-		outputs[OUT_OUTPUT].value = signal_input;
-	}else{
-		//do the delay calculations
-		outputs[OUT_OUTPUT].value = out;
+		fade_in_dry += fade_speed;
+		if ( fade_in_dry > 1.0f ) {
+			fade_in_dry = 1.0f;
+		}
+		fade_out_fx -= fade_speed;
+		if ( fade_out_fx < 0.0f ) {
+			fade_out_fx = 0.0f;
+		}
+        outputs[OUT_OUTPUT].value = ( signal_input * fade_in_dry ) + ( out * fade_out_fx );
+    }else{
+		fade_in_fx += fade_speed;
+		if ( fade_in_fx > 1.0f ) {
+			fade_in_fx = 1.0f;
+		}
+		fade_out_dry -= fade_speed;
+		if ( fade_out_dry < 0.0f ) {
+			fade_out_dry = 0.0f;
+		}
+        outputs[OUT_OUTPUT].value = ( signal_input * fade_out_dry ) + ( out * fade_in_fx );
 	}
 }
 

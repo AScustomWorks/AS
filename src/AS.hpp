@@ -147,6 +147,13 @@ template <typename BASE>
  	}
  };
 
+ template <typename BASE>
+ struct DisplayLedLight : BASE {
+ 	DisplayLedLight() {
+ 		this->box.size = mm2px(Vec(2.0, 2.0));
+		 this->bgColor = nvgRGB(0x14, 0x14, 0x14);
+ 	}
+ };
  struct OrangeLight : GrayModuleLightWidget {
 	OrangeLight() {
 		addBaseColor(COLOR_ORANGE);
