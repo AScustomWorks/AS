@@ -36,6 +36,8 @@ extern Model *modelSignalDelay;
 extern Model *modelBPMCalc;
 
 extern Model *modelDelayPlusFx;
+extern Model *modelDelayPlusStereoFx;
+
 extern Model *modelPhaserFx;
 extern Model *modelReverbFx;
 extern Model *modelSuperDriveFx;

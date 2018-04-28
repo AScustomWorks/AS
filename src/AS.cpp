@@ -35,6 +35,7 @@ void init(rack::Plugin *p) {
 	
 	//EFFECTS	
 	p->addModel(modelDelayPlusFx);
+	p->addModel(modelDelayPlusStereoFx);
 	p->addModel(modelPhaserFx);
 	p->addModel(modelReverbFx);
 	p->addModel(modelSuperDriveFx);

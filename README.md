@@ -46,6 +46,8 @@ V 0.6.2: Small fix on the reset signal length.
 
 V 0.6.5: Added a Regular/Extended switch to change the clock from 40-250 to 30-300 range. Had to add the switch instead of simply changing the default settings to avoid changing the bpm tempo on the patches already using the clock.
 
+V 0.6.6: Added a CV input for the "RUN" switch.
+
 ### BPM to delay/hz calculator
 A BPM to delay/hz calculator to setup easier those nice delay effects.
 
@@ -122,9 +124,11 @@ A manual CV signal temporary trigger module with labeling integrated, so you rem
 The labels list includes:
     "------", "MUTE","  SOLO"," RESET"," DRUMS","  KICK"," SNARE"," HIHAT","  CLAP","  PERC","BASS 1","BASS 2"," GTR 1",
     " GTR 2","LEAD 1","LEAD 2"," PAD 1"," PAD 2","CHORDS","  FX 1","  FX 2"," SEQ 1"," SEQ 2"," MIX 1"," MIX 2",    
-    " AUX 1"," AUX 2","    ON","   OFF"," START","  STOP"," PAUSE","    UP","  DOWN","  LEFT"," RIGHT",
+    " AUX 1"," AUX 2","    ON","   OFF"," START","  STOP"," PAUSE","    UP","  DOWN","  LEFT"," RIGHT", "RUN"
 
 V 0.5.7: First relase of this module.
+
+V 0.6.5: Added "RUN" label at the end of the list.
 
 ### Steps
 Strum's Mental VCV Counters module. Mods: graphics, 3 counters, up to 64 steps each, added reset lights to the buttons.
@@ -169,6 +173,11 @@ V 0.5.5 CHanged the time knob reading from exponential to linear, now you can se
 V 0.6.3: bypass CV input added.
 
 V 0.6.5: Now it features soft bypass to avoid switching noise.
+
+### Delay Plus Stereo
+Same as Delay Plus, but now in Stereo.
+
+V 0.6.6: Stereo version of the Delay Plus module, with link switches for Feedback and Color parameters. If the respective switch is active, the left knob controls the changes for both left and right channels.
 
 ### Phaser
 Autodafe's Phaser Fx module. Mods: graphics, bypass switch.

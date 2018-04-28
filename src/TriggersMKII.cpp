@@ -133,6 +133,7 @@ static const char *label_values[] = {
     "  DOWN",
     "  LEFT",
     " RIGHT",
+    "   RUN",
 };
 
 ///////////////////////////////////
@@ -211,7 +212,7 @@ TriggersMKIIWidget::TriggersMKIIWidget(TriggersMKII *module) : ModuleWidget(modu
 	addChild(display1); 	
 
     //PARAM
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1, 0.0, 35.0, 0.0));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1, 0.0, 36.0, 0.0));
     //SWITCH
     addParam(ParamWidget::create<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1, 0.0, 1.0, 0.0));
     addChild(ModuleLightWidget::create<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
@@ -228,7 +229,7 @@ TriggersMKIIWidget::TriggersMKIIWidget(TriggersMKII *module) : ModuleWidget(modu
 	addChild(display2); 	
 
     //PARAM
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2, 0.0, 35.0, 0.0));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2, 0.0, 36.0, 0.0));
     //SWITCH
     addParam(ParamWidget::create<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2, 0.0, 1.0, 0.0));
     addChild(ModuleLightWidget::create<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));
