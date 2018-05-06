@@ -130,7 +130,7 @@ void ReverbFx::step() {
 	if( old_damp != damp ) reverb.setdamp(damp);
 	if( old_roomsize != roomsize) reverb.setroomsize(roomsize);
 
-	reverb.process(input_signal, out1, out2);
+	reverb.process(input_signal+ input_signal, out1, out2);
 
 	float out = input_signal + out1 * clamp(params[BLEND_PARAM].value + inputs[BLEND_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
 

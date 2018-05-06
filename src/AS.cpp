@@ -32,14 +32,23 @@ void init(rack::Plugin *p) {
 	p->addModel(modelTriggersMKI);
 	p->addModel(modelTriggersMKII);
 	p->addModel(modelBPMCalc);
+	p->addModel(modelCv2T);
+	
 	
 	//EFFECTS	
 	p->addModel(modelDelayPlusFx);
 	p->addModel(modelDelayPlusStereoFx);
+	
 	p->addModel(modelPhaserFx);
+
 	p->addModel(modelReverbFx);
+	p->addModel(modelReverbStereoFx);
+
 	p->addModel(modelSuperDriveFx);
+
 	p->addModel(modelTremoloFx);
+	p->addModel(modelTremoloStereoFx);
+	
 	p->addModel(modelWaveShaper);
 	//BLANK PANELS
 	p->addModel(modelBlankPanel4);

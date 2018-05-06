@@ -48,6 +48,8 @@ V 0.6.5: Added a Regular/Extended switch to change the clock from 40-250 to 30-3
 
 V 0.6.6: Added a CV input for the "RUN" switch.
 
+V 0.6.7: Added a CV output for the "RUN" switch, sends a trigger signal on each press of the switch.
+
 ### BPM to delay/hz calculator
 A BPM to delay/hz calculator to setup easier those nice delay effects.
 
@@ -163,6 +165,11 @@ Delay the incomming CV signal by set milliseconds, with signal thru and delayed 
 
 V 0.5.5: First relase of this module.
 
+### CV 2 T
+CV to Trigger module. Feed a midi signal to the CV inputs and it will output one trigger signal when the incoming signal rises above 0v, and another trigger signal when the incoming signal returns to 0v. Useful to use your external hardware controller/keyboard as a trigger.
+
+V 0.6.7: First relase of this module.
+
 ### Delay Plus
 Fundamental Delay module. Mods: graphics, digital display to show delay time in MS , wet signal send & return, bypass switch.
 
@@ -175,9 +182,9 @@ V 0.6.3: bypass CV input added.
 V 0.6.5: Now it features soft bypass to avoid switching noise.
 
 ### Delay Plus Stereo
-Same as Delay Plus, but now in Stereo.
+Stereo version of the Delay Plus module, with link switches for Feedback and Color parameters. If the respective switch is active, the left knob controls the changes for both left and right channels.
 
-V 0.6.6: Stereo version of the Delay Plus module, with link switches for Feedback and Color parameters. If the respective switch is active, the left knob controls the changes for both left and right channels.
+V 0.6.7: First relase of this module.
 
 ### Phaser
 Autodafe's Phaser Fx module. Mods: graphics, bypass switch.
@@ -206,6 +213,11 @@ V 0.6.3: bypass CV input added.
 
 V 0.6.5: Now it features soft bypass to avoid switching noise.
 
+### Reverb Stereo
+Stereo version of the Reverb module, BLEND is replaced with a DRY /WET knob, to work better when used with a mixer send/return ports.
+
+V 0.6.7: First relase of this module.
+
 ### Tremolo
 Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (set your effect, duplicate the module and invert the phase for stereo tremolo setup)your Tremolo to go!.
 
@@ -214,6 +226,11 @@ Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (se
 V 0.6.3: bypass CV input added.
 
 V 0.6.5: Now it features soft bypass to avoid switching noise.
+
+### Tremolo Stereo
+Stereo version of the Tremolo module, use the phase switch to change from synced L and R channels to inverted phase, to get stereo panning effect.
+
+V 0.6.7: First relase of this module.
 
 ### WaveShaper
 HetrickCV Wave Shaper module. Mods: graphics, bypass switch.

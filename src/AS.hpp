@@ -34,14 +34,20 @@ extern Model *modelKillGate;
 extern Model *modelFlow;
 extern Model *modelSignalDelay;
 extern Model *modelBPMCalc;
+extern Model *modelCv2T;
 
 extern Model *modelDelayPlusFx;
 extern Model *modelDelayPlusStereoFx;
 
 extern Model *modelPhaserFx;
 extern Model *modelReverbFx;
+extern Model *modelReverbStereoFx;
+
 extern Model *modelSuperDriveFx;
+
 extern Model *modelTremoloFx;
+extern Model *modelTremoloStereoFx;
+
 extern Model *modelWaveShaper;
 
 extern Model *modelBlankPanel4;
