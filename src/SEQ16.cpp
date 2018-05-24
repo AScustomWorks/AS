@@ -83,7 +83,7 @@ struct SEQ16 : Module {
 	}
 	void step() override;
 
-	int numSteps;
+	int numSteps = 0;
 
 	json_t *toJson() override {
 		json_t *rootJ = json_object();
