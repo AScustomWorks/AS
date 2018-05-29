@@ -392,11 +392,11 @@ DelayPlusStereoFxWidget::DelayPlusStereoFxWidget(DelayPlusStereoFx *module) : Mo
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS L
-	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(37, 78), module, DelayPlusStereoFx::TIME_PARAM_1, 0.001f, 10.0f, 0.375f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(37, 78), module, DelayPlusStereoFx::TIME_PARAM_1, 0.0f, 10.0f, 0.375f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(37, 130), module, DelayPlusStereoFx::FEEDBACK_PARAM_1, 0.0f, 1.0f, 0.5f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(37, 180), module, DelayPlusStereoFx::COLOR_PARAM_1, 0.0f, 1.0f, 0.5f));
 	//KNOBS R
-	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(106, 78), module, DelayPlusStereoFx::TIME_PARAM_2, 0.001f, 10.0f, 0.750f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(106, 78), module, DelayPlusStereoFx::TIME_PARAM_2, 0.0f, 10.0f, 0.750f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(106, 130), module, DelayPlusStereoFx::FEEDBACK_PARAM_2, 0.0f, 1.0f, 0.5f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(106, 180), module, DelayPlusStereoFx::COLOR_PARAM_2, 0.0f, 1.0f, 0.5f));
 	//FEEDBACK LINK SWITCH

@@ -270,7 +270,7 @@ DelayPlusFxWidget::DelayPlusFxWidget(DelayPlusFx *module) : ModuleWidget(module)
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 38+y_offset), module, DelayPlusFx::TIME_PARAM, 0.0f, 10.0f, 0.350f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 90+y_offset), module, DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 140+y_offset), module, DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f));
 	addParam(ParamWidget::create<as_FxKnobWhite>(Vec(74, 213+y_offset), module, DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f));

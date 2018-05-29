@@ -21,7 +21,8 @@ struct BPMCalc : Module {
     CLOCK_INPUT,  
 		NUM_INPUTS
 	};
-	enum OutputIds {     
+	enum OutputIds {  
+    ENUMS(MS_OUTPUT, 16),   
 		NUM_OUTPUTS
 	};
   enum LightIds {
@@ -51,7 +52,7 @@ struct BPMCalc : Module {
   float mult = 1000;
   float millisecondsPerBeat;
   float millisecondsPerMeasure;
-  float bar = 1;
+  float bar = 1.0f;
 
   float secondsPerBeat = 0.0f;
 	float secondsPerMeasure = 0.0f;
@@ -279,6 +280,33 @@ void BPMCalc::step() {
 
   pulse = LightPulse.process( 1.0 / engineGetSampleRate() );
   lights[CLOCK_LIGHT].value = (pulse ? 1.0f : 0.0f);
+
+  //OUTPUTS: MS to 10V scaled values
+  outputs[MS_OUTPUT+0].value = rescale(bar,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+1].value = rescale(half_note_d,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+2].value = rescale(half_note,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+3].value = rescale(half_note_t,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+4].value = rescale(qt_note_d,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+5].value = rescale(qt_note,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+6].value = rescale(qt_note_t,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+7].value = rescale(eight_note_d,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+8].value = rescale(eight_note,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+9].value = rescale(eight_note_t,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+10].value = rescale(sixth_note_d,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+11].value = rescale(sixth_note,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+12].value = rescale(sixth_note_t,0.0f,10000.0f,0.0f,10.0f);
+  outputs[MS_OUTPUT+13].value = rescale(trth_note_d,0.0f,10000.0f,0.0f,10.0f);
+
+  outputs[MS_OUTPUT+14].value = rescale(trth_note,0.0f,10000.0f,0.0f,10.0f);
+  
+  outputs[MS_OUTPUT+15].value = rescale(trth_note_t,0.0f,10000.0f,0.0f,10.0f);
+
 
 }
 
@@ -570,6 +598,35 @@ BPMCalcWidget::BPMCalcWidget(BPMCalc *module) : ModuleWidget(module) {
   display1->box.pos = Vec(7, 120);
   display1->box.size = Vec(190, 240);
   addChild(display1);
+  //MS outputs
+  int const out_offset = 40;
+  // 1 - ·1/2
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 0));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 1));
+  // 1/2 - t1/2
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*1), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 2));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*1), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 3));
+  // ·1/4 - 1/4
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*2), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 4));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*2), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 5));
+  // t1/4 - ·1/8
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*3), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 6));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*3), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 7));
+  // 1/8 - t1/8
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*4), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 8));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*4), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 9));
+  // ·1/16 - 1/16
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*5), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 10));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*5), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 11));
+
+  // t1/16 - ·1/32
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*6), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 12));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*6), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 13));
+  
+  // 1/32 - t1/32
+  addOutput(Port::create<as_PJ301MPort>(Vec(220, 50+out_offset*7), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 14));
+  addOutput(Port::create<as_PJ301MPort>(Vec(260, 50+out_offset*7), Port::OUTPUT, module, BPMCalc::MS_OUTPUT + 15));
+  
 
 }
 
