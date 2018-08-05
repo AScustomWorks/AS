@@ -29,12 +29,14 @@ extern Model *modelMerge2_5;
 extern Model *modelSteps;
 extern Model *modelTriggersMKI;
 extern Model *modelTriggersMKII;
+extern Model *modelTriggersMKIII;
 extern Model *modelLaunchGate;
 extern Model *modelKillGate;
 extern Model *modelFlow;
 extern Model *modelSignalDelay;
 extern Model *modelBPMCalc;
 extern Model *modelCv2T;
+extern Model *modelReScale;
 
 extern Model *modelDelayPlusFx;
 extern Model *modelDelayPlusStereoFx;
@@ -80,6 +82,24 @@ struct as_KnobBlack : SVGKnob {
 		setSVG( SVG::load(assetPlugin(plugin, "res/as-knobBlack.svg")) );
 	}
 };
+
+struct as_KnobBlackSnap : as_KnobBlack {
+	as_KnobBlackSnap() {
+		snap = true;
+	}
+};
+
+struct as_KnobBlackSnap4 : as_KnobBlack {
+	as_KnobBlackSnap4() {
+		minAngle = -0.30 * M_PI;
+		maxAngle = 0.30 * M_PI;
+		snap = true;
+	}
+};
+
+
+
+
 
 struct as_FxKnobWhite : SVGKnob {
 	as_FxKnobWhite() {

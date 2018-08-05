@@ -220,7 +220,7 @@ SignalDelayWidget::SignalDelayWidget(SignalDelay *module) : ModuleWidget(module)
 	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 	//KNOBS
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM, 0.0f, 10.0f, 0.350f));
 	//CV INPUT
 	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]+5, 87), Port::INPUT, module, SignalDelay::TIME_1_INPUT));
 	//INPUT
@@ -238,7 +238,7 @@ SignalDelayWidget::SignalDelayWidget(SignalDelay *module) : ModuleWidget(module)
 	display2->value = &module->lcd_tempo2;
 	addChild(display2); 
 	//KNOBS
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM, 0.001f, 10.0f, 0.350f));
+	addParam(ParamWidget::create<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM, 0.0f, 10.0f, 0.350f));
 	//CV INPUT
 	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]+5, 87+mod_offset), Port::INPUT, module, SignalDelay::TIME_2_INPUT));
 	//INPUT
