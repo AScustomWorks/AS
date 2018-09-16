@@ -36,6 +36,7 @@ extern Model *modelFlow;
 extern Model *modelSignalDelay;
 extern Model *modelBPMCalc;
 extern Model *modelCv2T;
+extern Model *modelZeroCV2T;
 extern Model *modelReScale;
 
 extern Model *modelDelayPlusFx;

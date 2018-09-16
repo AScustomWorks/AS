@@ -96,10 +96,14 @@ V 0.5.5 Extendend the freq range 1 octave below.
 
 V 0.5.7 Module size reduced to 4HP
 
+V 0.6.10 Added a base frequency switch to change from A (original and default) to C (to match the current VCV standard).
+
 ### TinySine
 VCV tutorial module. Mods: graphics, proper sine wave.
 
 V 0.5.7 Module size reduced to 4HP
+
+V 0.6.10 Added a base frequency switch to change from A (original and default) to C (to match the current VCV standard).
 
 ### TriLFO
 Fundamental LFO module. Mods:graphics, controls stripped to the basics but you get 3 LFOS on the same space.
@@ -188,6 +192,11 @@ V 0.6,9: Small fix on the ms CV input to take the proper values fron BPM calc mo
 CV to Trigger module. Feed a midi signal to the CV inputs and it will output one trigger signal when the incoming signal rises above 0v, and another trigger signal when the incoming signal returns to 0v. Useful to use your external hardware controller/keyboard as a trigger.
 
 V 0.6.7: First relase of this module.
+
+### Zero Crossing CV 2 T
+Zero crossing CV to Trigger module. Each time a CV input hits 0v it will generate a trigger signal on the respective output. User request.
+
+V 0.6.10: First relase of this module.
 
 ### Delay Plus
 Fundamental Delay module. Mods: graphics, digital display to show delay time in MS , wet signal send & return, bypass switch.

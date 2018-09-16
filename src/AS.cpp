@@ -34,6 +34,7 @@ void init(rack::Plugin *p) {
 	p->addModel(modelTriggersMKIII);
 	p->addModel(modelBPMCalc);
 	p->addModel(modelCv2T);
+	p->addModel(modelZeroCV2T);
 	p->addModel(modelReScale);
 	
 	//EFFECTS	

@@ -131,4 +131,4 @@ ReScaleWidget::ReScaleWidget(ReScale *module) : ModuleWidget(module) {
 
 
 }
-Model *modelReScale = Model::create<ReScale, ReScaleWidget>("AS", "ReScale", "Voltage Converter", UTILITY_TAG);
+Model *modelReScale = Model::create<ReScale, ReScaleWidget>("AS", "ReScale", "ReScale - Voltage Converter", UTILITY_TAG);
