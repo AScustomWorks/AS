@@ -35,6 +35,7 @@ extern Model *modelKillGate;
 extern Model *modelFlow;
 extern Model *modelSignalDelay;
 extern Model *modelBPMCalc;
+extern Model *modelBPMCalc2;
 extern Model *modelCv2T;
 extern Model *modelZeroCV2T;
 extern Model *modelReScale;

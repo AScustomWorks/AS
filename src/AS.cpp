@@ -33,6 +33,7 @@ void init(rack::Plugin *p) {
 	p->addModel(modelTriggersMKII);
 	p->addModel(modelTriggersMKIII);
 	p->addModel(modelBPMCalc);
+	p->addModel(modelBPMCalc2);
 	p->addModel(modelCv2T);
 	p->addModel(modelZeroCV2T);
 	p->addModel(modelReScale);
