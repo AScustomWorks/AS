@@ -57,6 +57,11 @@ V 0.6.4: First relase of this module.
 
 V 0.6.5: Added an external input to detect a BPM from a LFO or some other sources, BPM detection code based on Koralfx Beatovnik from Tomek Sosnowski, nice work Tomek!.
 
+### BPM to delay/ms calculator
+New slimmed down BPM Delay/MS Calculator module, just like the old BPM to delay/hz calculator module but without the calc values display to free some HP space.
+
+V 0.6.11: First relase of this module.
+
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
 
