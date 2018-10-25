@@ -1,6 +1,6 @@
 RACK_DIR ?= ../..
 SLUG = AS
-VERSION = 0.6.11
+VERSION = 0.6.12
 
 FLAGS +=
 SOURCES += $(wildcard src/*.cpp freeverb/*.cpp)
