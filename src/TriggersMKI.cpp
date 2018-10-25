@@ -106,19 +106,6 @@ void TriggersMKI::step() {
     }
 
     //MOMENTARY TRIGGER
-    //EXTERNAL TRIGGER - old method
-    /*
-    if (BtnTrigger.process(params[MOMENTARY_SWITCH].value)) {
-        resetLight = 1.0;
-        if (!running) {
-            outputs[TRIGGER_OUT].value = volts;
-        }
-    }else{
-        if (!running) {
-             outputs[TRIGGER_OUT].value = 0.0f;
-        }
-    }
-    */
     //updated to use pulses
     if (BtnTrigger.process(params[MOMENTARY_SWITCH].value)) {
         resetLight = 1.0;
@@ -127,11 +114,11 @@ void TriggersMKI::step() {
 
         }
     }
-
     if(!running){
         trg_pulse = triggerPulse.process(1.0 / engineGetSampleRate());
         outputs[TRIGGER_OUT].value = (trg_pulse ? volts : 0.0f);
     }
+
 
     resetLight -= resetLight / lightLambda / engineGetSampleRate();
     lights[MOMENTARY_LED].value = resetLight;
