@@ -124,10 +124,15 @@ void TriggersMKI::step() {
         resetLight = 1.0;
         if (!running) {
             triggerPulse.trigger(1e-3f);
-            trg_pulse = triggerPulse.process(1.0 / engineGetSampleRate());
-            outputs[TRIGGER_OUT].value = (trg_pulse ? volts : 0.0f);
+
         }
     }
+
+    if(!running){
+        trg_pulse = triggerPulse.process(1.0 / engineGetSampleRate());
+        outputs[TRIGGER_OUT].value = (trg_pulse ? volts : 0.0f);
+    }
+
     resetLight -= resetLight / lightLambda / engineGetSampleRate();
     lights[MOMENTARY_LED].value = resetLight;
 
