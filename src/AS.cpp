@@ -19,6 +19,8 @@ void init(rack::Plugin *p) {
 	
 	p->addModel(modelBPMClock);
 	p->addModel(modelSEQ16);
+	p->addModel(modelMixer2ch);
+	p->addModel(modelMixer4ch);
 	p->addModel(modelMixer8ch);
 	p->addModel(modelMonoVUmeter);
 	p->addModel(modelStereoVUmeter);

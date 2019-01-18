@@ -21,6 +21,8 @@ extern Model *modelAtNuVrTr;
 
 extern Model *modelBPMClock;
 extern Model *modelSEQ16;
+extern Model *modelMixer2ch;
+extern Model *modelMixer4ch;
 extern Model *modelMixer8ch;
 extern Model *modelMonoVUmeter;
 extern Model *modelStereoVUmeter;

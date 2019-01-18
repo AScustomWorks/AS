@@ -62,6 +62,16 @@ New slimmed down BPM Delay/MS Calculator module, just like the old BPM to delay/
 
 V 0.6.11: First relase of this module.
 
+### 2 Channel Mixer
+Same as 8 channel mixer, but 2 channels only for those small setups(OmriCohen request).
+
+V 0.6.14: First relase of this module.
+
+### 4 Channel Mixer
+Same as 8 channel mixer, but 4 channels only for those small setups(OmriCohen request).
+
+V 0.6.14: First relase of this module.
+
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
 
@@ -71,6 +81,8 @@ V 0.5.2: added MIX L & R input to chain mixers without giving up 2 mixer channel
 2x5 Signal multiplier.
 
 V 0.5.7 Module size reduced to 5HP
+
+V 0.6.13 New feature: If the input 2 is not active the second row of outputs takes the value of input 1 so the module becomes a multi 1 x 10, nice and simple idea! requested by MarcBroule.
 
 ### Merge 2x5
 2x5 CV Signal merger.

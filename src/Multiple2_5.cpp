@@ -43,11 +43,31 @@ void Multiple2_5::step() {
 	outputs[OUT13].value = IN1;
 	outputs[OUT14].value = IN1;
 	outputs[OUT15].value = IN1;
+	/* Update suggested by MarcBrule
+	If the input 2 is not active the second row of outputs takes the value of input 1
+	so the module becomes a multi 1 x 10, nice and simple idea!
+	*/
+	if(!inputs[INPUT2].active){
+		outputs[OUT21].value = IN1;
+		outputs[OUT22].value = IN1;
+		outputs[OUT23].value = IN1;
+		outputs[OUT24].value = IN1;
+		outputs[OUT25].value = IN1;
+
+	}else{
+		outputs[OUT21].value = IN2;
+		outputs[OUT22].value = IN2;
+		outputs[OUT23].value = IN2;
+		outputs[OUT24].value = IN2;
+		outputs[OUT25].value = IN2;
+	}
+	/*
 	outputs[OUT21].value = IN2;
 	outputs[OUT22].value = IN2;
 	outputs[OUT23].value = IN2;
 	outputs[OUT24].value = IN2;
 	outputs[OUT25].value = IN2;
+	*/
 	//Is it necessary to check for active outputs in this case?
 	/*
 	if (outputs[OUT11].active) {
