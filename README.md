@@ -65,12 +65,12 @@ V 0.6.11: First relase of this module.
 ### 2 Channel Mixer
 Same as 8 channel mixer, but 2 channels only for those small setups(OmriCohen request).
 
-V 0.6.14: First relase of this module.
+V 0.6.13: First relase of this module.
 
 ### 4 Channel Mixer
 Same as 8 channel mixer, but 4 channels only for those small setups(OmriCohen request).
 
-V 0.6.14: First relase of this module.
+V 0.6.13: First relase of this module.
 
 ### 8 Channel Mixer
 Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
