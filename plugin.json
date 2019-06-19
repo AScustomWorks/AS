@@ -65,8 +65,7 @@
       "name": "TriLFO",
       "description": "Low-frequency oscillator",
       "tags": [
-        "LFO",
-        "Triple"
+        "LFO"
       ]
     },
     {
@@ -269,7 +268,6 @@
       "description": "Manual CV signal trigger with latch and temporary triggers + adjustable output voltage",
       "tags": [
         "Switch",
-        "Trigger",
         "Utility"
       ]
     },
@@ -279,7 +277,6 @@
       "description": "Manual CV signal temporary trigger with labeling integrated",
       "tags": [
         "Switch",
-        "Trigger",
         "Utility"
       ]
     },
@@ -289,7 +286,6 @@
       "description": "Manual CV signal temporary trigger with editable labeling integrated",
       "tags": [
         "Switch",
-        "Trigger",
         "Utility"
       ]
     },
@@ -349,7 +345,6 @@
       "name": "SuperDrive Fx",
       "description": "Overdrive FX with CV input for each parameter and bypass switch",
       "tags": [
-        "Overdrive",
         "Effect"
       ]
     },
@@ -359,7 +354,6 @@
       "name": "Tremolo Fx",
       "description": "Tremolo Fx with CV input for each parameter and bypass switch",
       "tags": [
-        "Tremolo",
         "Effect"
       ]
     },
@@ -369,9 +363,7 @@
       "name": "Tremolo Stereo Fx",
       "description": "Stereo Tremolo Fx with CV input for each parameter and bypass switch",
       "tags": [
-        "Tremolo",
-        "Effect",
-        "Stereo"
+        "Effect"
       ]
     },
     {
