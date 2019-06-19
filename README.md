@@ -9,7 +9,7 @@ Derivative works may not use the AS logo or panel graphics including custom comp
 
 ### Releases
 
-AS is compatible with VCV Rack 0.6.X. releases, (see previous releases for 0.5.X. binaries and source files).  You can download Mac, Win and Linux binary files and source on the [Release Page](https://github.com/AScustomWorks/as/releases)
+AS is compatible with VCV Rack 1.0.X. releases, (see previous releases for 0.6.X and 0.5.X. binaries and source files).  You can download Mac, Win and Linux binary files and source on the [Release Page](https://github.com/AScustomWorks/as/releases)
 
 If you enjoy those modules you can support the development by making a donation, it will be appreciated!. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
