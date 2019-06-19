@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.0447368"
-     inkscape:cx="136.96196"
-     inkscape:cy="190"
+     inkscape:zoom="4.6791718"
+     inkscape:cx="62.686478"
+     inkscape:cy="215.37214"
      inkscape:document-units="mm"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -37,8 +37,8 @@
      fit-margin-bottom="0"
      inkscape:window-width="1678"
      inkscape:window-height="1334"
-     inkscape:window-x="219"
-     inkscape:window-y="25"
+     inkscape:window-x="142"
+     inkscape:window-y="40"
      inkscape:window-maximized="0"
      units="px" />
   <metadata
@@ -390,6 +390,46 @@
            transform="translate(319.8,697.39)"
            d="m 1702.56,690 a 0.51,0.51 0 0 1 -0.15,-0.38 v -3.44 h -1.1 q -0.5,0 -0.5,-0.44 0,-0.44 0.5,-0.43 h 3.26 q 0.5,0 0.5,0.43 0,0.43 -0.5,0.44 h -1.1 v 3.44 a 0.51,0.51 0 0 1 -0.14,0.38 0.59,0.59 0 0 1 -0.77,0 z" />
       </g>
+    </g>
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,1.4591772,0.69950803)"
+       id="g2347">
+      <rect
+         style="fill:#221212"
+         id="rect30"
+         ry="2.04"
+         rx="2.04"
+         height="19.57"
+         width="77.470001"
+         y="47.450001"
+         x="0.75"
+         class="cls-1" />
+      <path
+         style="fill:#010101"
+         inkscape:connector-curvature="0"
+         id="path32"
+         d="m 76.18,48.2 a 1.3,1.3 0 0 1 1.29,1.3 v 15.48 a 1.29,1.29 0 0 1 -1.29,1.29 H 2.79 A 1.29,1.29 0 0 1 1.5,64.98 V 49.5 a 1.3,1.3 0 0 1 1.29,-1.3 h 73.39 m 0,-1.5 H 2.79 A 2.81,2.81 0 0 0 0,49.5 v 15.48 a 2.8,2.8 0 0 0 2.79,2.79 h 73.39 a 2.8,2.8 0 0 0 2.79,-2.79 V 49.5 a 2.81,2.81 0 0 0 -2.79,-2.8 z"
+         class="cls-2" />
+    </g>
+    <g
+       id="g1025"
+       transform="matrix(0.26458333,0,0,0.26458333,1.4591772,40.387008)">
+      <rect
+         class="cls-1"
+         x="0.75"
+         y="47.450001"
+         width="77.470001"
+         height="19.57"
+         rx="2.04"
+         ry="2.04"
+         id="rect1021"
+         style="fill:#221212" />
+      <path
+         class="cls-2"
+         d="m 76.18,48.2 a 1.3,1.3 0 0 1 1.29,1.3 v 15.48 a 1.29,1.29 0 0 1 -1.29,1.29 H 2.79 A 1.29,1.29 0 0 1 1.5,64.98 V 49.5 a 1.3,1.3 0 0 1 1.29,-1.3 h 73.39 m 0,-1.5 H 2.79 A 2.81,2.81 0 0 0 0,49.5 v 15.48 a 2.8,2.8 0 0 0 2.79,2.79 h 73.39 a 2.8,2.8 0 0 0 2.79,-2.79 V 49.5 a 2.81,2.81 0 0 0 -2.79,-2.8 z"
+         id="path1023"
+         inkscape:connector-curvature="0"
+         style="fill:#010101" />
     </g>
   </g>
   <g

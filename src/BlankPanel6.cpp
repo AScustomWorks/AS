@@ -15,27 +15,27 @@ struct BlankPanel6 : Module {
 		NUM_LIGHTS
 	};
 
-	BlankPanel6() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
-	void step() override;
+	BlankPanel6() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+	}
+	void process(const ProcessArgs &args) override {
+	}
 };
 
-void BlankPanel6::step() 
-{
-}
+struct BlankPanel6Widget : ModuleWidget { 
 
-struct BlankPanel6Widget : ModuleWidget 
-{ 
-    BlankPanel6Widget(BlankPanel6 *module);
+	BlankPanel6Widget(BlankPanel6 *module) {
+
+		setModule(module);
+		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Blanks/BlankPanel6.svg")));
+		
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+	}
 };
 
-BlankPanel6Widget::BlankPanel6Widget(BlankPanel6 *module) : ModuleWidget(module) {
 
-	setPanel(SVG::load(assetPlugin(plugin, "res/Blanks/BlankPanel6.svg")));
-	
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-}
 
-Model *modelBlankPanel6 = Model::create<BlankPanel6, BlankPanel6Widget>("AS", "BlankPanel6", "BlankPanel 6", BLANK_TAG);
+Model *modelBlankPanel6 = createModel<BlankPanel6, BlankPanel6Widget>("BlankPanel6");

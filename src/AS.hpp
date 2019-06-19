@@ -1,10 +1,12 @@
 #include "rack.hpp"
+//#include "rack0.hpp"
+
 
 #pragma once
 
 using namespace rack;
 
-extern Plugin *plugin;
+extern Plugin *pluginInstance;
 
 ////////////////////
 // module widgets
@@ -12,13 +14,11 @@ extern Plugin *plugin;
 
 extern Model *modelSineOsc;
 extern Model *modelSawOsc;
-
 extern Model *modelADSR;
 extern Model *modelVCA;
 extern Model *modelQuadVCA;
 extern Model *modelTriLFO;
 extern Model *modelAtNuVrTr;
-
 extern Model *modelBPMClock;
 extern Model *modelSEQ16;
 extern Model *modelMixer2ch;
@@ -29,15 +29,19 @@ extern Model *modelStereoVUmeter;
 extern Model *modelMultiple2_5;
 extern Model *modelMerge2_5;
 extern Model *modelSteps;
+
 extern Model *modelTriggersMKI;
 extern Model *modelTriggersMKII;
 extern Model *modelTriggersMKIII;
 extern Model *modelLaunchGate;
 extern Model *modelKillGate;
+
 extern Model *modelFlow;
 extern Model *modelSignalDelay;
+
 extern Model *modelBPMCalc;
 extern Model *modelBPMCalc2;
+
 extern Model *modelCv2T;
 extern Model *modelZeroCV2T;
 extern Model *modelReScale;
@@ -61,29 +65,31 @@ extern Model *modelBlankPanel6;
 extern Model *modelBlankPanel8;
 extern Model *modelBlankPanelSpecial;
 
+
 //////////////////////////////////////
 //MODULE COMPONENTS
 /////////////////////////////////////
-struct as_HexScrew : SVGScrew {
+
+struct as_HexScrew : app::SvgScrew {
 	as_HexScrew() {
-		sw->svg = SVG::load(assetPlugin(plugin, "res/as-hexscrew.svg"));
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-hexscrew.svg")));
 		sw->wrap();
 		box.size = sw->box.size;
 	}
 };
 
-struct as_Knob : SVGKnob {
+struct as_Knob : app::SvgKnob {
 	as_Knob() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		setSVG( SVG::load(assetPlugin(plugin, "res/as-knob.svg")) );
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-knob.svg")));
 	}
 };
-struct as_KnobBlack : SVGKnob {
+struct as_KnobBlack : app::SvgKnob {
 	as_KnobBlack() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		setSVG( SVG::load(assetPlugin(plugin, "res/as-knobBlack.svg")) );
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-knobBlack.svg")));
 	}
 };
 
@@ -102,65 +108,61 @@ struct as_KnobBlackSnap4 : as_KnobBlack {
 };
 
 
-
-
-
-struct as_FxKnobWhite : SVGKnob {
+struct as_FxKnobWhite : app::SvgKnob {
 	as_FxKnobWhite() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		setSVG( SVG::load(assetPlugin(plugin, "res/as-FxKnobWhite.svg")) );
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-FxKnobWhite.svg")));
 	}
 };
-struct as_FxKnobBlack : SVGKnob {
+struct as_FxKnobBlack : app::SvgKnob {
 	as_FxKnobBlack() {
         minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		setSVG( SVG::load(assetPlugin(plugin, "res/as-FxKnobBlack.svg")) );
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-FxKnobBlack.svg")));
 	}
 };
 
-struct BigLEDBezel : SVGSwitch, MomentarySwitch {
+struct BigLEDBezel : app::SvgSwitch {
         BigLEDBezel() {
-                addFrame(SVG::load(assetPlugin(plugin, "res/as_bigLEDBezel.svg")));
+				momentary = true;
+                addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_bigLEDBezel.svg")));
         }
 };
 
-struct as_CKSS : SVGSwitch, ToggleSwitch {
+struct as_CKSS : app::SvgSwitch {
 	as_CKSS() {
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSS_0.svg")));
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSS_1.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSS_0.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSS_1.svg")));
 	}
 };
 
-struct as_CKSSH : SVGSwitch, ToggleSwitch {
+struct as_CKSSH : app::SvgSwitch {
 	as_CKSSH() {
-		addFrame(SVG::load(assetPlugin(plugin, "res/as_CKSSH_0.svg")));
-		addFrame(SVG::load(assetPlugin(plugin, "res/as_CKSSH_1.svg")));
-		sw->wrap();
-		box.size = sw->box.size;
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSSH_0.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSSH_1.svg")));
 	}
 };
 
-struct as_CKSSThree : SVGSwitch, ToggleSwitch {
+struct as_CKSSThree : app::SvgSwitch {
 	as_CKSSThree() {
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSSThree_2.svg")));
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSSThree_1.svg")));
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_CKSSThree_0.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSSThree_2.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSSThree_1.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSSThree_0.svg")));
 	}
 };
 
-struct as_MuteBtn : SVGSwitch, ToggleSwitch {
+struct as_MuteBtn : app::SvgSwitch {
 	as_MuteBtn() {
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_mute-off.svg")));
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_mute-on.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_mute-off.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_mute-on.svg")));
 	}
 };
 
-struct as_SoloBtn : SVGSwitch, ToggleSwitch {
+struct as_SoloBtn : app::SvgSwitch {
 	as_SoloBtn() {
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_solo-off.svg")));
-		addFrame(SVG::load(assetPlugin(plugin,"res/as_solo-on.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_solo-off.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_solo-on.svg")));
 	}
 };
 
@@ -188,7 +190,7 @@ template <typename BASE>
  };
  struct OrangeLight : GrayModuleLightWidget {
 	OrangeLight() {
-		addBaseColor(COLOR_ORANGE);
+		addBaseColor(SCHEME_ORANGE);
 	}
 };
 
@@ -203,44 +205,41 @@ struct LedLight : BASE {
 /** Reads two adjacent lightIds, so `lightId` and `lightId + 1` must be defined */
 struct YellowRedLight : GrayModuleLightWidget {
 	YellowRedLight() {
-		addBaseColor(COLOR_YELLOW);
-		addBaseColor(COLOR_RED);
+		addBaseColor(SCHEME_YELLOW);
+		addBaseColor(SCHEME_RED);
 	}
 };
 
-struct as_PJ301MPort : SVGPort {
+struct as_PJ301MPort : app::SvgPort {
 	as_PJ301MPort() {
-		setSVG(SVG::load(assetPlugin(plugin,"res/as-PJ301M.svg")));
-		//background->svg = SVG::load(assetPlugin(plugin,"res/as-PJ301M.svg"));
-		//background->wrap();
-		//box.size = background->box.size;
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-PJ301M.svg")));
 	}
 };
 
-struct as_SlidePot : SVGFader {
+struct as_SlidePot : app::SvgSlider {
 	as_SlidePot() {
 		Vec margin = Vec(4, 4);
 		maxHandlePos = Vec(-1.5, -8).plus(margin);
 		minHandlePos = Vec(-1.5, 87).plus(margin);
-		background->svg = SVG::load(assetPlugin(plugin,"res/as-SlidePot.svg"));
+		setBackgroundSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-SlidePot.svg")));
 		background->wrap();
 		background->box.pos = margin;
 		box.size = background->box.size.plus(margin.mult(2));
-		handle->svg = SVG::load(assetPlugin(plugin,"res/as-SlidePotHandle.svg"));
+		setHandleSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-SlidePotHandle.svg")));
 		handle->wrap();
 	}
 };
 
-struct as_FaderPot : SVGFader {
+struct as_FaderPot : app::SvgSlider {
 	as_FaderPot() {
 		Vec margin = Vec(4, 4);
 		maxHandlePos = Vec(-1.5, -8).plus(margin);
 		minHandlePos = Vec(-1.5, 57).plus(margin);
-		background->svg = SVG::load(assetPlugin(plugin,"res/as-FaderPot.svg"));
+		setBackgroundSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-FaderPot.svg")));
 		background->wrap();
 		background->box.pos = margin;
 		box.size = background->box.size.plus(margin.mult(2));
-		handle->svg = SVG::load(assetPlugin(plugin,"res/as-SlidePotHandle.svg"));
+		setHandleSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-SlidePotHandle.svg")));
 		handle->wrap();
 	}
 };

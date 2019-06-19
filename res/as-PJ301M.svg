@@ -147,15 +147,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="12.542418"
-     inkscape:cx="9.0067134"
-     inkscape:cy="-16.604918"
+     inkscape:cx="13.471562"
+     inkscape:cy="31.232748"
      inkscape:document-units="mm"
      inkscape:current-layer="g936"
      showgrid="false"
      inkscape:window-width="1923"
      inkscape:window-height="1396"
-     inkscape:window-x="194"
-     inkscape:window-y="605"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      units="px"
      fit-margin-top="0"
@@ -182,68 +182,9 @@
     <g
        id="g922"
        transform="matrix(0.92857145,0,0,0.92857145,5.8895549,9.5508327)">
-      <path
-         style="fill:#e6e6e6;fill-opacity:1;fill-rule:nonzero;stroke:#636663;stroke-width:0.20460665;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 92.504028,138.37571 c -1.82933,0 -3.316927,-1.48759 -3.316927,-3.31694 0,-1.82931 1.487597,-3.31692 3.316927,-3.31692 1.829327,0 3.316927,1.48761 3.316927,3.31692 0,1.82935 -1.4876,3.31694 -3.316927,3.31694"
-         id="path7255"
-         inkscape:connector-curvature="0" />
-      <path
-         style="fill:#4b4b4b;fill-opacity:1;fill-rule:nonzero;stroke:#636663;stroke-width:0.21603572;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 92.504029,137.58095 c -1.390879,0 -2.522161,-1.13131 -2.522161,-2.52218 0,-1.39088 1.131282,-2.52215 2.522161,-2.52215 1.39088,0 2.522158,1.13127 2.522158,2.52215 0,1.39087 -1.131278,2.52218 -2.522158,2.52218"
-         id="path7261"
-         inkscape:connector-curvature="0" />
-      <path
-         style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.32564101"
-         d="m 94.165306,135.05876 c 0,0.91714 -0.744141,1.6613 -1.661277,1.6613 -0.917139,0 -1.66128,-0.74416 -1.66128,-1.6613 0,-0.91713 0.744141,-1.66125 1.66128,-1.66125 0.917136,0 1.661277,0.74412 1.661277,1.66125"
-         id="path7265"
-         inkscape:connector-curvature="0" />
       <g
          transform="matrix(0.13676923,0,0,0.13676923,88.978209,112.80552)"
          id="g24">
-        <circle
-           cx="86.794006"
-           cy="26.327333"
-           r="24.959999"
-           style="fill:#3c434a"
-           id="circle4" />
-        <path
-           inkscape:connector-curvature="0"
-           d="m 106.294,11.507333 a 24.94,24.94 0 0 0 -38.999996,0 32.94,32.94 0 0 1 38.999996,0 z"
-           style="fill:#4b5053"
-           id="path6" />
-        <path
-           inkscape:connector-curvature="0"
-           d="m 86.794004,46.377333 c -12,0 -21.78,-7.19 -22.83,-16.35 a 14.27,14.27 0 0 0 -0.1,1.62 c 0,9.93 10.26,18 22.92,18 12.66,0 22.919996,-8 22.919996,-18 a 14.27,14.27 0 0 0 -0.1,-1.62 c -1.03,9.16 -10.809996,16.35 -22.809996,16.35 z"
-           style="fill:#3c4041"
-           id="path8" />
-        <g
-           id="g14"
-           transform="translate(58.014004,1.3673334)">
-          <path
-             inkscape:connector-curvature="0"
-             d="M 45,65.78 A 15.46,15.46 0 1 1 60.46,50.31 15.48,15.48 0 0 1 45,65.78 Z"
-             transform="translate(-16.22,-25.36)"
-             id="path10" />
-          <path
-             inkscape:connector-curvature="0"
-             d="M 45,35.85 A 14.46,14.46 0 1 1 30.54,50.31 14.48,14.48 0 0 1 45,35.85 m 0,-2 A 16.46,16.46 0 1 0 61.46,50.31 16.46,16.46 0 0 0 45,33.85 Z"
-             transform="translate(-16.22,-25.36)"
-             style="fill:#282828"
-             id="path12" />
-        </g>
-        <path
-           inkscape:connector-curvature="0"
-           d="m 86.794004,3.3673334 a 23,23 0 1 1 -23,22.9999996 23,23 0 0 1 23,-22.9999996 m 0,-2 A 25,25 0 1 0 111.794,26.367333 25,25 0 0 0 86.794004,1.3673334 Z"
-           id="path22" />
-        <path
-           id="path16"
-           d="m 86.794004,37.797333 a 11.48,11.48 0 1 1 11.48,-11.48 11.49,11.49 0 0 1 -11.48,11.48 z"
-           inkscape:connector-curvature="0" />
-        <path
-           id="path18"
-           style="fill:#646464"
-           d="m 86.794004,15.347333 a 11,11 0 1 1 -11,11 11,11 0 0 1 11,-11 m 0,-1 a 12,12 0 1 0 12,12 12,12 0 0 0 -12,-12 z"
-           inkscape:connector-curvature="0" />
         <g
            id="g936"
            transform="translate(-6.1411973,60.790716)">

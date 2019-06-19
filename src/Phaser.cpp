@@ -8,7 +8,7 @@
 //***********************************************************************************************
 
 #include "AS.hpp"
-#include "dsp/digital.hpp"
+//#include "dsp/digital.hpp"
 
 #include <stdlib.h>
 
@@ -40,8 +40,8 @@ struct PhaserFx : Module{
 		NUM_LIGHTS
 	};
 
-	SchmittTrigger bypass_button_trig;
-	SchmittTrigger bypass_cv_trig;
+	dsp::SchmittTrigger bypass_button_trig;
+	dsp::SchmittTrigger bypass_cv_trig;
 
 	bool fx_bypass = false;
 
@@ -51,11 +51,17 @@ struct PhaserFx : Module{
 	float fade_out_dry = 1.0f;
     const float fade_speed = 0.001f;
 
-	PhaserFx() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
+	PhaserFx() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+		configParam(PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f, "Rate");
+		configParam(PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f, "Feedback");
+		configParam(PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f, "Depth");
+		configParam(PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
+	}
 
-	void step() override;
+	void process(const ProcessArgs &args) override;
 
-	json_t *toJson()override {
+	json_t *dataToJson()override {
 		json_t *rootJm = json_object();
 
 		json_t *statesJ = json_array();
@@ -68,7 +74,7 @@ struct PhaserFx : Module{
 		return rootJm;
 	}
 
-	void fromJson(json_t *rootJm)override {
+	void dataFromJson(json_t *rootJm)override {
 		json_t *statesJ = json_object_get(rootJm, "as_FxBypass");
 		
 			json_t *bypassJ = json_array_get(statesJ, 0);
@@ -175,9 +181,9 @@ private:
 
 Phaser *pha = new Phaser();
 
-void PhaserFx::step() {
+void PhaserFx::process(const ProcessArgs &args) {
 
-	if (bypass_button_trig.process(params[BYPASS_SWITCH].value)	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].value) ){
+	if (bypass_button_trig.process(params[BYPASS_SWITCH].getValue())	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].getVoltage()) ){
 			fx_bypass = !fx_bypass;
 			resetFades();
 	}
@@ -185,11 +191,11 @@ void PhaserFx::step() {
     lights[BYPASS_LED].value = fx_bypass ? 1.00 : 0.0;
 
 
-	float rate = clamp(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float feedback = clamp(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 0.95f);
-	float depth = clamp(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	float rate = clamp(params[RATE_PARAM].getValue() + inputs[RATE_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+	float feedback = clamp(params[FBK_PARAM].getValue() + inputs[FEEDBACK_CV_INPUT].getVoltage() / 10.0f, 0.0f, 0.95f);
+	float depth = clamp(params[DEPTH_PARAM].getValue() + inputs[DEPTH_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 
-	float input = inputs[INPUT].value / 5.0f;
+	float input = inputs[INPUT].getVoltage() / 5.0f;
 
 		pha->Rate(rate);
 		pha->Feedback(feedback);
@@ -198,13 +204,6 @@ void PhaserFx::step() {
 	float out = pha->Update(input);
 
 	//check bypass switch status
-	/*
-	if (fx_bypass){
-		outputs[OUT].value = input * 5.0f;
-	}else{
-		outputs[OUT].value = out * 5.0f;
-	}
-*/
 	if (fx_bypass){
 		fade_in_dry += fade_speed;
 		if ( fade_in_dry > 1.0f ) {
@@ -214,7 +213,7 @@ void PhaserFx::step() {
 		if ( fade_out_fx < 0.0f ) {
 			fade_out_fx = 0.0f;
 		}
-        outputs[OUT].value = ( (input * 5.0f) * fade_in_dry ) + ( (out*5.0f) * fade_out_fx );
+        outputs[OUT].setVoltage(( (input * 5.0f) * fade_in_dry ) + ( (out*5.0f) * fade_out_fx ));
     }else{
 		fade_in_fx += fade_speed;
 		if ( fade_in_fx > 1.0f ) {
@@ -224,52 +223,51 @@ void PhaserFx::step() {
 		if ( fade_out_dry < 0.0f ) {
 			fade_out_dry = 0.0f;
 		}
-        outputs[OUT].value = ( (input * 5.0f) * fade_out_dry ) + ( (out*5.0f) * fade_in_fx );
+        outputs[OUT].setVoltage(( (input * 5.0f) * fade_out_dry ) + ( (out*5.0f) * fade_in_fx ));
 	}
 
-	lights[RATE_LIGHT].value = clamp(params[RATE_PARAM].value + inputs[RATE_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[FBK_LIGHT].value = clamp(params[FBK_PARAM].value + inputs[FEEDBACK_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-	lights[DEPTH_LIGHT].value = clamp(params[DEPTH_PARAM].value + inputs[DEPTH_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
+	lights[RATE_LIGHT].value = clamp(params[RATE_PARAM].getValue() + inputs[RATE_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+	lights[FBK_LIGHT].value = clamp(params[FBK_PARAM].getValue() + inputs[FEEDBACK_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+	lights[DEPTH_LIGHT].value = clamp(params[DEPTH_PARAM].getValue() + inputs[DEPTH_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 }
 
 
-struct PhaserFxWidget : ModuleWidget 
-{ 
-    PhaserFxWidget(PhaserFx *module);
+struct PhaserFxWidget : ModuleWidget { 
+
+	PhaserFxWidget(PhaserFx *module) {
+		
+		setModule(module);
+		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/Phaser.svg")));
+	
+		//SCREWS
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		//KNOBS  
+		addParam(createParam<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM));
+		addParam(createParam<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM));
+		addParam(createParam<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM));
+		//LIGHTS
+		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 57), module, PhaserFx::RATE_LIGHT));
+		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
+		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
+		//BYPASS SWITCH
+		addParam(createParam<LEDBezel>(Vec(55, 260), module, PhaserFx::BYPASS_SWITCH ));
+		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, PhaserFx::BYPASS_LED));
+		//INS/OUTS
+		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, PhaserFx::INPUT));
+		addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, PhaserFx::OUT));
+		//CV INPUTS
+		addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, PhaserFx::RATE_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, PhaserFx::FEEDBACK_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, PhaserFx::DEPTH_CV_INPUT));
+
+		//BYPASS CV INPUT
+		addInput(createInput<as_PJ301MPort>(Vec(10, 259), module, PhaserFx::BYPASS_CV_INPUT));
+	
+	}
 };
 
 
-PhaserFxWidget::PhaserFxWidget(PhaserFx *module) : ModuleWidget(module) {
-
-  setPanel(SVG::load(assetPlugin(plugin, "res/Phaser.svg")));
-  
-	//SCREWS
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-    //KNOBS  
-	addParam(ParamWidget::create<as_FxKnobBlack>(Vec(43, 60), module, PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f));
-	addParam(ParamWidget::create<as_FxKnobBlack>(Vec(43, 125), module, PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f));
-	addParam(ParamWidget::create<as_FxKnobBlack>(Vec(43, 190), module, PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f));
-	//LIGHTS
-	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 57), module, PhaserFx::RATE_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 122), module, PhaserFx::FBK_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
-    //BYPASS SWITCH
-  	addParam(ParamWidget::create<LEDBezel>(Vec(55, 260), module, PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(57.2, 262), module, PhaserFx::BYPASS_LED));
-    //INS/OUTS
-	addInput(Port::create<as_PJ301MPort>(Vec(10, 310), Port::INPUT, module, PhaserFx::INPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(55, 310), Port::OUTPUT, module, PhaserFx::OUT));
-	//CV INPUTS
-	addInput(Port::create<as_PJ301MPort>(Vec(10, 67), Port::INPUT, module, PhaserFx::RATE_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(10, 132), Port::INPUT, module, PhaserFx::FEEDBACK_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(10, 197), Port::INPUT, module, PhaserFx::DEPTH_CV_INPUT));
-
-	//BYPASS CV INPUT
-	addInput(Port::create<as_PJ301MPort>(Vec(10, 259), Port::INPUT, module, PhaserFx::BYPASS_CV_INPUT));
- 
-}
-
-Model *modelPhaserFx = Model::create<PhaserFx, PhaserFxWidget>("AS", "PhaserFx", "Phaser FX", EFFECT_TAG);
+Model *modelPhaserFx = createModel<PhaserFx, PhaserFxWidget>("PhaserFx");

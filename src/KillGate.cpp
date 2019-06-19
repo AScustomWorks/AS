@@ -6,7 +6,7 @@
 
 #include "AS.hpp"
 
-#include "dsp/digital.hpp"
+//#include "dsp/digital.hpp"
 
 #include <sstream>
 #include <iomanip>
@@ -40,14 +40,14 @@ struct KillGate : Module {
 		NUM_LIGHTS
 	};
 
-    SchmittTrigger clock_trigger_1;
-    SchmittTrigger reset_trigger_1;
-    SchmittTrigger reset_ext_trigger_1;
+    dsp::SchmittTrigger clock_trigger_1;
+    dsp::SchmittTrigger reset_trigger_1;
+    dsp::SchmittTrigger reset_ext_trigger_1;
     int count_limit1 = 1;
     int count1 = 0;
-    SchmittTrigger clock_trigger_2;
-    SchmittTrigger reset_trigger_2;
-    SchmittTrigger reset_ext_trigger_2;
+    dsp::SchmittTrigger clock_trigger_2;
+    dsp::SchmittTrigger reset_trigger_2;
+    dsp::SchmittTrigger reset_ext_trigger_2;
     int count_limit_2 = 1;
     int count_2 = 0;
  
@@ -63,11 +63,15 @@ struct KillGate : Module {
     float mute_fade2 = 0.0f;
     const float fade_speed = 0.001f;
 
-    KillGate() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-
+    KillGate() {
+		  config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+      configParam(KillGate::RST_BUTTON1 , 0.0f, 1.0f, 0.0f, "CH 1 Reset");
+      configParam(KillGate::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f, "CH 1 Count");
+      configParam(KillGate::RST_BUTTON2 , 0.0f, 1.0f, 0.0f, "CH 2 Reset");
+      configParam(KillGate::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f, "CH 2 Count");
     }
 
-  void reset() override {
+  void onReset() override {
     
     count_limit1 = 1;
     count1 = 0;
@@ -78,194 +82,181 @@ struct KillGate : Module {
 
   }
 
-	void step() override;
+  void process(const ProcessArgs &args) override {
+
+    count_limit1 = round(params[COUNT_NUM_PARAM_1].getValue());
+    count_limit_2 = round(params[COUNT_NUM_PARAM_2].getValue());
+
+    bool reset1 = false;
+    bool reset_2 = false;
+    ///////////// counter 1
+    if (reset_trigger_1.process(params[RST_BUTTON1].getValue()) || reset_ext_trigger_1.process(inputs[RESET_IN_1].getVoltage()) ){
+        reset1 = true;
+        count1 = 0;
+        gate1_open=true;
+        resetLight1 = 1.0;
+
+    }
+
+    resetLight1 -= resetLight1 / lightLambda / args.sampleRate;
+    lights[RESET_LIGHT1].value = resetLight1;
+
+    if ( reset1 == false ) {
+      if ( clock_trigger_1.process( inputs[CLK_IN_1].getVoltage() ) && count1 <= count_limit1 ) {
+        if ( gate1_open ) {
+          count1++;
+        }
+      }
+    }
+    if ( count1 == count_limit1 ) {
+      gate1_open = false;
+    }
+    //SOFT MUTE/UNMUTE
+    mute_fade1 -= !gate1_open ? fade_speed : -fade_speed;
+    if ( mute_fade1 < 0.0f ) {
+      mute_fade1 = 0.0f;
+    } else if ( mute_fade1 > 1.0f ) {
+      mute_fade1 = 1.0f;
+    }
+    outputs[OUTPUT_1].setVoltage(inputs[INPUT_1].getVoltage() * mute_fade1);
+
+    ///////////// counter 2
+    if ( reset_trigger_2.process( params[RST_BUTTON2].getValue() ) || reset_ext_trigger_2.process( inputs[RESET_IN_2].getVoltage() ) ) {
+      reset_2 = true;
+      count_2 = 0;
+      gate2_open = true;
+      resetLight2 = 1.0f;
+    }
+
+    resetLight2 -= resetLight2 / lightLambda / args.sampleRate;
+    lights[RESET_LIGHT2].value = resetLight2;
+
+    if ( reset_2 == false ) {
+      if ( clock_trigger_2.process( inputs[CLK_IN_2].getVoltage() ) && count_2 <= count_limit_2 ) {
+        if ( gate2_open ) {
+          count_2++;
+        }
+      }
+    }
+    if ( count_2 == count_limit_2 ) {
+      gate2_open = false;
+    }
+    //SOFT MUTE/UNMUTE
+    mute_fade2 -= !gate2_open ? fade_speed : -fade_speed;
+    if ( mute_fade2 < 0.0f ) {
+      mute_fade2 = 0.0f;
+    } else if ( mute_fade2 > 1.0f ) {
+      mute_fade2 = 1.0f;
+    }
+    outputs[OUTPUT_2].setVoltage(inputs[INPUT_2].getVoltage() * mute_fade2);
+  }
 
 };
-
-
-void KillGate::step(){
-
-  count_limit1 = round(params[COUNT_NUM_PARAM_1].value);
-  count_limit_2 = round(params[COUNT_NUM_PARAM_2].value);
-
-  bool reset1 = false;
-  bool reset_2 = false;
-  ///////////// counter 1
-  if (reset_trigger_1.process(params[RST_BUTTON1].value) || reset_ext_trigger_1.process(inputs[RESET_IN_1].value) ){
-      reset1 = true;
-      count1 = 0;
-      gate1_open=true;
-      resetLight1 = 1.0;
-
-  }
-
-  resetLight1 -= resetLight1 / lightLambda / engineGetSampleRate();
-  lights[RESET_LIGHT1].value = resetLight1;
-
-  if ( reset1 == false ) {
-    if ( clock_trigger_1.process( inputs[CLK_IN_1].value ) && count1 <= count_limit1 ) {
-      if ( gate1_open ) {
-        count1++;
-      }
-    }
-  }
-  if ( count1 == count_limit1 ) {
-    gate1_open = false;
-  }
-  //SOFT MUTE/UNMUTE
-  mute_fade1 -= !gate1_open ? fade_speed : -fade_speed;
-  if ( mute_fade1 < 0.0f ) {
-    mute_fade1 = 0.0f;
-  } else if ( mute_fade1 > 1.0f ) {
-    mute_fade1 = 1.0f;
-  }
-  outputs[OUTPUT_1].value = inputs[INPUT_1].value * mute_fade1;
-
-  ///////////// counter 2
-  if ( reset_trigger_2.process( params[RST_BUTTON2].value ) || reset_ext_trigger_2.process( inputs[RESET_IN_2].value ) ) {
-    reset_2 = true;
-    count_2 = 0;
-    gate2_open = true;
-    resetLight2 = 1.0f;
-  }
-
-  resetLight2 -= resetLight2 / lightLambda / engineGetSampleRate();
-  lights[RESET_LIGHT2].value = resetLight2;
-
-  if ( reset_2 == false ) {
-    if ( clock_trigger_2.process( inputs[CLK_IN_2].value ) && count_2 <= count_limit_2 ) {
-      if ( gate2_open ) {
-        count_2++;
-      }
-    }
-  }
-  if ( count_2 == count_limit_2 ) {
-    gate2_open = false;
-  }
-  //SOFT MUTE/UNMUTE
-  mute_fade2 -= !gate2_open ? fade_speed : -fade_speed;
-  if ( mute_fade2 < 0.0f ) {
-    mute_fade2 = 0.0f;
-  } else if ( mute_fade2 > 1.0f ) {
-    mute_fade2 = 1.0f;
-  }
-  outputs[OUTPUT_2].value = inputs[INPUT_2].value * mute_fade2;
-}
 
 ///////////////////////////////////
 struct NumberDisplayWidget : TransparentWidget {
 
-  int *value;
+  int *value = NULL;
   std::shared_ptr<Font> font;
 
   NumberDisplayWidget() {
-    font = Font::load(assetPlugin(plugin, "res/Segment7Standard.ttf"));
+    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
   };
 
-  void draw(NVGcontext *vg) override
-  {
-    // Background
-    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
-     NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(vg);
-    nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(vg, backgroundColor);
-    nvgFill(vg);
-    nvgStrokeWidth(vg, 1.5);
-    nvgStrokeColor(vg, borderColor);
-    nvgStroke(vg);    
+  void draw(const DrawArgs &args) override {
+    if (!value) {
+      return;
+    }   
     // text 
-    nvgFontSize(vg, 18);
-    nvgFontFaceId(vg, font->handle);
-    nvgTextLetterSpacing(vg, 2.5);
+    nvgFontSize(args.vg, 18);
+    nvgFontFaceId(args.vg, font->handle);
+    nvgTextLetterSpacing(args.vg, 2.5);
 
     std::stringstream to_display;   
     to_display << std::right  << std::setw(2) << *value;
 
     Vec textPos = Vec(4.0f, 17.0f); 
 
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(vg, nvgTransRGBA(textColor, 16));
-    nvgText(vg, textPos.x, textPos.y, "~~", NULL);
-
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(vg, nvgTransRGBA(textColor, 16));
-    nvgText(vg, textPos.x, textPos.y, "\\\\", NULL);
-
-    textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(vg, textColor);
-    nvgText(vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+    nvgFillColor(args.vg, textColor);
+    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
   }
 };
 ////////////////////////////////////
-struct KillGateWidget : ModuleWidget 
-{ 
-    KillGateWidget(KillGate *module);
+struct KillGateWidget : ModuleWidget { 
+
+  KillGateWidget(KillGate *module) {
+    
+    setModule(module);
+    setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/KillGate.svg")));  
+    
+  //SCREWS
+    addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+    addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+    addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+    addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+    // counter 1
+    //COUNT DISPLAY
+      NumberDisplayWidget *display1 = new NumberDisplayWidget();
+      display1->box.pos = Vec(9,50);
+      display1->box.size = Vec(30, 20);
+      if (module) {
+        display1->value = &module->count1;
+      }
+      addChild(display1);
+    //KillGate DISPLAY  
+      NumberDisplayWidget *display2 = new NumberDisplayWidget();
+      display2->box.pos = Vec(49,50);
+      display2->box.size = Vec(30, 20);
+      if (module) {
+        display2->value = &module->count_limit1;
+      }
+      addChild(display2);
+
+    int group_offset = 160;
+
+      addParam(createParam<LEDBezel>(Vec(11, 82), module, KillGate::RST_BUTTON1 ));
+      addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, KillGate::RESET_LIGHT1));
+
+      addParam(createParam<as_KnobBlack>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1)); 
+
+      addInput(createInput<as_PJ301MPort>(Vec(10, 125), module, KillGate::RESET_IN_1));
+      addInput(createInput<as_PJ301MPort>(Vec(55, 125), module, KillGate::CLK_IN_1));
+
+      addInput(createInput<as_PJ301MPort>(Vec(10, 170), module, KillGate::INPUT_1));
+      addOutput(createOutput<as_PJ301MPort>(Vec(55, 170), module, KillGate::OUTPUT_1));
+    
+    // counter 2
+    //COUNT DISPLAY
+      NumberDisplayWidget *display3 = new NumberDisplayWidget();
+      display3->box.pos = Vec(9,50 + group_offset);
+      display3->box.size = Vec(30, 20);
+      if (module) {
+        display3->value = &module->count_2;
+      }
+      addChild(display3);
+    //KillGate DISPLAY  
+      NumberDisplayWidget *display4 = new NumberDisplayWidget();
+      display4->box.pos = Vec(49,50 + group_offset);
+      display4->box.size = Vec(30, 20);
+      if (module) {
+        display4->value = &module->count_limit_2;
+      }
+      addChild(display4);
+
+      addParam(createParam<LEDBezel>(Vec(11, 82+ group_offset), module, KillGate::RST_BUTTON2 ));
+      addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, KillGate::RESET_LIGHT2));
+
+      addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2)); 
+
+      addInput(createInput<as_PJ301MPort>(Vec(10, 125 + group_offset), module, KillGate::RESET_IN_2));
+      addInput(createInput<as_PJ301MPort>(Vec(55, 125 + group_offset), module, KillGate::CLK_IN_2));
+
+      addInput(createInput<as_PJ301MPort>(Vec(10, 170 + group_offset), module, KillGate::INPUT_2));
+      addOutput(createOutput<as_PJ301MPort>(Vec(55, 170 + group_offset), module, KillGate::OUTPUT_2));
+  
+  }
 };
 
 
-KillGateWidget::KillGateWidget(KillGate *module) : ModuleWidget(module) {
-
-  setPanel(SVG::load(assetPlugin(plugin, "res/KillGate.svg")));  
-  
- //SCREWS
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-  // counter 1
-  //COUNT DISPLAY
-    NumberDisplayWidget *display1 = new NumberDisplayWidget();
-    display1->box.pos = Vec(10,50);
-    display1->box.size = Vec(30, 20);
-    display1->value = &module->count1;
-    addChild(display1);
-  //KillGate DISPLAY  
-    NumberDisplayWidget *display2 = new NumberDisplayWidget();
-    display2->box.pos = Vec(50,50);
-    display2->box.size = Vec(30, 20);
-    display2->value = &module->count_limit1;
-    addChild(display2);
-
-   int group_offset = 160;
-
-    addParam(ParamWidget::create<LEDBezel>(Vec(11, 82), module, KillGate::RST_BUTTON1 , 0.0f, 1.0f, 0.0f));
-    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, KillGate::RESET_LIGHT1));
-
-    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f)); 
-
-    addInput(Port::create<as_PJ301MPort>(Vec(10, 125), Port::INPUT, module, KillGate::RESET_IN_1));
-    addInput(Port::create<as_PJ301MPort>(Vec(55, 125), Port::INPUT, module, KillGate::CLK_IN_1));
-
-    addInput(Port::create<as_PJ301MPort>(Vec(10, 170), Port::INPUT, module, KillGate::INPUT_1));
-    addOutput(Port::create<as_PJ301MPort>(Vec(55, 170), Port::OUTPUT, module, KillGate::OUTPUT_1));
-  
-  // counter 2
-  //COUNT DISPLAY
-    NumberDisplayWidget *display3 = new NumberDisplayWidget();
-    display3->box.pos = Vec(10,50 + group_offset);
-    display3->box.size = Vec(30, 20);
-    display3->value = &module->count_2;
-    addChild(display3);
-  //KillGate DISPLAY  
-    NumberDisplayWidget *display4 = new NumberDisplayWidget();
-    display4->box.pos = Vec(50,50 + group_offset);
-    display4->box.size = Vec(30, 20);
-    display4->value = &module->count_limit_2;
-    addChild(display4);
-
-    addParam(ParamWidget::create<LEDBezel>(Vec(11, 82+ group_offset), module, KillGate::RST_BUTTON2 , 0.0f, 1.0f, 0.0f));
-    addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, KillGate::RESET_LIGHT2));
-
-    addParam(ParamWidget::create<as_KnobBlack>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f)); 
-
-    addInput(Port::create<as_PJ301MPort>(Vec(10, 125 + group_offset), Port::INPUT, module, KillGate::RESET_IN_2));
-    addInput(Port::create<as_PJ301MPort>(Vec(55, 125 + group_offset), Port::INPUT, module, KillGate::CLK_IN_2));
-
-    addInput(Port::create<as_PJ301MPort>(Vec(10, 170 + group_offset), Port::INPUT, module, KillGate::INPUT_2));
-    addOutput(Port::create<as_PJ301MPort>(Vec(55, 170 + group_offset), Port::OUTPUT, module, KillGate::OUTPUT_2));
- 
-}
-
-Model *modelKillGate = Model::create<KillGate, KillGateWidget>("AS", "KillGate", "Kill Gate", SWITCH_TAG, SEQUENCER_TAG, UTILITY_TAG, DELAY_TAG);
+Model *modelKillGate = createModel<KillGate, KillGateWidget>("KillGate");

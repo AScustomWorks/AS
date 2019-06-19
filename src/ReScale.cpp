@@ -34,101 +34,104 @@ struct ReScale: Module {
         return voltMinusOct;
     }
 
-    ReScale() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
+    ReScale() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+        configParam(ReScale::CONVERT_PARAM, 0.0f, 3.0f, 0.0f, "Convert Mode");
 
     }
-    void step() override;
+
+    void process(const ProcessArgs &args) override {
+
+        selection = params[CONVERT_PARAM].getValue();
+
+        if(inputs[INPUT_0].isConnected()){
+
+            input_value = clamp(inputs[INPUT_0].getVoltage(), -5.0f,5.0f);
+            if(selection==0){
+                rescaled_value = input_value;
+            }else if(selection==1){
+                rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 5.0f);
+            }else if(selection==2){
+                rescaled_value = rescale(input_value, -5.0f, 5.0f, -10.0f, 10.0f);
+            }else if(selection==3){
+                rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
+            }
+
+        }else if(inputs[INPUT_1].isConnected()){
+
+            input_value = clamp(inputs[INPUT_1].getVoltage(), 0.0f, 5.0f);
+            if(selection==0){
+                rescaled_value = rescale(input_value, 0.0f, 5.0f, -5.0f, 5.0f);
+            }else if(selection==1){
+                rescaled_value = input_value;
+            }else if(selection==2){
+                rescaled_value = rescale(input_value, 0.0f, 5.0f, -10.0f, 10.0f);
+            }else if(selection==3){
+                rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
+            }
+
+        }else if(inputs[INPUT_2].isConnected()){
+            
+            input_value = clamp(inputs[INPUT_2].getVoltage(), 0.0f, 10.0f);
+            if(selection==0){
+                rescaled_value = rescale(input_value, 0.0f, 10.0f, -5.0f, 5.0f);
+            }else if(selection==1){
+                rescaled_value = rescale(input_value, 0.0f, 10.0f, 0.0f, 5.0f);        
+            }else if(selection==2){
+                rescaled_value = rescale(input_value, 0.0f, 10.0f, -10.0f, 10.0f);
+            }else if(selection==3){
+                rescaled_value = input_value;
+            }
+
+        }else if(inputs[INPUT_3].isConnected()){
+            
+            input_value = inputs[INPUT_3].getVoltage();
+            if(selection==0){
+                rescaled_value = input_value;
+            }else if(selection==1){
+                rescaled_value = input_value;      
+            }else if(selection==2){
+                rescaled_value = input_value;
+            }else if(selection==3){
+                //take the input of a midi KB, get the voltage minus octave, convert it to 1V/KEY
+                float ext_key = getNoteInVolts(input_value);
+                rescaled_value = clamp( rescale( ext_key, 0.0f, 1.0f, 0.0f, 11.0f ), 0.0f, 10.0f );
+            }
+
+        }
+        outputs[OUTPUT].setVoltage(rescaled_value);
+        
+    }
     
 };
 
-void ReScale::step() {
-
-    selection = params[CONVERT_PARAM].value;
-
-    if(inputs[INPUT_0].active){
-
-        input_value = clamp(inputs[INPUT_0].value, -5.0f,5.0f);
-        if(selection==0){
-            rescaled_value = input_value;
-        }else if(selection==1){
-            rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 5.0f);
-        }else if(selection==2){
-            rescaled_value = rescale(input_value, -5.0f, 5.0f, -10.0f, 10.0f);
-        }else if(selection==3){
-            rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
-        }
-
-    }else if(inputs[INPUT_1].active){
-
-        input_value = clamp(inputs[INPUT_1].value, 0.0f, 5.0f);
-        if(selection==0){
-            rescaled_value = rescale(input_value, 0.0f, 5.0f, -5.0f, 5.0f);
-        }else if(selection==1){
-            rescaled_value = input_value;
-        }else if(selection==2){
-            rescaled_value = rescale(input_value, 0.0f, 5.0f, -10.0f, 10.0f);
-        }else if(selection==3){
-            rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
-        }
-
-    }else if(inputs[INPUT_2].active){
-        
-        input_value = clamp(inputs[INPUT_2].value, 0.0f, 10.0f);
-        if(selection==0){
-            rescaled_value = rescale(input_value, 0.0f, 10.0f, -5.0f, 5.0f);
-        }else if(selection==1){
-            rescaled_value = rescale(input_value, 0.0f, 10.0f, 0.0f, 5.0f);        
-        }else if(selection==2){
-            rescaled_value = rescale(input_value, 0.0f, 10.0f, -10.0f, 10.0f);
-        }else if(selection==3){
-            rescaled_value = input_value;
-        }
-
-    }else if(inputs[INPUT_3].active){
-        
-        input_value = inputs[INPUT_3].value;
-        if(selection==0){
-            rescaled_value = input_value;
-        }else if(selection==1){
-            rescaled_value = input_value;      
-        }else if(selection==2){
-            rescaled_value = input_value;
-        }else if(selection==3){
-            //take the input of a midi KB, get the voltage minus octave, convert it to 1V/KEY
-            float ext_key = getNoteInVolts(input_value);
-            rescaled_value = clamp( rescale( ext_key, 0.0f, 1.0f, 0.0f, 11.0f ), 0.0f, 10.0f );
-        }
-
-    }
-    outputs[OUTPUT].value = rescaled_value;
-    
-}
 
 ////////////////////////////////////
-struct ReScaleWidget : ModuleWidget 
-{ 
-    ReScaleWidget(ReScale *module);
+struct ReScaleWidget : ModuleWidget {
+
+    ReScaleWidget(ReScale *module) {
+
+        setModule(module);
+        setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ReScale.svg")));
+    
+        //SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
+        addChild(createWidget<as_HexScrew>(Vec(0, 0)));
+        addChild(createWidget<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
+        addChild(createWidget<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+        addChild(createWidget<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+        //PORTS
+        addInput(createInput<as_PJ301MPort>(Vec(18, 65), module, ReScale::INPUT_0));
+        addInput(createInput<as_PJ301MPort>(Vec(18, 105), module, ReScale::INPUT_1));
+        addInput(createInput<as_PJ301MPort>(Vec(18, 145), module, ReScale::INPUT_2));
+        addInput(createInput<as_PJ301MPort>(Vec(18, 185), module, ReScale::INPUT_3));
+
+        addParam(createParam<as_KnobBlackSnap4>(Vec(12, 230), module, ReScale::CONVERT_PARAM));
+
+        addOutput(createOutput<as_PJ301MPort>(Vec(18, 280), module, ReScale::OUTPUT));
+
+
+    }
 };
 
-ReScaleWidget::ReScaleWidget(ReScale *module) : ModuleWidget(module) {
 
-  	setPanel(SVG::load(assetPlugin(plugin, "res/ReScale.svg")));
-  
-	//SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
-	addChild(Widget::create<as_HexScrew>(Vec(0, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(0, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-    //PORTS
-	addInput(Port::create<as_PJ301MPort>(Vec(18, 65), Port::INPUT, module, ReScale::INPUT_0));
-	addInput(Port::create<as_PJ301MPort>(Vec(18, 105), Port::INPUT, module, ReScale::INPUT_1));
-	addInput(Port::create<as_PJ301MPort>(Vec(18, 145), Port::INPUT, module, ReScale::INPUT_2));
-	addInput(Port::create<as_PJ301MPort>(Vec(18, 185), Port::INPUT, module, ReScale::INPUT_3));
-
-	addParam(ParamWidget::create<as_KnobBlackSnap4>(Vec(12, 230), module, ReScale::CONVERT_PARAM, 0.0f, 3.0f, 0.0f));
-
-	addOutput(Port::create<as_PJ301MPort>(Vec(18, 280), Port::OUTPUT, module, ReScale::OUTPUT));
-
-
-}
-Model *modelReScale = Model::create<ReScale, ReScaleWidget>("AS", "ReScale", "ReScale - Voltage Converter", UTILITY_TAG);
+Model *modelReScale = createModel<ReScale, ReScaleWidget>("ReScale");

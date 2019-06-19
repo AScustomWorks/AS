@@ -6,7 +6,7 @@
 //**************************************************************************************
 
 #include "AS.hpp"
-#include "dsp/digital.hpp"
+//#include "dsp/digital.hpp"
 
 struct Mixer2ch : Module {
 	enum ParamIds {
@@ -55,15 +55,23 @@ struct Mixer2ch : Module {
 		MUTE_LIGHT_MASTER,
 		NUM_LIGHTS
 	};
-	Mixer2ch() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
-		reset();
+
+	Mixer2ch() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+		configParam(Mixer2ch::CH1_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 1 Pan");
+		configParam(Mixer2ch::CH2_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 2 Pan");
+		configParam(Mixer2ch::CH1_PARAM, 0.0f, 1.0f, 0.8f, "CH 1 Gain");
+		configParam(Mixer2ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain");
+		configParam(Mixer2ch::CH1MUTE , 0.0f, 1.0f, 0.0f, "CH 1 Mute");
+		configParam(Mixer2ch::CH2MUTE , 0.0f, 1.0f, 0.0f, "CH 2 Mute");
+		configParam(Mixer2ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain");
+		configParam(Mixer2ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f, "Mix Mute");
 	}
-	void step() override;
 
-	SchmittTrigger ch1mute;
-	SchmittTrigger ch2mute;
+	dsp::SchmittTrigger ch1mute;
+	dsp::SchmittTrigger ch2mute;
 
-	SchmittTrigger chMmute;
+	dsp::SchmittTrigger chMmute;
 
 	float ch1m = false;
 	float ch2m = false;
@@ -73,8 +81,77 @@ struct Mixer2ch : Module {
 	float mixL = 0.0f;
 	float mixR = 0.0f;
 
+	//PAN LEVEL
+	float PanL(float balance, float cv) { // -1...+1
+		float p, inp;
+		inp = balance + cv / 5;
+		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
+		return ::cos(p);
+	}
 
- 	json_t *toJson()override {
+	float PanR(float balance , float cv) {
+		float p, inp;
+		inp = balance + cv / 5;
+		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
+		return ::sin(p);
+	}
+
+	void process(const ProcessArgs &args) override {
+		//MUTE BUTTONS
+		if (ch1mute.process(params[CH1MUTE].getValue())) {
+			ch1m = !ch1m;
+		}
+		lights[MUTE_LIGHT1].value = ch1m ? 1.0f : 0.0f;
+		if (ch2mute.process(params[CH2MUTE].getValue())) {
+			ch2m = !ch2m;
+		}
+		lights[MUTE_LIGHT2].value = ch2m ? 1.0f : 0.0f;
+
+		if (chMmute.process(params[MASTER_MUTE].getValue())) {
+			chMm = !chMm;
+		}
+		lights[MUTE_LIGHT_MASTER].value = chMm ? 1.0f : 0.0f;
+		//CHANNEL RESULTS
+		float ch1L =  (1-ch1m) * (inputs[CH1_INPUT].getVoltage()) * params[CH1_PARAM].getValue() * PanL(params[CH1_PAN_PARAM].getValue(),(inputs[CH1_CV_PAN_INPUT].getVoltage()))* clamp(inputs[CH1_CV_INPUT].getNormalVoltage(10.0f) / 10.0f, 0.0f, 1.0f);
+		float ch1R =  (1-ch1m) * (inputs[CH1_INPUT].getVoltage()) * params[CH1_PARAM].getValue() * PanR(params[CH1_PAN_PARAM].getValue(),(inputs[CH1_CV_PAN_INPUT].getVoltage())) * clamp(inputs[CH1_CV_INPUT].getNormalVoltage(10.0f) / 10.0f, 0.0f, 1.0f);
+
+		float ch2L = (1-ch2m) *(inputs[CH2_INPUT].getVoltage()) * params[CH2_PARAM].getValue() * PanL(params[CH2_PAN_PARAM].getValue(),(inputs[CH2_CV_PAN_INPUT].getVoltage())) * clamp(inputs[CH2_CV_INPUT].getNormalVoltage(10.0f) / 10.0f, 0.0f, 1.0f);
+		float ch2R = (1-ch2m) *(inputs[CH2_INPUT].getVoltage()) * params[CH2_PARAM].getValue() * PanR(params[CH2_PAN_PARAM].getValue(),(inputs[CH2_CV_PAN_INPUT].getVoltage())) * clamp(inputs[CH2_CV_INPUT].getNormalVoltage(10.0f) / 10.0f, 0.0f, 1.0f);
+
+
+		if(!chMm){
+			mixL = (ch1L + ch2L) * params[MIX_PARAM].getValue() * clamp(inputs[MIX_CV_INPUT].getNormalVoltage(10.0f) / 10.0f, 0.0f, 1.0f);
+			mixR = (ch1R + ch2R) * params[MIX_PARAM].getValue() * clamp(inputs[MIX_CV_INPUT].getNormalVoltage(10.0f) / 10.0f, 0.0f, 1.0f);
+			//CHECK FOR INPUT FROM ANOTHER MIXER
+			if(inputs[LINK_L].isConnected() && inputs[LINK_R].isConnected()){
+				mixL += inputs[LINK_L].getVoltage();
+				mixR += inputs[LINK_R].getVoltage();
+			}
+		}else{
+			mixL = 0.0f;
+			mixR = 0.0f;
+		}
+
+		outputs[CH1_OUTPUT].value= ch1L+ch1R;
+		outputs[CH2_OUTPUT].value= ch2L+ch2R;
+
+		//check for MONO OUTPUT
+
+		if(!outputs[MIX_OUTPUTR].isConnected()){
+			outputs[MIX_OUTPUTL].value= mixL+mixR;
+			outputs[MIX_OUTPUTR].value= 0.0f;
+		}else{
+			outputs[MIX_OUTPUTL].value= mixL;
+			outputs[MIX_OUTPUTR].value= mixR;
+		}
+
+			//outputs[MIX_OUTPUTL].value= mixL;
+			//outputs[MIX_OUTPUTR].value= mixR;
+
+	}
+
+
+ 	json_t *dataToJson()override {
 		json_t *rootJm = json_object();
 
 		json_t *mutesJ = json_array();
@@ -94,7 +171,7 @@ struct Mixer2ch : Module {
 		return rootJm;
 	}
 
-	void fromJson(json_t *rootJm)override {
+	void dataFromJson(json_t *rootJm)override {
 		json_t *mutesJ = json_object_get(rootJm, "as_Mixer2Mutes");
 
 			json_t *muteJ1 = json_array_get(mutesJ, 0);
@@ -109,136 +186,68 @@ struct Mixer2ch : Module {
 			chMm = !!json_integer_value(muteJ3);
 
 	}
-	//PAN LEVEL
-	float PanL(float balance, float cv) { // -1...+1
-		float p, inp;
-		inp = balance + cv / 5;
-		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
-		return ::cos(p);
-	}
-
-	float PanR(float balance , float cv) {
-		float p, inp;
-		inp = balance + cv / 5;
-		p = M_PI * (clamp(inp, -1.0f, 1.0f) + 1) / 4;
-		return ::sin(p);
-	}
-};
-
-void Mixer2ch::step() {
-	//MUTE BUTTONS
-	if (ch1mute.process(params[CH1MUTE].value)) {
-		ch1m = !ch1m;
-	}
-	lights[MUTE_LIGHT1].value = ch1m ? 1.0f : 0.0f;
-	if (ch2mute.process(params[CH2MUTE].value)) {
-		ch2m = !ch2m;
-	}
-	lights[MUTE_LIGHT2].value = ch2m ? 1.0f : 0.0f;
-
-	if (chMmute.process(params[MASTER_MUTE].value)) {
-		chMm = !chMm;
-	}
-	lights[MUTE_LIGHT_MASTER].value = chMm ? 1.0f : 0.0f;
-	//CHANNEL RESULTS
-	float ch1L =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanL(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value))* clamp(inputs[CH1_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-	float ch1R =  (1-ch1m) * (inputs[CH1_INPUT].value) * params[CH1_PARAM].value * PanR(params[CH1_PAN_PARAM].value,(inputs[CH1_CV_PAN_INPUT].value)) * clamp(inputs[CH1_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-
-	float ch2L = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanL(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clamp(inputs[CH2_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-	float ch2R = (1-ch2m) *(inputs[CH2_INPUT].value) * params[CH2_PARAM].value * PanR(params[CH2_PAN_PARAM].value,(inputs[CH2_CV_PAN_INPUT].value)) * clamp(inputs[CH2_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-
-
-	if(!chMm){
-		mixL = (ch1L + ch2L) * params[MIX_PARAM].value * clamp(inputs[MIX_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-		mixR = (ch1R + ch2R) * params[MIX_PARAM].value * clamp(inputs[MIX_CV_INPUT].normalize(10.0f) / 10.0f, 0.0f, 1.0f);
-		//CHECK FOR INPUT FROM ANOTHER MIXER
-		if(inputs[LINK_L].active && inputs[LINK_R].active){
-			mixL += inputs[LINK_L].value;
-			mixR += inputs[LINK_R].value;
-		}
-	}else{
-		mixL = 0.0f;
-		mixR = 0.0f;
-	}
-
-	outputs[CH1_OUTPUT].value= ch1L+ch1R;
-	outputs[CH2_OUTPUT].value= ch2L+ch2R;
-
-	//check for MONO OUTPUT
-
-	if(!outputs[MIX_OUTPUTR].active){
-		outputs[MIX_OUTPUTL].value= mixL+mixR;
-		outputs[MIX_OUTPUTR].value= 0.0f;
-	}else{
-		outputs[MIX_OUTPUTL].value= mixL;
-		outputs[MIX_OUTPUTR].value= mixR;
-	}
-
-		//outputs[MIX_OUTPUTL].value= mixL;
-		//outputs[MIX_OUTPUTR].value= mixR;
-
-}
-
-
-struct Mixer2chWidget : ModuleWidget
-{
-    Mixer2chWidget(Mixer2ch *module);
 };
 
 
-Mixer2chWidget::Mixer2chWidget(Mixer2ch *module) : ModuleWidget(module) {
+struct Mixer2chWidget : ModuleWidget{
 
-  setPanel(SVG::load(assetPlugin(plugin, "res/2chMixer.svg")));
+	Mixer2chWidget(Mixer2ch *module) {
+		setModule(module);
+		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/2chMixer.svg")));
 
-	//SCREWS
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	//PAN KNOBS
- 	static const float columnPos[8] = {33,73,113,153, 193, 233, 273, 313};
-	static const float panPosY = 180;
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(columnPos[0]-5, panPosY), module, Mixer2ch::CH1_PAN_PARAM, -1.0f, 1.0f, 0.0f));
-	addParam(ParamWidget::create<as_KnobBlack>(Vec(columnPos[1]-5, panPosY), module, Mixer2ch::CH2_PAN_PARAM, -1.0f, 1.0f, 0.0f));
+		//SCREWS
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		//PAN KNOBS
+		static const float columnPos[8] = {33,73,113,153, 193, 233, 273, 313};
+		static const float panPosY = 180;
+		addParam(createParam<as_KnobBlack>(Vec(columnPos[0]-5, panPosY), module, Mixer2ch::CH1_PAN_PARAM));
+		addParam(createParam<as_KnobBlack>(Vec(columnPos[1]-5, panPosY), module, Mixer2ch::CH2_PAN_PARAM));
 
-	//VOLUME FADERS
-	static const float volPosY = 223;
-	addParam(ParamWidget::create<as_FaderPot>(Vec(columnPos[0]+2, volPosY), module, Mixer2ch::CH1_PARAM, 0.0f, 1.0f, 0.8f));
-	addParam(ParamWidget::create<as_FaderPot>(Vec(columnPos[1]+2, volPosY), module, Mixer2ch::CH2_PARAM, 0.0f, 1.0f, 0.8f));
+		//VOLUME FADERS
+		static const float volPosY = 223;
+		addParam(createParam<as_FaderPot>(Vec(columnPos[0]+2, volPosY), module, Mixer2ch::CH1_PARAM));
+		addParam(createParam<as_FaderPot>(Vec(columnPos[1]+2, volPosY), module, Mixer2ch::CH2_PARAM));
 
-	//MUTES
-	static const float mutePosY = 310;
-	addParam(ParamWidget::create<LEDBezel>(Vec(columnPos[0]+3, mutePosY), module, Mixer2ch::CH1MUTE , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT1));
-	addParam(ParamWidget::create<LEDBezel>(Vec(columnPos[1]+3, mutePosY), module, Mixer2ch::CH2MUTE , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT2));
+		//MUTES
+		static const float mutePosY = 310;
+		addParam(createParam<LEDBezel>(Vec(columnPos[0]+3, mutePosY), module, Mixer2ch::CH1MUTE ));
+		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT1));
+		addParam(createParam<LEDBezel>(Vec(columnPos[1]+3, mutePosY), module, Mixer2ch::CH2MUTE ));
+		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT2));
 
-	//PORTS
- 	static const float portsY[4] = {60,90,120,150};
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[0], portsY[0]), Port::INPUT, module, Mixer2ch::CH1_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[0], portsY[1]), Port::INPUT, module, Mixer2ch::CH1_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[0], portsY[2]), Port::INPUT, module, Mixer2ch::CH1_CV_PAN_INPUT));
+		//PORTS
+		static const float portsY[4] = {60,90,120,150};
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], portsY[0]), module, Mixer2ch::CH1_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], portsY[1]), module, Mixer2ch::CH1_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], portsY[2]), module, Mixer2ch::CH1_CV_PAN_INPUT));
 
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[1], portsY[0]), Port::INPUT, module, Mixer2ch::CH2_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[1], portsY[1]), Port::INPUT, module, Mixer2ch::CH2_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[1], portsY[2]), Port::INPUT, module, Mixer2ch::CH2_CV_PAN_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], portsY[0]), module, Mixer2ch::CH2_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], portsY[1]), module, Mixer2ch::CH2_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], portsY[2]), module, Mixer2ch::CH2_CV_PAN_INPUT));
 
-	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[0], portsY[3]), Port::OUTPUT, module, Mixer2ch::CH1_OUTPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(columnPos[1], portsY[3]), Port::OUTPUT, module, Mixer2ch::CH2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[0], portsY[3]), module, Mixer2ch::CH1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[1], portsY[3]), module, Mixer2ch::CH2_OUTPUT));
 
 
-	//OUTPUT
-	static const float mstrX = 130;
-	addOutput(Port::create<as_PJ301MPort>(Vec(mstrX, portsY[0]), Port::OUTPUT, module, Mixer2ch::MIX_OUTPUTL));
-	addOutput(Port::create<as_PJ301MPort>(Vec(mstrX, portsY[1]), Port::OUTPUT, module, Mixer2ch::MIX_OUTPUTR));
-	addInput(Port::create<as_PJ301MPort>(Vec(mstrX, portsY[3]), Port::INPUT, module, Mixer2ch::MIX_CV_INPUT));
-	addParam(ParamWidget::create<as_FaderPot>(Vec(mstrX, volPosY), module, Mixer2ch::MIX_PARAM, 0.0f, 1.0f, 0.8f));
-	addParam(ParamWidget::create<LEDBezel>(Vec(mstrX, mutePosY), module, Mixer2ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f));
-  	addChild(ModuleLightWidget::create<LedLight<RedLight>>(Vec(mstrX+2.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT_MASTER));
+		//OUTPUT
+		static const float mstrX = 130;
+		addOutput(createOutput<as_PJ301MPort>(Vec(mstrX, portsY[0]), module, Mixer2ch::MIX_OUTPUTL));
+		addOutput(createOutput<as_PJ301MPort>(Vec(mstrX, portsY[1]), module, Mixer2ch::MIX_OUTPUTR));
+		addInput(createInput<as_PJ301MPort>(Vec(mstrX, portsY[3]), module, Mixer2ch::MIX_CV_INPUT));
+		addParam(createParam<as_FaderPot>(Vec(mstrX, volPosY), module, Mixer2ch::MIX_PARAM));
+		addParam(createParam<LEDBezel>(Vec(mstrX, mutePosY), module, Mixer2ch::MASTER_MUTE ));
+		addChild(createLight<LedLight<RedLight>>(Vec(mstrX+2.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT_MASTER));
 
-	//LINK
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[0], 30), Port::INPUT, module, Mixer2ch::LINK_L));
-	addInput(Port::create<as_PJ301MPort>(Vec(columnPos[1], 30), Port::INPUT, module, Mixer2ch::LINK_R));
+		//LINK
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], 30), module, Mixer2ch::LINK_L));
+		addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], 30), module, Mixer2ch::LINK_R));
 
-}
-Model *modelMixer2ch = Model::create<Mixer2ch, Mixer2chWidget>("AS", "Mixer2ch", "2-CH Mixer", MIXER_TAG, AMPLIFIER_TAG);
+	}
+};
+
+
+
+Model *modelMixer2ch = createModel<Mixer2ch, Mixer2chWidget>("Mixer2ch");

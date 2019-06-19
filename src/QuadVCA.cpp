@@ -50,120 +50,129 @@ struct QuadVCA : Module {
 	float v4= 0.0f;
 	const float expBase = 50.0f;
 
-	QuadVCA() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {}
-	void step() override;
+	QuadVCA() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+		configParam(QuadVCA::GAIN1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain");
+		configParam(QuadVCA::GAIN2_PARAM, 0.0f, 1.0f, 0.5f, "CH 2 Gain");
+		configParam(QuadVCA::GAIN3_PARAM, 0.0f, 1.0f, 0.5f, "CH 3 Gain");
+		configParam(QuadVCA::GAIN4_PARAM, 0.0f, 1.0f, 0.5f, "CH 4 Gain");
+		configParam(QuadVCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Response");
+		configParam(QuadVCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");
+		configParam(QuadVCA::MODE3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Response");
+		configParam(QuadVCA::MODE4_PARAM, 0.0f, 1.0f, 1.0f, "CH 4 Response");
+	}
+
+	void process(const ProcessArgs &args) override {
+		//QuadVCA 1
+		float out = 0.0;
+		v1 = inputs[IN1_INPUT].getVoltage() * params[GAIN1_PARAM].getValue();
+		if(inputs[GAIN1_CV_INPUT].isConnected()){
+			if(params[MODE1_PARAM].getValue()==1){
+				v1 *= clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+			}else{
+				v1 *= rescale(powf(expBase, clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
+			}
+		}
+		out+=v1;
+		lights[GAIN1_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
+		if (outputs[OUT1_OUTPUT].isConnected()) {
+				outputs[OUT1_OUTPUT].setVoltage(out);
+				out = 0.0f;
+		}
+		//QuadVCA 2
+		v2 = inputs[IN2_INPUT].getVoltage() * params[GAIN2_PARAM].getValue();
+		if(inputs[GAIN2_CV_INPUT].isConnected()){
+			if(params[MODE2_PARAM].getValue()){
+				v2 *= clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+			}else{
+				v2 *= rescale(powf(expBase, clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
+			}
+		}
+		out+=v2;
+		lights[GAIN2_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
+		if (outputs[OUT2_OUTPUT].isConnected()) {
+				outputs[OUT2_OUTPUT].setVoltage(out);
+				out = 0.0f;
+		}
+		//QuadVCA 3
+		v3 = inputs[IN3_INPUT].getVoltage() * params[GAIN3_PARAM].getValue();
+		if(inputs[GAIN3_CV_INPUT].isConnected()){
+			if(params[MODE3_PARAM].getValue()){
+				v3 *= clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+			}else{
+				v3 *= rescale(powf(expBase, clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
+			}
+		}
+		out+=v3;
+		lights[GAIN3_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
+		if (outputs[OUT3_OUTPUT].isConnected()) {
+				outputs[OUT3_OUTPUT].setVoltage(out);
+				out = 0.0f;
+		}
+		//QuadVCA 4
+		v4 = inputs[IN4_INPUT].getVoltage() * params[GAIN4_PARAM].getValue();
+		if(inputs[GAIN4_CV_INPUT].isConnected()){
+			if(params[MODE4_PARAM].getValue()){
+				v4 *= clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+			}else{
+				v4 *= rescale(powf(expBase, clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
+			}
+		}
+		out+=v4;
+		lights[GAIN4_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
+		if (outputs[OUT4_OUTPUT].isConnected()) {
+				outputs[OUT4_OUTPUT].setVoltage(out);
+				out = 0.0f;
+		}
+	}
 };
 
-void QuadVCA::step() {
-	//QuadVCA 1
-	float out = 0.0;
-	v1 = inputs[IN1_INPUT].value * params[GAIN1_PARAM].value;
-	if(inputs[GAIN1_CV_INPUT].active){
-		if(params[MODE1_PARAM].value==1){
-			v1 *= clamp(inputs[GAIN1_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		}else{
-			v1 *= rescale(powf(expBase, clamp(inputs[GAIN1_CV_INPUT].value / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
-		}
-	}
-	out+=v1;
-	lights[GAIN1_LIGHT].setBrightnessSmooth(fmaxf(0.0f, out / 5.0f));
-	if (outputs[OUT1_OUTPUT].active) {
-			outputs[OUT1_OUTPUT].value = out;
-			out = 0.0f;
-	}
-	//QuadVCA 2
-	v2 = inputs[IN2_INPUT].value * params[GAIN2_PARAM].value;
-	if(inputs[GAIN2_CV_INPUT].active){
-		if(params[MODE2_PARAM].value){
-			v2 *= clamp(inputs[GAIN2_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		}else{
-			v2 *= rescale(powf(expBase, clamp(inputs[GAIN2_CV_INPUT].value / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
-		}
-	}
-	out+=v2;
-	lights[GAIN2_LIGHT].setBrightnessSmooth(fmaxf(0.0f, out / 5.0f));
-	if (outputs[OUT2_OUTPUT].active) {
-			outputs[OUT2_OUTPUT].value = out;
-			out = 0.0f;
-	}
-	//QuadVCA 3
-	v3 = inputs[IN3_INPUT].value * params[GAIN3_PARAM].value;
-	if(inputs[GAIN3_CV_INPUT].active){
-		if(params[MODE3_PARAM].value){
-			v3 *= clamp(inputs[GAIN3_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		}else{
-			v3 *= rescale(powf(expBase, clamp(inputs[GAIN3_CV_INPUT].value / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
-		}
-	}
-	out+=v3;
-	lights[GAIN3_LIGHT].setBrightnessSmooth(fmaxf(0.0f, out / 5.0f));
-	if (outputs[OUT3_OUTPUT].active) {
-			outputs[OUT3_OUTPUT].value = out;
-			out = 0.0f;
-	}
-	//QuadVCA 4
-	v4 = inputs[IN4_INPUT].value * params[GAIN4_PARAM].value;
-	if(inputs[GAIN4_CV_INPUT].active){
-		if(params[MODE4_PARAM].value){
-			v4 *= clamp(inputs[GAIN4_CV_INPUT].value / 10.0f, 0.0f, 1.0f);
-		}else{
-			v4 *= rescale(powf(expBase, clamp(inputs[GAIN4_CV_INPUT].value / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
-		}
-	}
-	out+=v4;
-	lights[GAIN4_LIGHT].setBrightnessSmooth(fmaxf(0.0f, out / 5.0f));
-	if (outputs[OUT4_OUTPUT].active) {
-			outputs[OUT4_OUTPUT].value = out;
-			out = 0.0f;
-	}
-}
 
-struct QuadVCAWidget : ModuleWidget 
-{ 
-    QuadVCAWidget(QuadVCA *module);
+struct QuadVCAWidget : ModuleWidget { 
+
+	QuadVCAWidget(QuadVCA *module) {
+
+		setModule(module);
+		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/QuadVCA.svg")));
+		//SCREWS
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		static const float posX[4] = {13,39,65,91};
+		//SLIDERS
+		addParam(createParam<as_SlidePot>(Vec(posX[0]-3, 70), module, QuadVCA::GAIN1_PARAM));
+		addParam(createParam<as_SlidePot>(Vec(posX[1]-3, 70), module, QuadVCA::GAIN2_PARAM));
+		addParam(createParam<as_SlidePot>(Vec(posX[2]-3, 70), module, QuadVCA::GAIN3_PARAM));
+		addParam(createParam<as_SlidePot>(Vec(posX[3]-3, 70), module, QuadVCA::GAIN4_PARAM));
+		//MODE SWITCHES
+		addParam(createParam<as_CKSS>(Vec(posX[0], 190), module, QuadVCA::MODE1_PARAM));
+		addParam(createParam<as_CKSS>(Vec(posX[1], 190), module, QuadVCA::MODE2_PARAM));
+		addParam(createParam<as_CKSS>(Vec(posX[2], 190), module, QuadVCA::MODE3_PARAM));
+		addParam(createParam<as_CKSS>(Vec(posX[3], 190), module, QuadVCA::MODE4_PARAM));
+		//CV INPUTS
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 217), module, QuadVCA::GAIN1_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[1]-4, 217), module, QuadVCA::GAIN2_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[2]-4, 217), module, QuadVCA::GAIN3_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[3]-4, 217), module, QuadVCA::GAIN4_CV_INPUT));
+		//INPUTS
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 260), module, QuadVCA::IN1_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[1]-4, 260), module, QuadVCA::IN2_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[2]-4, 260), module, QuadVCA::IN3_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[3]-4, 260), module, QuadVCA::IN4_INPUT));
+		//LEDS
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[0]+5, 288), module, QuadVCA::GAIN1_LIGHT));
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[1]+5, 288), module, QuadVCA::GAIN2_LIGHT));
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[2]+5, 288), module, QuadVCA::GAIN3_LIGHT));
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[3]+5, 288), module, QuadVCA::GAIN4_LIGHT));
+		//OUTPUTS
+		addOutput(createOutput<as_PJ301MPort>(Vec(posX[0]-4, 310), module, QuadVCA::OUT1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPort>(Vec(posX[1]-4, 310), module, QuadVCA::OUT2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPort>(Vec(posX[2]-4, 310), module, QuadVCA::OUT3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPort>(Vec(posX[3]-4, 310), module, QuadVCA::OUT4_OUTPUT));
+
+	}
 };
 
 
-QuadVCAWidget::QuadVCAWidget(QuadVCA *module) : ModuleWidget(module) {
-
-  setPanel(SVG::load(assetPlugin(plugin, "res/QuadVCA.svg")));
-	//SCREWS
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	static const float posX[4] = {13,39,65,91};
-    //SLIDERS
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[0]-3, 70), module, QuadVCA::GAIN1_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[1]-3, 70), module, QuadVCA::GAIN2_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[2]-3, 70), module, QuadVCA::GAIN3_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[3]-3, 70), module, QuadVCA::GAIN4_PARAM, 0.0f, 1.0f, 0.5f));
-    //MODE SWITCHES
-    addParam(ParamWidget::create<as_CKSS>(Vec(posX[0], 190), module, QuadVCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f));
-	addParam(ParamWidget::create<as_CKSS>(Vec(posX[1], 190), module, QuadVCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f));
-	addParam(ParamWidget::create<as_CKSS>(Vec(posX[2], 190), module, QuadVCA::MODE3_PARAM, 0.0f, 1.0f, 1.0f));
-	addParam(ParamWidget::create<as_CKSS>(Vec(posX[3], 190), module, QuadVCA::MODE4_PARAM, 0.0f, 1.0f, 1.0f));
-	//CV INPUTS
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]-4, 217), Port::INPUT, module, QuadVCA::GAIN1_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[1]-4, 217), Port::INPUT, module, QuadVCA::GAIN2_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[2]-4, 217), Port::INPUT, module, QuadVCA::GAIN3_CV_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[3]-4, 217), Port::INPUT, module, QuadVCA::GAIN4_CV_INPUT));
-	//INPUTS
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]-4, 260), Port::INPUT, module, QuadVCA::IN1_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[1]-4, 260), Port::INPUT, module, QuadVCA::IN2_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[2]-4, 260), Port::INPUT, module, QuadVCA::IN3_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[3]-4, 260), Port::INPUT, module, QuadVCA::IN4_INPUT));
-	//LEDS
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[0]+5, 288), module, QuadVCA::GAIN1_LIGHT));//294
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[1]+5, 288), module, QuadVCA::GAIN2_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[2]+5, 288), module, QuadVCA::GAIN3_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[3]+5, 288), module, QuadVCA::GAIN4_LIGHT));
-	//OUTPUTS
-	addOutput(Port::create<as_PJ301MPort>(Vec(posX[0]-4, 310), Port::OUTPUT, module, QuadVCA::OUT1_OUTPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(posX[1]-4, 310), Port::OUTPUT, module, QuadVCA::OUT2_OUTPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(posX[2]-4, 310), Port::OUTPUT, module, QuadVCA::OUT3_OUTPUT));
-	addOutput(Port::create<as_PJ301MPort>(Vec(posX[3]-4, 310), Port::OUTPUT, module, QuadVCA::OUT4_OUTPUT));
-
-}
-
-Model *modelQuadVCA = Model::create<QuadVCA, QuadVCAWidget>("AS", "QuadVCA", "Quad VCA/Mixer", AMPLIFIER_TAG, MIXER_TAG);
+Model *modelQuadVCA = createModel<QuadVCA, QuadVCAWidget>("QuadVCA");

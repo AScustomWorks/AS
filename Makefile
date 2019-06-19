@@ -1,8 +1,7 @@
 RACK_DIR ?= ../..
-SLUG = AS
-VERSION = 0.6.13
 
 FLAGS +=
+#FLAGS += -w
 SOURCES += $(wildcard src/*.cpp freeverb/*.cpp)
 DISTRIBUTABLES += $(wildcard LICENSE*) res
 

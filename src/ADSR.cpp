@@ -4,7 +4,7 @@
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
 #include "AS.hpp"
-#include "dsp/digital.hpp"
+//#include "dsp/digital.hpp"
 
 struct ADSR : Module {
 	enum ParamIds {
@@ -37,118 +37,110 @@ struct ADSR : Module {
 
 	bool decaying = false;
 	float env = 0.0f;
-	SchmittTrigger trigger;
+	dsp::SchmittTrigger trigger;
 
-	ADSR() : Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS) {
+	ADSR() {
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+		configParam(ADSR::ATTACK_PARAM, 0.0f, 1.0f, 0.5f, "Atacck");
+		configParam(ADSR::DECAY_PARAM, 0.0f, 1.0f, 0.5f, "Decay");
+		configParam(ADSR::SUSTAIN_PARAM, 0.0f, 1.0f, 0.5f, "Sustain");
+		configParam(ADSR::RELEASE_PARAM, 0.0f, 1.0f, 0.5f, "Release");
 
 	}
-	void step() override;
-};
+	void process(const ProcessArgs &args) override {
+		float attack = clamp(params[ATTACK_PARAM].getValue() + inputs[ATTACK_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+		float decay = clamp(params[DECAY_PARAM].getValue() + inputs[DECAY_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+		float sustain = clamp(params[SUSTAIN_PARAM].getValue() + inputs[SUSTAIN_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+		float release = clamp(params[RELEASE_PARAM].getValue() + inputs[RELEASE_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
+		// Gate and trigger
+		bool gated = inputs[GATE_INPUT].getVoltage() >= 1.0f;
+		if (trigger.process(inputs[TRIG_INPUT].getVoltage()))
+			decaying = false;
 
-
-void ADSR::step() {
-	float attack = clamp(params[ATTACK_PARAM].value + inputs[ATTACK_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float decay = clamp(params[DECAY_PARAM].value + inputs[DECAY_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float sustain = clamp(params[SUSTAIN_PARAM].value + inputs[SUSTAIN_INPUT].value / 10.0f, 0.0f, 1.0f);
-	float release = clamp(params[RELEASE_PARAM].value + inputs[RELEASE_INPUT].value / 10.0f, 0.0f, 1.0f);
-	// Gate and trigger
-	bool gated = inputs[GATE_INPUT].value >= 1.0f;
-	if (trigger.process(inputs[TRIG_INPUT].value))
-		decaying = false;
-
-	const float base = 20000.0f;
-	const float maxTime = 10.0f;
-	if (gated) {
-		if (decaying) {
-			// Decay
-			if (decay < 1e-4) {
-				env = sustain;
+		const float base = 20000.0f;
+		const float maxTime = 10.0f;
+		if (gated) {
+			if (decaying) {
+				// Decay
+				if (decay < 1e-4) {
+					env = sustain;
+				}
+				else {
+					env += powf(base, 1 - decay) / maxTime * (sustain - env) / args.sampleRate;
+				}
 			}
 			else {
-				env += powf(base, 1 - decay) / maxTime * (sustain - env) / engineGetSampleRate();
+				// Attack
+				// Skip ahead if attack is all the way down (infinitely fast)
+				if (attack < 1e-4) {
+					env = 1.0f;
+				}
+				else {
+					env += powf(base, 1 - attack) / maxTime * (1.01 - env) / args.sampleRate;
+				}
+				if (env >= 1.0f) {
+					env = 1.0f;
+					decaying = true;
+				}
 			}
 		}
 		else {
-			// Attack
-			// Skip ahead if attack is all the way down (infinitely fast)
-			if (attack < 1e-4) {
-				env = 1.0f;
+			// Release
+			if (release < 1e-4) {
+				env = 0.0f;
 			}
 			else {
-				env += powf(base, 1 - attack) / maxTime * (1.01 - env) / engineGetSampleRate();
+				env += powf(base, 1 - release) / maxTime * (0.0 - env) / args.sampleRate;
 			}
-			if (env >= 1.0f) {
-				env = 1.0f;
-				decaying = true;
-			}
+			decaying = false;
 		}
+
+		bool sustaining = isNear(env, sustain, 1e-3);
+		bool resting = isNear(env, 0.0, 1e-3);
+
+		outputs[ENVELOPE_OUTPUT].setVoltage(10.0f * env);
+
+		// Lights
+		lights[ATTACK_LIGHT].value = (gated && !decaying) ? 1.0f : 0.0f;
+		lights[DECAY_LIGHT].value = (gated && decaying && !sustaining) ? 1.0f : 0.0f;
+		lights[SUSTAIN_LIGHT].value = (gated && decaying && sustaining) ? 1.0f : 0.0f;
+		lights[RELEASE_LIGHT].value = (!gated && !resting) ? 1.0f : 0.0f;
 	}
-	else {
-		// Release
-		if (release < 1e-4) {
-			env = 0.0f;
-		}
-		else {
-			env += powf(base, 1 - release) / maxTime * (0.0 - env) / engineGetSampleRate();
-		}
-		decaying = false;
-	}
-
-	bool sustaining = isNear(env, sustain, 1e-3);
-	bool resting = isNear(env, 0.0, 1e-3);
-
-	outputs[ENVELOPE_OUTPUT].value = 10.0f * env;
-
-	// Lights
-	lights[ATTACK_LIGHT].value = (gated && !decaying) ? 1.0f : 0.0f;
-	lights[DECAY_LIGHT].value = (gated && decaying && !sustaining) ? 1.0f : 0.0f;
-	lights[SUSTAIN_LIGHT].value = (gated && decaying && sustaining) ? 1.0f : 0.0f;
-	lights[RELEASE_LIGHT].value = (!gated && !resting) ? 1.0f : 0.0f;
-}
-
-
-
-struct ADSRWidget : ModuleWidget 
-{ 
-    ADSRWidget(ADSR *module);
 };
 
 
-ADSRWidget::ADSRWidget(ADSR *module) : ModuleWidget(module) {
-	box.size = Vec(RACK_GRID_WIDTH*8, RACK_GRID_HEIGHT);
 
-	{
-		SVGPanel *panel = new SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(SVG::load(assetPlugin(plugin, "res/ADSR.svg")));
-		addChild(panel);
+struct ADSRWidget : ModuleWidget { 
+   	 ADSRWidget(ADSR *module) {
+		setModule(module);
+		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ADSR.svg")));
+
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
+		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
+		
+		static const float posX[4] = {13.0f,39.0f,65.0f,91.0f};
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[0]+6, 74), module, ADSR::ATTACK_LIGHT));
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[1]+6, 74), module, ADSR::DECAY_LIGHT));
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[2]+6, 74), module, ADSR::SUSTAIN_LIGHT));
+		addChild(createLight<SmallLight<RedLight>>(Vec(posX[3]+6, 74), module, ADSR::RELEASE_LIGHT));
+
+		addParam(createParam<as_SlidePot>(Vec(posX[0]-3, 90), module, ADSR::ATTACK_PARAM));
+		addParam(createParam<as_SlidePot>(Vec(posX[1]-3, 90), module, ADSR::DECAY_PARAM));
+		addParam(createParam<as_SlidePot>(Vec(posX[2]-3, 90), module, ADSR::SUSTAIN_PARAM));
+		addParam(createParam<as_SlidePot>(Vec(posX[3]-3, 90), module, ADSR::RELEASE_PARAM));
+
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 217), module, ADSR::ATTACK_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[1]-4, 217), module, ADSR::DECAY_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[2]-4, 217), module, ADSR::SUSTAIN_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[3]-4, 217), module, ADSR::RELEASE_INPUT));
+
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0]-4, 310), module, ADSR::GATE_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(48, 310), module, ADSR::TRIG_INPUT));
+
+		addOutput(createOutput<as_PJ301MPort>(Vec(posX[3]-4, 310), module, ADSR::ENVELOPE_OUTPUT));
 	}
+};
 
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, 0)));
-	addChild(Widget::create<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	addChild(Widget::create<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
-	
-	static const float posX[4] = {13.0f,39.0f,65.0f,91.0f};
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[0]+6, 74), module, ADSR::ATTACK_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[1]+6, 74), module, ADSR::DECAY_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[2]+6, 74), module, ADSR::SUSTAIN_LIGHT));
-	addChild(ModuleLightWidget::create<SmallLight<RedLight>>(Vec(posX[3]+6, 74), module, ADSR::RELEASE_LIGHT));
-
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[0]-3, 90), module, ADSR::ATTACK_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[1]-3, 90), module, ADSR::DECAY_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[2]-3, 90), module, ADSR::SUSTAIN_PARAM, 0.0f, 1.0f, 0.5f));
-	addParam(ParamWidget::create<as_SlidePot>(Vec(posX[3]-3, 90), module, ADSR::RELEASE_PARAM, 0.0f, 1.0f, 0.5f));
-
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]-4, 217), Port::INPUT, module, ADSR::ATTACK_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[1]-4, 217), Port::INPUT, module, ADSR::DECAY_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[2]-4, 217), Port::INPUT, module, ADSR::SUSTAIN_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[3]-4, 217), Port::INPUT, module, ADSR::RELEASE_INPUT));
-
-	addInput(Port::create<as_PJ301MPort>(Vec(posX[0]-4, 310), Port::INPUT, module, ADSR::GATE_INPUT));
-	addInput(Port::create<as_PJ301MPort>(Vec(48, 310), Port::INPUT, module, ADSR::TRIG_INPUT));
-
-	addOutput(Port::create<as_PJ301MPort>(Vec(posX[3]-4, 310), Port::OUTPUT, module, ADSR::ENVELOPE_OUTPUT));
-}
-
-Model *modelADSR = Model::create<ADSR, ADSRWidget>("AS", "ADSR", "ADSR", ENVELOPE_GENERATOR_TAG);
+Model *modelADSR = createModel<ADSR, ADSRWidget>("ADSR");
