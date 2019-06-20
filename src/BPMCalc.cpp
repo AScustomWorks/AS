@@ -312,7 +312,7 @@ struct BPMCalc : Module {
 
 ////////////////////////////////////
 struct TempodisplayWidget : TransparentWidget {
-  std::string *value;
+  std::string *value = NULL;
   std::shared_ptr<Font> font;
 
   TempodisplayWidget() {
