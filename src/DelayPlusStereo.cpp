@@ -334,7 +334,7 @@ struct DelayPlusStereoFx : Module {
 ///////////////////////////////////
 struct MsDisplayWidget : TransparentWidget {
 
-  int *value;
+  int *value = NULL;
   std::shared_ptr<Font> font;
 
   MsDisplayWidget() {
@@ -363,6 +363,7 @@ struct MsDisplayWidget : TransparentWidget {
 
     std::stringstream to_display;   
     to_display << std::right  << std::setw(5) << *value;
+	//to_display << std::right << *value;
 
     Vec textPos = Vec(4.0f, 17.0f); 
 	/*

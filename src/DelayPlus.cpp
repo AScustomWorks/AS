@@ -240,6 +240,8 @@ struct MsDisplayWidget : TransparentWidget {
 
     std::stringstream to_display;   
     to_display << std::right  << std::setw(5) << *value;
+	//to_display << std::right << *value;
+
 
     Vec textPos = Vec(4.0f, 17.0f); 
 	/*

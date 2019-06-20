@@ -154,7 +154,7 @@ struct LaunchGate : Module {
 ///////////////////////////////////
 struct NumberDisplayWidget : TransparentWidget {
 
-  int *value;
+  int *value = NULL;
   std::shared_ptr<Font> font;
 
   NumberDisplayWidget() {
