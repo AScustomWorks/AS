@@ -345,6 +345,7 @@
       "name": "SuperDrive Fx",
       "description": "Overdrive FX with CV input for each parameter and bypass switch",
       "tags": [
+        "Distortion",
         "Effect"
       ]
     },
