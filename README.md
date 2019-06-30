@@ -18,6 +18,10 @@ If you enjoy those modules you can support the development by making a donation,
 
 # AS modules
 
+### V 1.0.1 update
+
+Small graphic refresh/fixes, output ports on every module are now gold colored to make easier to find them
+
 ### ADSR
 Fundamental ADSR module. Mods: graphics, sliders instead of knobs to provide faster visual input.
 
@@ -204,6 +208,8 @@ Delay the incomming CV signal by set milliseconds, with signal thru and delayed 
 V 0.5.5: First relase of this module.
 
 V 0.6,9: Small fix on the ms CV input to take the proper values fron BPM calc module.
+
+V 1.0.1: Changer thru port to act as pre/post delay with a switch for each channel (Omri Cohen request)
 
 ### CV 2 T
 CV to Trigger module. Feed a midi signal to the CV inputs and it will output one trigger signal when the incoming signal rises above 0v, and another trigger signal when the incoming signal returns to 0v. Useful to use your external hardware controller/keyboard as a trigger.

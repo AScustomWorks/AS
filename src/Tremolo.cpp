@@ -230,7 +230,7 @@ struct TremoloFxWidget : ModuleWidget {
 		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, TremoloFx::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, TremoloFx::SIGNAL_INPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, TremoloFx::SIGNAL_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, TremoloFx::SIGNAL_OUTPUT));
 		//CV INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, TremoloFx::WAVE_CV_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, TremoloFx::FREQ_CV_INPUT));

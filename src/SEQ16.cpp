@@ -419,10 +419,10 @@ struct SEQ16Widget : ModuleWidget {
 		addChild(createLight<MediumLight<RedLight>>(Vec(portX[14]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 1));
 		addChild(createLight<MediumLight<RedLight>>(Vec(portX[15]+elements_offst, main_lds_y+6), module, SEQ16::ROW_LIGHTS + 2));
 		//GATE/ROW OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(portX[12], 98), module, SEQ16::GATES_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(portX[13], 98), module, SEQ16::ROW1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(portX[14], 98), module, SEQ16::ROW2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(portX[15], 98), module, SEQ16::ROW3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(portX[12], 98), module, SEQ16::GATES_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(portX[13], 98), module, SEQ16::ROW1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(portX[14], 98), module, SEQ16::ROW2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(portX[15], 98), module, SEQ16::ROW3_OUTPUT));
 
 		for (int i = 0; i < 16; i++) {
 			//ROW KNOBS
@@ -433,7 +433,7 @@ struct SEQ16Widget : ModuleWidget {
 			addParam(createParam<LEDButton>(Vec(portX[i]+1.5, 284), module, SEQ16::GATE_PARAM + i));
 			addChild(createLight<MediumLight<RedLight>>(Vec(portX[i]+5.8, 287.9), module, SEQ16::GATE_LIGHTS + i));
 			//GATE STEPS OUT
-			addOutput(createOutput<as_PJ301MPort>(Vec(portX[i]-2, 310), module, SEQ16::GATE_OUTPUT + i));
+			addOutput(createOutput<as_PJ301MPortGold>(Vec(portX[i]-2, 310), module, SEQ16::GATE_OUTPUT + i));
 		}
 	}
 

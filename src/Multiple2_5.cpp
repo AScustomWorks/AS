@@ -127,20 +127,20 @@ struct Multiple2_5Widget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(8, 65), module, Multiple2_5::INPUT1));
 		addInput(createInput<as_PJ301MPort>(Vec(43, 65), module, Multiple2_5::INPUT2));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(8, 130), module, Multiple2_5::OUT11));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 130), module, Multiple2_5::OUT21));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 130), module, Multiple2_5::OUT11));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 130), module, Multiple2_5::OUT21));
 		
-		addOutput(createOutput<as_PJ301MPort>(Vec(8, 175), module, Multiple2_5::OUT12));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 175), module, Multiple2_5::OUT22));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 175), module, Multiple2_5::OUT12));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 175), module, Multiple2_5::OUT22));
 
-		addOutput(createOutput<as_PJ301MPort>(Vec(8, 220), module, Multiple2_5::OUT13));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 220), module, Multiple2_5::OUT23));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 220), module, Multiple2_5::OUT13));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 220), module, Multiple2_5::OUT23));
 
-		addOutput(createOutput<as_PJ301MPort>(Vec(8, 265), module, Multiple2_5::OUT14));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 265), module, Multiple2_5::OUT24));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 265), module, Multiple2_5::OUT14));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 265), module, Multiple2_5::OUT24));
 
-		addOutput(createOutput<as_PJ301MPort>(Vec(8, 310), module, Multiple2_5::OUT15));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 310), module, Multiple2_5::OUT25));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 310), module, Multiple2_5::OUT15));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 310), module, Multiple2_5::OUT25));
 
 	}
 };

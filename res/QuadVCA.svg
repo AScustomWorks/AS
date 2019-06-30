@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.7644161"
-     inkscape:cx="93.219432"
-     inkscape:cy="188.36489"
+     inkscape:zoom="2.7749192"
+     inkscape:cx="89.168921"
+     inkscape:cy="145.45263"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -37,7 +37,7 @@
      fit-margin-bottom="0"
      inkscape:window-width="1869"
      inkscape:window-height="1359"
-     inkscape:window-x="82"
+     inkscape:window-x="189"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      units="px"
@@ -333,7 +333,7 @@
     </g>
     <g
        id="g10729"
-       transform="translate(0,6)">
+       transform="translate(0,5.50612)">
       <path
          id="path12074-2-2"
          data-name="path12074-2"
@@ -536,28 +536,6 @@
        id="path297"
        style="fill:#fff7d4"
        d="m 181.5226,87.45032 a 0.5,0.5 0 0 1 -0.14,-0.37 v -4.89 a 0.5,0.5 0 0 1 0.14,-0.37 0.52,0.52 0 0 1 0.38,-0.13 h 1.64 a 3.07,3.07 0 0 1 2.23,0.77 3.34,3.34 0 0 1 0,4.32 3.07,3.07 0 0 1 -2.23,0.77 h -1.64 a 0.52,0.52 0 0 1 -0.38,-0.1 z m 2,-0.74 a 2.055,2.055 0 0 0 0,-4.11 h -1 v 4.11 z" />
-    <g
-       id="g5642"
-       transform="translate(80)">
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#fff7d4"
-         d="m 139.6978,331.7103 a 2.47,2.47 0 0 0 2.54,-2.46 2.53,2.53 0 0 0 -5.05,0 v 0 a 2.44,2.44 0 0 0 2.51,2.45 z m 0,-1 a 1.45,1.45 0 0 1 -1.43,-1.5 1.42,1.42 0 0 1 1.42,-1.48 1.44,1.44 0 0 1 1.45,1.48 v 0 a 1.43,1.43 0 0 1 -1.43,1.48 z"
-         data-name="path12074"
-         id="path12074-2" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#fff7d4"
-         d="m 145.3978,331.7103 a 1.92,1.92 0 0 0 2.09,-2.15 v -2.2 a 0.52,0.52 0 0 0 -1,0 v 2.25 c 0,0.75 -0.39,1.14 -1,1.14 -0.61,0 -1,-0.41 -1,-1.17 v -2.22 a 0.52,0.52 0 0 0 -0.52,-0.52 0.53,0.53 0 0 0 -0.52,0.52 v 2.23 a 1.89,1.89 0 0 0 2.05,2.12 z"
-         data-name="path12070"
-         id="path12070-2" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#fff7d4"
-         d="m 149.8178,331.1903 a 0.52,0.52 0 0 0 1,0 v -3.29 h 1 a 0.5,0.5 0 1 0 0,-1 h -3 a 0.5,0.5 0 0 0 0,1 h 1 z"
-         data-name="path12066"
-         id="path12066-2" />
-    </g>
     <g
        transform="translate(-1194.3022,-484.00276)"
        id="g2656">

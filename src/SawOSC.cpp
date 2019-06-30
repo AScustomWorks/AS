@@ -114,9 +114,9 @@ struct SawOscWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(18, 180), module, SawOsc::PW_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(18, 260), module, SawOsc::PITCH_INPUT));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(18, 310), module, SawOsc::OSC_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(18, 310), module, SawOsc::OSC_OUTPUT));
 	}
 };
 
 
-Model *modelSawOsc = createModel<SawOsc, SawOscWidget>("SawOsc");
+Model *modelSawOsc = createModel<SawOsc, SawOscWidget>("SawOSC");

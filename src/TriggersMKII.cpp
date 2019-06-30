@@ -198,7 +198,7 @@ struct TriggersMKIIWidget : ModuleWidget {
         addParam(createParam<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1));
         addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
         //PORTS
-        addOutput(createOutput<as_PJ301MPort>(Vec(7, 78), module, TriggersMKII::TRIGGER_OUT1));
+        addOutput(createOutput<as_PJ301MPortGold>(Vec(7, 78), module, TriggersMKII::TRIGGER_OUT1));
         addInput(createInput<as_PJ301MPort>(Vec(7, 104), module, TriggersMKII::CV_TRIG_INPUT_1));
 
         //TRIGGER 2
@@ -217,7 +217,7 @@ struct TriggersMKIIWidget : ModuleWidget {
         addParam(createParam<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2));
         addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));
         //PORTS
-        addOutput(createOutput<as_PJ301MPort>(Vec(7, 78+y_offset), module, TriggersMKII::MOMENTARY_OUT2));
+        addOutput(createOutput<as_PJ301MPortGold>(Vec(7, 78+y_offset), module, TriggersMKII::MOMENTARY_OUT2));
         addInput(createInput<as_PJ301MPort>(Vec(7, 104+y_offset), module, TriggersMKII::CV_TRIG_INPUT_2));
         
     }

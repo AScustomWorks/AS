@@ -157,7 +157,7 @@ struct WaveShaperWidget : ModuleWidget {
 		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, WaveShaper::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, WaveShaper::INPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, WaveShaper::OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, WaveShaper::OUTPUT));
 
 		//BYPASS CV INPUT
 		addInput(createInput<as_PJ301MPort>(Vec(10, 259), module, WaveShaper::BYPASS_CV_INPUT));

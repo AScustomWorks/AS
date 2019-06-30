@@ -14,7 +14,7 @@
    viewBox="0 0 6.3499999 6.3499998"
    version="1.1"
    id="svg15246"
-   sodipodi:docname="as-PJ301M.svg"
+   sodipodi:docname="as_PJ301M_output_port.svg"
    inkscape:version="0.92.2 5c3e80d, 2017-08-06">
   <defs
      id="defs15240">
@@ -170,7 +170,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -226,7 +226,7 @@
              d="M 31.920524,34.238381 A 15.655775,15.655775 0 1 1 47.576297,18.572479 15.676026,15.676026 0 0 1 31.920524,34.238381 Z"
              id="path874" />
           <path
-             style="fill:#000000;stroke:#646464;stroke-width:4.16666651px;fill-opacity:0;stroke-opacity:1"
+             style="fill:#000000;stroke:#b29553;stroke-width:4.16666651px;fill-opacity:0;stroke-opacity:1"
              inkscape:connector-curvature="0"
              d="m 31.903357,30.065473 a 11.479166,11.479166 0 1 1 11.5,-11.479166 v 0 a 11.5,11.5 0 0 1 -11.5,11.479166 z"
              class="cls-6"

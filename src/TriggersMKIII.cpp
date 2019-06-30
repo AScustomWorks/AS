@@ -194,7 +194,7 @@ struct TriggersMKIIIWidget : ModuleWidget {
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(8, 90), module, TriggersMKIII::CV_TRIG_INPUT_1_1));
         addInput(createInput<as_PJ301MPort>(Vec(33, 90), module, TriggersMKIII::CV_TRIG_INPUT_1_2));
-        addOutput(createOutput<as_PJ301MPort>(Vec(58, 90), module, TriggersMKIII::TRIGGER_OUT1));
+        addOutput(createOutput<as_PJ301MPortGold>(Vec(58, 90), module, TriggersMKIII::TRIGGER_OUT1));
 
         //TRIGGER 2
         
@@ -213,7 +213,7 @@ struct TriggersMKIIIWidget : ModuleWidget {
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(8, 90+y_offset), module, TriggersMKIII::CV_TRIG_INPUT_2_1));
         addInput(createInput<as_PJ301MPort>(Vec(33, 90+y_offset), module, TriggersMKIII::CV_TRIG_INPUT_2_2));
-        addOutput(createOutput<as_PJ301MPort>(Vec(58, 90+y_offset), module, TriggersMKIII::TRIGGER_OUT2));
+        addOutput(createOutput<as_PJ301MPortGold>(Vec(58, 90+y_offset), module, TriggersMKIII::TRIGGER_OUT2));
 
     
     }   

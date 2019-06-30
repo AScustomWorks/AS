@@ -26,10 +26,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.0696518"
-     inkscape:cx="14.703179"
-     inkscape:cy="39.580627"
+     inkscape:cx="17.859214"
+     inkscape:cy="63.250892"
      inkscape:document-units="px"
-     inkscape:current-layer="g922"
+     inkscape:current-layer="layer2"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -38,7 +38,7 @@
      inkscape:snap-bbox-edge-midpoints="true"
      inkscape:window-width="1259"
      inkscape:window-height="1377"
-     inkscape:window-x="599"
+     inkscape:window-x="510"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      showguides="true"
@@ -86,13 +86,6 @@
          id="polygon164"
          transform="matrix(1,0,0,1.8212547,0,-22.815527)" />
     </g>
-    <rect
-       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.18216543;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect1759-2"
-       width="15.874999"
-       height="3.9687505"
-       x="5.2853608e-07"
-       y="96.572914" />
     <g
        transform="matrix(2.0981223,0,0,2.0981223,-117.89568,-706.23001)"
        data-name="Layer 2"
@@ -110,6 +103,19 @@
            id="path1657-5" />
       </g>
     </g>
+    <path
+       sodipodi:nodetypes="sssssssss"
+       style="display:inline;fill:#202020;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2330292"
+       d="m 14.900281,68.793431 c 0,-0.43021 -0.352578,-0.78172 -0.782786,-0.78172 H 9.6950119 c -0.430208,0 -0.782786,0.35151 -0.782786,0.78172 v 22.891904 c 0,0.43022 0.352578,0.7828 0.782786,0.7828 h 4.4224831 c 0.430208,0 0.782786,-0.35258 0.782786,-0.7828 z"
+       id="path1041"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="opacity:1;vector-effect:none;fill:#3c3835;fill-opacity:1;stroke:none;stroke-width:0.18216543;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect1759-2"
+       width="15.874999"
+       height="3.9687505"
+       x="5.2853608e-07"
+       y="96.572914" />
     <rect
        y="-1.4210855e-14"
        x="5.2853608e-07"

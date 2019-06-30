@@ -252,7 +252,7 @@ struct StepsWidget : ModuleWidget {
 
       addInput(createInput<as_PJ301MPort>(Vec(3, 120), module, Steps::RESET_IN_1));
       addInput(createInput<as_PJ301MPort>(Vec(33, 120), module, Steps::CLK_IN_1));
-      addOutput(createOutput<as_PJ301MPort>(Vec(63, 120), module, Steps::OUTPUT_1));
+      addOutput(createOutput<as_PJ301MPortGold>(Vec(63, 120), module, Steps::OUTPUT_1));
 
     // counter 2
     //COUNT DISPLAY
@@ -279,7 +279,7 @@ struct StepsWidget : ModuleWidget {
 
       addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset), module, Steps::RESET_IN_2));
       addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset), module, Steps::CLK_IN_2));
-      addOutput(createOutput<as_PJ301MPort>(Vec(63, 120 + group_offset), module, Steps::OUTPUT_2));
+      addOutput(createOutput<as_PJ301MPortGold>(Vec(63, 120 + group_offset), module, Steps::OUTPUT_2));
 
     // counter 3
     //COUNT DISPLAY
@@ -306,7 +306,7 @@ struct StepsWidget : ModuleWidget {
 
       addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset*2), module, Steps::RESET_IN_3));
       addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset*2), module, Steps::CLK_IN_3));
-      addOutput(createOutput<as_PJ301MPort>(Vec(63, 120 + group_offset*2), module, Steps::OUTPUT_3));	  
+      addOutput(createOutput<as_PJ301MPortGold>(Vec(63, 120 + group_offset*2), module, Steps::OUTPUT_3));	  
   }
 };
 

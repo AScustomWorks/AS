@@ -47,8 +47,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.4660084"
-     inkscape:cx="77.194661"
-     inkscape:cy="310.56423"
+     inkscape:cx="43.532071"
+     inkscape:cy="61.753782"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -332,7 +332,7 @@
          id="path199" />
     </g>
     <path
-       style="display:inline;fill:#202020;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2330292"
+       style="display:inline;fill:#141414;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2330292"
        d="m 21.508559,275.90368 c 0,-0.43021 -0.352577,-0.78171 -0.782785,-0.78171 h -6.009987 c -0.430208,0 -0.782787,0.3515 -0.782787,0.78171 v 9.13358 c 0,0.43022 0.352579,0.78279 0.782787,0.78279 h 6.009987 c 0.430208,0 0.782785,-0.35257 0.782785,-0.78279 z m 0,0"
        id="path25377"
        inkscape:connector-curvature="0" />
@@ -352,15 +352,6 @@
          style="display:inline;fill:#fff7d4;fill-opacity:1;stroke:none;stroke-width:0.2330292"
          d="m 19.080558,277.40806 c 0,0.0776 0.06038,0.13801 0.138012,0.13801 0.07763,0 0.138012,-0.0604 0.138012,-0.13801 v -0.8712 h 0.263087 c 0.07332,0 0.129386,-0.0561 0.129386,-0.12939 0,-0.069 -0.05607,-0.12507 -0.129386,-0.12507 H 18.81316 c -0.06901,0 -0.125072,0.0561 -0.125072,0.12507 0,0.0733 0.05607,0.12939 0.125072,0.12939 h 0.267398 z m 0,0"
          id="path12066"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       transform="translate(-16.881907,193.81249)"
-       id="g2847">
-      <path
-         style="display:inline;fill:#202020;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.2330292"
-         d="m 26.368901,82.091199 c 0,-0.43021 -0.352577,-0.78171 -0.782785,-0.78171 h -6.009987 c -0.430208,0 -0.782787,0.3515 -0.782787,0.78171 v 9.13358 c 0,0.43022 0.352579,0.78279 0.782787,0.78279 h 6.009987 c 0.430208,0 0.782785,-0.35257 0.782785,-0.78279 z m 0,0"
-         id="path2839"
          inkscape:connector-curvature="0" />
     </g>
     <g

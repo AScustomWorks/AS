@@ -437,12 +437,12 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(150, 187), module, DelayPlusStereoFx::COLOR_CV_INPUT_2));
 
 		//DELAY SIGNAL SEND L
-		addOutput(createOutput<as_PJ301MPort>(Vec(15, 224), module, DelayPlusStereoFx::COLOR_SEND_1));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(15, 224), module, DelayPlusStereoFx::COLOR_SEND_1));
 		//DELAY SIGNAL RETURN L
 		addInput(createInput<as_PJ301MPort>(Vec(50, 224), module, DelayPlusStereoFx::COLOR_RETURN_1));
 
 		//DELAY SIGNAL SEND R
-		addOutput(createOutput<as_PJ301MPort>(Vec(105, 224), module, DelayPlusStereoFx::COLOR_SEND_2));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(105, 224), module, DelayPlusStereoFx::COLOR_SEND_2));
 		//DELAY SIGNAL RETURN R
 		addInput(createInput<as_PJ301MPort>(Vec(140, 224), module, DelayPlusStereoFx::COLOR_RETURN_2));
 
@@ -453,9 +453,9 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		//SIGNAL INPUT R
 		addInput(createInput<as_PJ301MPort>(Vec(20, 330), module, DelayPlusStereoFx::SIGNAL_INPUT_2));
 		//SIGNAL OUTPUT L
-		addOutput(createOutput<as_PJ301MPort>(Vec(135, 300), module, DelayPlusStereoFx::SIGNAL_OUTPUT_1));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(135, 300), module, DelayPlusStereoFx::SIGNAL_OUTPUT_1));
 		//SIGNAL OUTPUT R
-		addOutput(createOutput<as_PJ301MPort>(Vec(135, 330), module, DelayPlusStereoFx::SIGNAL_OUTPUT_2));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(135, 330), module, DelayPlusStereoFx::SIGNAL_OUTPUT_2));
 
 		//BYPASS CV INPUT
 		addInput(createInput<as_PJ301MPort>(Vec(78, 322), module, DelayPlusStereoFx::BYPASS_CV_INPUT));

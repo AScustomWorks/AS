@@ -94,10 +94,10 @@ struct SineOscWidget : ModuleWidget {
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18, 260), module, SineOsc::FREQ_CV));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(18, 310), module, SineOsc::OSC_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(18, 310), module, SineOsc::OSC_OUTPUT));
 		
 	}
 };
 
 
-Model *modelSineOsc = createModel<SineOsc, SineOscWidget>("SineOsc");
+Model *modelSineOsc = createModel<SineOsc, SineOscWidget>("SineOSC");

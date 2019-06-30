@@ -418,17 +418,17 @@ struct Mixer8chWidget : ModuleWidget{
 		addInput(createInput<as_PJ301MPort>(Vec(columnPos[7], portsY[1]), module, Mixer8ch::CH8_CV_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(columnPos[7], portsY[2]), module, Mixer8ch::CH8_CV_PAN_INPUT));
 
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[0], portsY[3]), module, Mixer8ch::CH1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[1], portsY[3]), module, Mixer8ch::CH2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[2], portsY[3]), module, Mixer8ch::CH3_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[3], portsY[3]), module, Mixer8ch::CH4_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[4], portsY[3]), module, Mixer8ch::CH5_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[5], portsY[3]), module, Mixer8ch::CH6_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[6], portsY[3]), module, Mixer8ch::CH7_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[7], portsY[3]), module, Mixer8ch::CH8_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[0], portsY[3]), module, Mixer8ch::CH1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[1], portsY[3]), module, Mixer8ch::CH2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[2], portsY[3]), module, Mixer8ch::CH3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[3], portsY[3]), module, Mixer8ch::CH4_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[4], portsY[3]), module, Mixer8ch::CH5_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[5], portsY[3]), module, Mixer8ch::CH6_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[6], portsY[3]), module, Mixer8ch::CH7_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[7], portsY[3]), module, Mixer8ch::CH8_OUTPUT));
 		//OUTPUT
-		addOutput(createOutput<as_PJ301MPort>(Vec(356, portsY[0]), module, Mixer8ch::MIX_OUTPUTL));
-		addOutput(createOutput<as_PJ301MPort>(Vec(356, portsY[1]), module, Mixer8ch::MIX_OUTPUTR));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(356, portsY[0]), module, Mixer8ch::MIX_OUTPUTL));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(356, portsY[1]), module, Mixer8ch::MIX_OUTPUTR));
 		addInput(createInput<as_PJ301MPort>(Vec(356, portsY[3]), module, Mixer8ch::MIX_CV_INPUT));
 		addParam(createParam<as_FaderPot>(Vec(356, volPosY), module, Mixer8ch::MIX_PARAM));
 		addParam(createParam<LEDBezel>(Vec(356, mutePosY), module, Mixer8ch::MASTER_MUTE ));

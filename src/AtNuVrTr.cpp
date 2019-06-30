@@ -101,7 +101,7 @@ struct AtNuVrTrWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(4, 106), module, AtNuVrTr::CV_OFFSET_1));
 
 		addInput(createInput<as_PJ301MPort>(Vec(8, 165), module, AtNuVrTr::IN1_INPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 165), module, AtNuVrTr::OUT1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 165), module, AtNuVrTr::OUT1_OUTPUT));
 		//ATTN 2
 		addParam(createParam<as_KnobBlack>(Vec(34, 45+group_offset), module, AtNuVrTr::ATEN2_PARAM));
 		addParam(createParam<as_Knob>(Vec(34, 100+group_offset), module, AtNuVrTr::OFFSET2_PARAM));
@@ -112,7 +112,7 @@ struct AtNuVrTrWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(4, 106+group_offset), module, AtNuVrTr::CV_OFFSET_2));
 
 		addInput(createInput<as_PJ301MPort>(Vec(8, 165+group_offset), module, AtNuVrTr::IN2_INPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 165+group_offset), module, AtNuVrTr::OUT2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 165+group_offset), module, AtNuVrTr::OUT2_OUTPUT));
 
 	}
 };

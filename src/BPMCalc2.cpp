@@ -395,31 +395,31 @@ struct BPMCalc2Widget : ModuleWidget {
     //MS outputs
     int const out_offset = 40;
     // 1 
-    addOutput(createOutput<as_PJ301MPort>(Vec(84, 126), module, BPMCalc2::MS_OUTPUT + 0));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(84, 126), module, BPMCalc2::MS_OUTPUT + 0));
     //·1/2 - 1/2 - t1/2
-    addOutput(createOutput<as_PJ301MPort>(Vec(8, 126+out_offset*1), module, BPMCalc2::MS_OUTPUT + 1));
-    addOutput(createOutput<as_PJ301MPort>(Vec(48, 126+out_offset*1), module, BPMCalc2::MS_OUTPUT + 2));
-    addOutput(createOutput<as_PJ301MPort>(Vec(84, 126+out_offset*1), module, BPMCalc2::MS_OUTPUT + 3));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 126+out_offset*1), module, BPMCalc2::MS_OUTPUT + 1));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(48, 126+out_offset*1), module, BPMCalc2::MS_OUTPUT + 2));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(84, 126+out_offset*1), module, BPMCalc2::MS_OUTPUT + 3));
     // ·1/4 - 1/4 -  t1/4
-    addOutput(createOutput<as_PJ301MPort>(Vec(8, 126+out_offset*2), module, BPMCalc2::MS_OUTPUT + 4));
-    addOutput(createOutput<as_PJ301MPort>(Vec(48, 126+out_offset*2), module, BPMCalc2::MS_OUTPUT + 5));
-    addOutput(createOutput<as_PJ301MPort>(Vec(84, 126+out_offset*2), module, BPMCalc2::MS_OUTPUT + 6));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 126+out_offset*2), module, BPMCalc2::MS_OUTPUT + 4));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(48, 126+out_offset*2), module, BPMCalc2::MS_OUTPUT + 5));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(84, 126+out_offset*2), module, BPMCalc2::MS_OUTPUT + 6));
 
     // ·1/8 - 1/8 - t1/8
-  addOutput(createOutput<as_PJ301MPort>(Vec(8, 126+out_offset*3), module, BPMCalc2::MS_OUTPUT + 7));
-    addOutput(createOutput<as_PJ301MPort>(Vec(48, 126+out_offset*3), module, BPMCalc2::MS_OUTPUT + 8));
-    addOutput(createOutput<as_PJ301MPort>(Vec(84, 126+out_offset*3), module, BPMCalc2::MS_OUTPUT + 9));
+  addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 126+out_offset*3), module, BPMCalc2::MS_OUTPUT + 7));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(48, 126+out_offset*3), module, BPMCalc2::MS_OUTPUT + 8));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(84, 126+out_offset*3), module, BPMCalc2::MS_OUTPUT + 9));
     // ·1/16 - 1/16
-    addOutput(createOutput<as_PJ301MPort>(Vec(8, 126+out_offset*4), module, BPMCalc2::MS_OUTPUT + 10));
-    addOutput(createOutput<as_PJ301MPort>(Vec(48, 126+out_offset*4), module, BPMCalc2::MS_OUTPUT + 11));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 126+out_offset*4), module, BPMCalc2::MS_OUTPUT + 10));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(48, 126+out_offset*4), module, BPMCalc2::MS_OUTPUT + 11));
 
     // t1/16 - ·1/32
-    addOutput(createOutput<as_PJ301MPort>(Vec(84, 126+out_offset*4), module, BPMCalc2::MS_OUTPUT + 12));
-    addOutput(createOutput<as_PJ301MPort>(Vec(8, 126+out_offset*5), module, BPMCalc2::MS_OUTPUT + 13));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(84, 126+out_offset*4), module, BPMCalc2::MS_OUTPUT + 12));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 126+out_offset*5), module, BPMCalc2::MS_OUTPUT + 13));
     
     // 1/32 - t1/32
-    addOutput(createOutput<as_PJ301MPort>(Vec(48, 126+out_offset*5), module, BPMCalc2::MS_OUTPUT + 14));
-    addOutput(createOutput<as_PJ301MPort>(Vec(84, 126+out_offset*5), module, BPMCalc2::MS_OUTPUT + 15));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(48, 126+out_offset*5), module, BPMCalc2::MS_OUTPUT + 14));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(84, 126+out_offset*5), module, BPMCalc2::MS_OUTPUT + 15));
     
   }
 };

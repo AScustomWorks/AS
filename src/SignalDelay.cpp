@@ -17,6 +17,8 @@ struct SignalDelay : Module {
 	enum ParamIds {
 		TIME_1_PARAM,
 		TIME_2_PARAM,
+		SWITCH_1_MODE,
+		SWITCH_2_MODE,
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -27,8 +29,8 @@ struct SignalDelay : Module {
 		NUM_INPUTS
 	};
 	enum OutputIds {
-		THRU_1_OUTPUT,
-		THRU_2_OUTPUT,
+		SEND_1_OUTPUT,
+		SEND_2_OUTPUT,
 		OUT_1_OUTPUT,
 		OUT_2_OUTPUT,
 		NUM_OUTPUTS
@@ -39,23 +41,29 @@ struct SignalDelay : Module {
 	dsp::SampleRateConverter<1> src1;
 	float lastWet1 = 0.0f;
 	int lcd_tempo1 = 0;
+	int snd_mode_1 = 0;
 
 	dsp::DoubleRingBuffer<float, HISTORY_SIZE> historyBuffer2;
 	dsp::DoubleRingBuffer<float, 16> outBuffer2;
 	dsp::SampleRateConverter<1> src2;
 	float lastWet2 = 0.0f;
 	int lcd_tempo2 = 0;
+	int snd_mode_2 = 0;
 
 
 	SignalDelay() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
 		configParam(SignalDelay::TIME_1_PARAM, 0.0f, 10.0f, 0.350f, "CH 1 Time");
 		configParam(SignalDelay::TIME_2_PARAM, 0.0f, 10.0f, 0.350f, "CH 2 Time");
+		configParam(SignalDelay::SWITCH_1_MODE, 0.0f, 1.0f, 1.0f, "CH 1 send output mode: Pre/Post delay");
+		configParam(SignalDelay::SWITCH_2_MODE, 0.0f, 1.0f, 1.0f, "CH 2 send output mode: Pre/Post delay");
 
 	}
 
 
 	void process(const ProcessArgs &args) override {
+
+		snd_mode_1 = params[SWITCH_1_MODE].getValue();
 
 		// DELAY 1 Get input to delay block
 		float in1 = inputs[IN_1_INPUT].getVoltage();
@@ -97,10 +105,16 @@ struct SignalDelay : Module {
 		if (!outBuffer1.empty()) {
 			wet1 = outBuffer1.shift();
 		}
-		outputs[THRU_1_OUTPUT].setVoltage(in1);
+		if(snd_mode_1){
+			outputs[SEND_1_OUTPUT].setVoltage(in1);
+		}else{
+			outputs[SEND_1_OUTPUT].setVoltage(wet1);
+		}
 		outputs[OUT_1_OUTPUT].setVoltage(wet1);	
 		lastWet1 = wet1;
 
+		//DELAY 2
+		snd_mode_2 = params[SWITCH_2_MODE].getValue();
 		// DELAY 2 Get input to delay block
 		float in2 = inputs[IN_2_INPUT].getVoltage();
 		float feedback2 = 0;//only one repetition, for regular use: clamp(params[FEEDBACK_PARAM].getValue() + inputs[FEEDBACK_INPUT].getVoltage() / 10.0, 0.0, 1.0);
@@ -141,7 +155,11 @@ struct SignalDelay : Module {
 		if (!outBuffer2.empty()) {
 			wet2 = outBuffer2.shift();
 		}
-		outputs[THRU_2_OUTPUT].setVoltage(in2);
+		if(snd_mode_2){
+			outputs[SEND_2_OUTPUT].setVoltage(in2);
+		}else{
+			outputs[SEND_2_OUTPUT].setVoltage(wet2);
+		}
 		outputs[OUT_2_OUTPUT].setVoltage(wet2);	
 		lastWet2 = wet2;
 	}
@@ -205,21 +223,21 @@ struct SignalDelayWidget : ModuleWidget {
 		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		//KNOBS
-		addParam(createParam<as_KnobBlack>(Vec(47, 80), module, SignalDelay::TIME_1_PARAM));
+		addParam(createParam<as_KnobBlack>(Vec(47, 77), module, SignalDelay::TIME_1_PARAM));
 		//CV INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 87), module, SignalDelay::TIME_1_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 84), module, SignalDelay::TIME_1_INPUT));
 		//INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(posX[0], 160), module, SignalDelay::IN_1_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0], 166), module, SignalDelay::IN_1_INPUT));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[1], 160), module, SignalDelay::THRU_1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[2], 160), module, SignalDelay::OUT_1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[1], 166), module, SignalDelay::SEND_1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[2], 166), module, SignalDelay::OUT_1_OUTPUT));
 
 		//DELAY 2
 		//MS DISPLAY 
 		static const int mod_offset=160;
 		
 		MsDelayDisplayWidget *display2 = new MsDelayDisplayWidget();
-		display2->box.pos = Vec(10,50+mod_offset);
+		display2->box.pos = Vec(10,44+mod_offset);
 		display2->box.size = Vec(70, 20);
 		if (module) {
             display2->value = &module->lcd_tempo2;
@@ -227,14 +245,19 @@ struct SignalDelayWidget : ModuleWidget {
 		addChild(display2); 
 		
 		//KNOBS
-		addParam(createParam<as_KnobBlack>(Vec(47, 80+mod_offset), module, SignalDelay::TIME_2_PARAM));
+		addParam(createParam<as_KnobBlack>(Vec(47, 71+mod_offset), module, SignalDelay::TIME_2_PARAM));
 		//CV INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 87+mod_offset), module, SignalDelay::TIME_2_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0]+5, 78+mod_offset), module, SignalDelay::TIME_2_INPUT));
 		//INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(posX[0], 160+mod_offset), module, SignalDelay::IN_2_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(posX[0], 159+mod_offset), module, SignalDelay::IN_2_INPUT));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[1], 160+mod_offset), module, SignalDelay::THRU_2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[2], 160+mod_offset), module, SignalDelay::OUT_2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[1], 159+mod_offset), module, SignalDelay::SEND_2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[2], 159+mod_offset), module, SignalDelay::OUT_2_OUTPUT));
+
+		//SEND MODE SWITCH THRU/DELAYED
+		addParam(createParam<as_CKSSH>(Vec(33, 131), module, SignalDelay::SWITCH_1_MODE));
+		addParam(createParam<as_CKSSH>(Vec(33, 125+mod_offset), module, SignalDelay::SWITCH_2_MODE));
+
 	}
 };
 

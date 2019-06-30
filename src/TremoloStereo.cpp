@@ -263,8 +263,8 @@ struct TremoloStereoFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(15, 300), module, TremoloStereoFx::SIGNAL_INPUT_L));
 		addInput(createInput<as_PJ301MPort>(Vec(15, 330), module, TremoloStereoFx::SIGNAL_INPUT_R));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(50, 300), module, TremoloStereoFx::SIGNAL_OUTPUT_L));
-		addOutput(createOutput<as_PJ301MPort>(Vec(50, 330), module, TremoloStereoFx::SIGNAL_OUTPUT_R));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(50, 300), module, TremoloStereoFx::SIGNAL_OUTPUT_L));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(50, 330), module, TremoloStereoFx::SIGNAL_OUTPUT_R));
 		//RESET CV
 		addInput(createInput<as_PJ301MPort>(Vec(6, 259), module, TremoloStereoFx::RESET_CV_INPUT));
 

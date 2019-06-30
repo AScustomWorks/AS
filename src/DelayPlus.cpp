@@ -293,14 +293,14 @@ struct DelayPlusFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(10, 95+y_offset), module, DelayPlusFx::FEEDBACK_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(10, 145+y_offset), module, DelayPlusFx::COLOR_INPUT));
 		//DELAY SIGNAL SEND
-		addOutput(createOutput<as_PJ301MPort>(Vec(20, 184+y_offset), module, DelayPlusFx::COLOR_SEND));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(20, 184+y_offset), module, DelayPlusFx::COLOR_SEND));
 		//DELAY SIGNAL RETURN
 		addInput(createInput<as_PJ301MPort>(Vec(75, 184+y_offset), module, DelayPlusFx::COLOR_RETURN));
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 220+y_offset), module, DelayPlusFx::MIX_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, DelayPlusFx::IN_INPUT));
 		//OUTPUT
-		addOutput(createOutput<as_PJ301MPort>(Vec(85, 310), module, DelayPlusFx::OUT_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(85, 310), module, DelayPlusFx::OUT_OUTPUT));
 
 		//BYPASS CV INPUT
 		addInput(createInput<as_PJ301MPort>(Vec(49, 320), module, DelayPlusFx::BYPASS_CV_INPUT));

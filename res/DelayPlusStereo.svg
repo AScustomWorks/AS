@@ -66,11 +66,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.7455988"
-     inkscape:cx="102.74538"
-     inkscape:cy="196.65597"
+     inkscape:zoom="11.915654"
+     inkscape:cx="154.04036"
+     inkscape:cy="52.666754"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="g1005"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -78,8 +78,8 @@
      fit-margin-bottom="0"
      inkscape:window-width="1716"
      inkscape:window-height="1300"
-     inkscape:window-x="37"
-     inkscape:window-y="94"
+     inkscape:window-x="68"
+     inkscape:window-y="7"
      inkscape:window-maximized="0"
      units="px"
      showguides="true"
@@ -141,6 +141,32 @@
        data-name="rect817"
        d="M -4e-6,-8.0744425e-6 H 180 V 379.99997 H -4e-6 Z"
        style="display:inline;fill:url(#linear-gradient-4-2);stroke-width:1.4142133" />
+    <g
+       transform="matrix(3.7795273,0,0,3.7795273,-31.997786,9.745101)"
+       id="g1043">
+      <g
+         id="g1005"
+         transform="translate(-12.239065,-0.18512585)">
+        <rect
+           transform="rotate(-90)"
+           ry="0.7838282"
+           y="56.772095"
+           x="-91.299667"
+           height="10.583334"
+           width="6.3500004"
+           id="rect1003"
+           style="display:inline;opacity:1;vector-effect:none;fill:#141414;fill-opacity:1;stroke:none;stroke-width:0.65668017;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers" />
+        <rect
+           style="display:inline;opacity:1;vector-effect:none;fill:#141414;fill-opacity:1;stroke:none;stroke-width:0.65668017;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+           id="rect1001"
+           width="6.3500004"
+           height="10.583334"
+           x="-83.282791"
+           y="56.772095"
+           ry="0.7838282"
+           transform="rotate(-90)" />
+      </g>
+    </g>
     <g
        transform="matrix(7.9299105,0,0,7.9299105,-385.58992,-2669.2156)"
        data-name="Layer 2"

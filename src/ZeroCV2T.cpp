@@ -205,7 +205,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60), module, ZeroCV2T::CV_IN_1));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(32, 100), module, ZeroCV2T::TRIG_OUT_1));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(32, 100), module, ZeroCV2T::TRIG_OUT_1));
 		//CV 2 TRIG 2
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101+gp_offset*1), module, ZeroCV2T::TRIG_SWITCH_2 ));
@@ -213,7 +213,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*1), module, ZeroCV2T::CV_IN_2));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(32, 100+gp_offset*1), module, ZeroCV2T::TRIG_OUT_2));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(32, 100+gp_offset*1), module, ZeroCV2T::TRIG_OUT_2));
 		//CV 2 TRIG 3
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101+gp_offset*2), module, ZeroCV2T::TRIG_SWITCH_3 ));
@@ -221,7 +221,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*2), module, ZeroCV2T::CV_IN_3));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(32, 100+gp_offset*2), module, ZeroCV2T::TRIG_OUT_3));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(32, 100+gp_offset*2), module, ZeroCV2T::TRIG_OUT_3));
 		//CV 2 TRIG 4
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101+gp_offset*3), module, ZeroCV2T::TRIG_SWITCH_4 ));
@@ -229,7 +229,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*3), module, ZeroCV2T::CV_IN_4));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(32, 100+gp_offset*3), module, ZeroCV2T::TRIG_OUT_4));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(32, 100+gp_offset*3), module, ZeroCV2T::TRIG_OUT_4));
 		
 	}
 };

@@ -189,7 +189,7 @@ struct SuperDriveFxWidget : ModuleWidget {
 		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, SuperDriveFx::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, SuperDriveFx::SIGNAL_INPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, SuperDriveFx::SIGNAL_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, SuperDriveFx::SIGNAL_OUTPUT));
 		//CV INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, SuperDriveFx::DRIVE_CV_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, SuperDriveFx::TONE_CV_INPUT));

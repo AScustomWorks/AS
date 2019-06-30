@@ -206,7 +206,7 @@ struct TriggersMKIWidget : ModuleWidget {
 
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(10, 145), module, TriggersMKI::CV_RUN_INPUT));
-        addOutput(createOutput<as_PJ301MPort>(Vec(55, 145), module, TriggersMKI::TRIGGER_OUT));
+        addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 145), module, TriggersMKI::TRIGGER_OUT));
 
     }
 };

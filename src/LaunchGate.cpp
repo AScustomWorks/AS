@@ -223,7 +223,7 @@ struct LaunchGateWidget : ModuleWidget {
       addInput(createInput<as_PJ301MPort>(Vec(55, 125), module, LaunchGate::CLK_IN_1));
 
       addInput(createInput<as_PJ301MPort>(Vec(10, 170), module, LaunchGate::INPUT_1));
-      addOutput(createOutput<as_PJ301MPort>(Vec(55, 170), module, LaunchGate::OUTPUT_1));
+      addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 170), module, LaunchGate::OUTPUT_1));
     
     // counter 2
     //COUNT DISPLAY
@@ -252,7 +252,7 @@ struct LaunchGateWidget : ModuleWidget {
       addInput(createInput<as_PJ301MPort>(Vec(55, 125 + group_offset), module, LaunchGate::CLK_IN_2));
 
       addInput(createInput<as_PJ301MPort>(Vec(10, 170 + group_offset), module, LaunchGate::INPUT_2));
-      addOutput(createOutput<as_PJ301MPort>(Vec(55, 170 + group_offset), module, LaunchGate::OUTPUT_2));
+      addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 170 + group_offset), module, LaunchGate::OUTPUT_2));
   
   }
 };

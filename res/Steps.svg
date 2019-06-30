@@ -36,17 +36,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="996"
-     inkscape:window-height="1353"
+     inkscape:window-width="1904"
+     inkscape:window-height="1367"
      id="namedview37"
      showgrid="false"
      inkscape:zoom="3.181579"
-     inkscape:cx="12.311818"
+     inkscape:cx="-45.521101"
      inkscape:cy="190"
      inkscape:window-x="9"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="layer2" />
+     inkscape:current-layer="g957" />
   <defs
      id="defs4">
     <style
@@ -219,7 +219,7 @@
        transform="translate(-126.15609,71.000498)">
       <g
          id="g2081"
-         transform="translate(-181.01864,-499.27746)">
+         transform="translate(-179.01864,-499.27746)">
         <path
            id="path2075"
            style="fill:#fff7d4"
@@ -275,7 +275,7 @@
       </g>
       <g
          id="g920"
-         transform="translate(-181.01864,-499.27746)">
+         transform="translate(-183.01864,-499.27746)">
         <path
            style="fill:#fff8d5"
            transform="translate(319.8,124.29)"
@@ -300,7 +300,7 @@
        transform="translate(-126.15609,171.0005)"
        id="g927">
       <g
-         transform="translate(-181.01864,-499.27746)"
+         transform="translate(-179.01864,-499.27746)"
          id="g905">
         <path
            inkscape:connector-curvature="0"
@@ -356,7 +356,7 @@
            id="path915" />
       </g>
       <g
-         transform="translate(-181.01864,-499.27746)"
+         transform="translate(-183.01864,-499.27746)"
          id="g925">
         <path
            inkscape:connector-curvature="0"
@@ -383,7 +383,7 @@
        transform="translate(-126.15609,270.8005)">
       <g
          id="g935"
-         transform="translate(-181.01864,-499.27746)">
+         transform="translate(-179.01864,-499.27746)">
         <path
            id="path929"
            style="fill:#fff7d4"
@@ -439,7 +439,7 @@
       </g>
       <g
          id="g955"
-         transform="translate(-181.01864,-499.27746)">
+         transform="translate(-183.01864,-499.27746)">
         <path
            style="fill:#fff8d5"
            transform="translate(319.8,124.29)"

@@ -214,8 +214,8 @@ struct ReverbStereoFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(15, 300), module, ReverbStereoFx::SIGNAL_INPUT_L));
 		addInput(createInput<as_PJ301MPort>(Vec(15, 330), module, ReverbStereoFx::SIGNAL_INPUT_R));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(50, 300), module, ReverbStereoFx::SIGNAL_OUTPUT_L));
-		addOutput(createOutput<as_PJ301MPort>(Vec(50, 330), module, ReverbStereoFx::SIGNAL_OUTPUT_R));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(50, 300), module, ReverbStereoFx::SIGNAL_OUTPUT_L));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(50, 330), module, ReverbStereoFx::SIGNAL_OUTPUT_R));
 		//CV INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, ReverbStereoFx::DECAY_CV_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, ReverbStereoFx::DAMP_CV_INPUT));

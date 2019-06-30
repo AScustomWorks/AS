@@ -83,8 +83,8 @@ struct Merge2_5Widget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(43, 255), module, Merge2_5::INPUT25));
 
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(8, 310), module, Merge2_5::OUTPUT1));
-		addOutput(createOutput<as_PJ301MPort>(Vec(43, 310), module, Merge2_5::OUTPUT2));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(8, 310), module, Merge2_5::OUTPUT1));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(43, 310), module, Merge2_5::OUTPUT2));
 
 	}
 };

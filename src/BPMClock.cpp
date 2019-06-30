@@ -441,17 +441,17 @@ struct BPMClockWidget : ModuleWidget {
     //RESET INPUT
     addInput(createInput<as_PJ301MPort>(Vec(6, 240), module, BPMClock::RESET_INPUT));
     //RESET OUTPUT
-    addOutput(createOutput<as_PJ301MPort>(Vec(59, 240), module, BPMClock::RESET_OUTPUT));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(59, 240), module, BPMClock::RESET_OUTPUT));
     //TEMPO OUTPUTS
-    addOutput(createOutput<as_PJ301MPort>(Vec(6, 280), module, BPMClock::BAR_OUT));
-    addOutput(createOutput<as_PJ301MPort>(Vec(59, 280), module, BPMClock::BEAT_OUT));
-    addOutput(createOutput<as_PJ301MPort>(Vec(6, 320), module, BPMClock::EIGHTHS_OUT));
-    addOutput(createOutput<as_PJ301MPort>(Vec(59, 320), module, BPMClock::SIXTEENTHS_OUT));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(6, 280), module, BPMClock::BAR_OUT));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(59, 280), module, BPMClock::BEAT_OUT));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(6, 320), module, BPMClock::EIGHTHS_OUT));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(59, 320), module, BPMClock::SIXTEENTHS_OUT));
 
     //RUN CV
     addInput(createInput<as_PJ301MPort>(Vec(6, 200), module, BPMClock::RUN_CV));
     //RUN TRIGGER OUTPUT
-    addOutput(createOutput<as_PJ301MPort>(Vec(59, 200), module, BPMClock::RUN_OUTPUT));
+    addOutput(createOutput<as_PJ301MPortGold>(Vec(59, 200), module, BPMClock::RUN_OUTPUT));
 
   }
 };

@@ -84,7 +84,7 @@ struct MonoVUmeterWidget : ModuleWidget {
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(3, 270), module, MonoVUmeter::INPUT));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(3,310), module, MonoVUmeter::OUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(3,310), module, MonoVUmeter::OUT));
 	}
 };
 

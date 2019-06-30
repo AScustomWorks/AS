@@ -166,10 +166,10 @@ struct QuadVCAWidget : ModuleWidget {
 		addChild(createLight<SmallLight<RedLight>>(Vec(posX[2]+5, 288), module, QuadVCA::GAIN3_LIGHT));
 		addChild(createLight<SmallLight<RedLight>>(Vec(posX[3]+5, 288), module, QuadVCA::GAIN4_LIGHT));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[0]-4, 310), module, QuadVCA::OUT1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[1]-4, 310), module, QuadVCA::OUT2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[2]-4, 310), module, QuadVCA::OUT3_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(posX[3]-4, 310), module, QuadVCA::OUT4_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[0]-4, 310), module, QuadVCA::OUT1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[1]-4, 310), module, QuadVCA::OUT2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[2]-4, 310), module, QuadVCA::OUT3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(posX[3]-4, 310), module, QuadVCA::OUT4_OUTPUT));
 
 	}
 };

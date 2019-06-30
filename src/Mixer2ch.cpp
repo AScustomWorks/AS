@@ -228,14 +228,14 @@ struct Mixer2chWidget : ModuleWidget{
 		addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], portsY[1]), module, Mixer2ch::CH2_CV_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(columnPos[1], portsY[2]), module, Mixer2ch::CH2_CV_PAN_INPUT));
 
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[0], portsY[3]), module, Mixer2ch::CH1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(columnPos[1], portsY[3]), module, Mixer2ch::CH2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[0], portsY[3]), module, Mixer2ch::CH1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(columnPos[1], portsY[3]), module, Mixer2ch::CH2_OUTPUT));
 
 
 		//OUTPUT
 		static const float mstrX = 130;
-		addOutput(createOutput<as_PJ301MPort>(Vec(mstrX, portsY[0]), module, Mixer2ch::MIX_OUTPUTL));
-		addOutput(createOutput<as_PJ301MPort>(Vec(mstrX, portsY[1]), module, Mixer2ch::MIX_OUTPUTR));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(mstrX, portsY[0]), module, Mixer2ch::MIX_OUTPUTL));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(mstrX, portsY[1]), module, Mixer2ch::MIX_OUTPUTR));
 		addInput(createInput<as_PJ301MPort>(Vec(mstrX, portsY[3]), module, Mixer2ch::MIX_CV_INPUT));
 		addParam(createParam<as_FaderPot>(Vec(mstrX, volPosY), module, Mixer2ch::MIX_PARAM));
 		addParam(createParam<LEDBezel>(Vec(mstrX, mutePosY), module, Mixer2ch::MASTER_MUTE ));

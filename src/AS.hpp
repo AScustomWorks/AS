@@ -216,6 +216,12 @@ struct as_PJ301MPort : app::SvgPort {
 	}
 };
 
+struct as_PJ301MPortGold : app::SvgPort {
+	as_PJ301MPortGold() {
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_PJ301M_output_port.svg")));
+	}
+};
+
 struct as_SlidePot : app::SvgSlider {
 	as_SlidePot() {
 		Vec margin = Vec(4, 4);

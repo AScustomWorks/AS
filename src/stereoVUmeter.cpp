@@ -109,8 +109,8 @@ struct StereoVUmeterWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(3, 270), module, StereoVUmeter::INPUT_LEFT));
 		addInput(createInput<as_PJ301MPort>(Vec(3, 310), module, StereoVUmeter::INPUT_RIGHT));
 		//OUTPUTS
-		addOutput(createOutput<as_PJ301MPort>(Vec(33,270), module, StereoVUmeter::OUT_LEFT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(33,310), module, StereoVUmeter::OUT_RIGHT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(33,270), module, StereoVUmeter::OUT_LEFT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(33,310), module, StereoVUmeter::OUT_RIGHT));
 	}
 };
 

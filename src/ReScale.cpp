@@ -125,9 +125,9 @@ struct ReScaleWidget : ModuleWidget {
         addInput(createInput<as_PJ301MPort>(Vec(18, 145), module, ReScale::INPUT_2));
         addInput(createInput<as_PJ301MPort>(Vec(18, 185), module, ReScale::INPUT_3));
 
-        addParam(createParam<as_KnobBlackSnap4>(Vec(12, 230), module, ReScale::CONVERT_PARAM));
+        addParam(createParam<as_KnobBlackSnap4>(Vec(12, 226), module, ReScale::CONVERT_PARAM));
 
-        addOutput(createOutput<as_PJ301MPort>(Vec(18, 280), module, ReScale::OUTPUT));
+        addOutput(createOutput<as_PJ301MPortGold>(Vec(18, 280), module, ReScale::OUTPUT));
 
 
     }

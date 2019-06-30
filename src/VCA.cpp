@@ -88,8 +88,8 @@ struct VCAWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(10, 260), module, VCA::IN1_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(55, 260), module, VCA::IN2_INPUT));
 		
-		addOutput(createOutput<as_PJ301MPort>(Vec(10, 310), module, VCA::OUT1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, VCA::OUT2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(10, 310), module, VCA::OUT1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, VCA::OUT2_OUTPUT));
 
 	}
 };

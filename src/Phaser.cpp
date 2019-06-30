@@ -257,7 +257,7 @@ struct PhaserFxWidget : ModuleWidget {
 		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, PhaserFx::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, PhaserFx::INPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(55, 310), module, PhaserFx::OUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, PhaserFx::OUT));
 		//CV INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 67), module, PhaserFx::RATE_CV_INPUT));
 		addInput(createInput<as_PJ301MPort>(Vec(10, 132), module, PhaserFx::FEEDBACK_CV_INPUT));

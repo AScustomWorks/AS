@@ -217,10 +217,10 @@ struct TriLFOWidget : ModuleWidget {
 		addParam(createParam<as_CKSS>(Vec(90, 60), module, TriLFO::OFFSET1_PARAM));
 		addParam(createParam<as_CKSS>(Vec(120, 60), module, TriLFO::INVERT1_PARAM));
 		//
-		addOutput(createOutput<as_PJ301MPort>(Vec(11, 120), module, TriLFO::SIN1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(45, 120), module, TriLFO::TRI1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(80, 120), module, TriLFO::SAW1_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(114, 120), module, TriLFO::SQR1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(11, 120), module, TriLFO::SIN1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(45, 120), module, TriLFO::TRI1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(80, 120), module, TriLFO::SAW1_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(114, 120), module, TriLFO::SQR1_OUTPUT));
 		//LFO 2
 		static const int lfo2_y_offset = 100;
 		addInput(createInput<as_PJ301MPort>(Vec(10, 60+lfo2_y_offset), module, TriLFO::RESET2_INPUT));
@@ -231,10 +231,10 @@ struct TriLFOWidget : ModuleWidget {
 		addParam(createParam<as_CKSS>(Vec(90, 60+lfo2_y_offset), module, TriLFO::OFFSET2_PARAM));
 		addParam(createParam<as_CKSS>(Vec(120, 60+lfo2_y_offset), module, TriLFO::INVERT2_PARAM));
 		//
-		addOutput(createOutput<as_PJ301MPort>(Vec(11, 120+lfo2_y_offset), module, TriLFO::SIN2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(45, 120+lfo2_y_offset), module, TriLFO::TRI2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(80, 120+lfo2_y_offset), module, TriLFO::SAW2_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(114, 120+lfo2_y_offset), module, TriLFO::SQR2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(11, 120+lfo2_y_offset), module, TriLFO::SIN2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(45, 120+lfo2_y_offset), module, TriLFO::TRI2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(80, 120+lfo2_y_offset), module, TriLFO::SAW2_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(114, 120+lfo2_y_offset), module, TriLFO::SQR2_OUTPUT));
 		//LFO 3
 		static const int lfo3_y_offset = 200;
 		addInput(createInput<as_PJ301MPort>(Vec(10, 60+lfo3_y_offset), module, TriLFO::RESET3_INPUT));
@@ -245,10 +245,10 @@ struct TriLFOWidget : ModuleWidget {
 		addParam(createParam<as_CKSS>(Vec(90, 60+lfo3_y_offset), module, TriLFO::OFFSET3_PARAM));
 		addParam(createParam<as_CKSS>(Vec(120, 60+lfo3_y_offset), module, TriLFO::INVERT3_PARAM));
 		//
-		addOutput(createOutput<as_PJ301MPort>(Vec(11, 120+lfo3_y_offset), module, TriLFO::SIN3_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(45, 120+lfo3_y_offset), module, TriLFO::TRI3_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(80, 120+lfo3_y_offset), module, TriLFO::SAW3_OUTPUT));
-		addOutput(createOutput<as_PJ301MPort>(Vec(114, 120+lfo3_y_offset), module, TriLFO::SQR3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(11, 120+lfo3_y_offset), module, TriLFO::SIN3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(45, 120+lfo3_y_offset), module, TriLFO::TRI3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(80, 120+lfo3_y_offset), module, TriLFO::SAW3_OUTPUT));
+		addOutput(createOutput<as_PJ301MPortGold>(Vec(114, 120+lfo3_y_offset), module, TriLFO::SQR3_OUTPUT));
 
 	}
 };
