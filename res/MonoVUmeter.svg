@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="30"
@@ -17,7 +18,34 @@
    inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    sodipodi:docname="MonoVUmeter.svg">
   <defs
-     id="defs2" />
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1003"
+       id="linearGradient1005-6"
+       x1="3.25"
+       y1="84.555527"
+       x2="3.25"
+       y2="73.209999"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.2482637,0,0,0.25293419,0.7806432,193.84245)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1003">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.05490196"
+         offset="0"
+         id="stop999" />
+      <stop
+         id="stop1007"
+         offset="0.42975992"
+         style="stop-color:#ffffff;stop-opacity:0.03921569" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop1001" />
+    </linearGradient>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,11 +53,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.5386833"
-     inkscape:cx="40.31786"
-     inkscape:cy="72.677401"
+     inkscape:zoom="12.082851"
+     inkscape:cx="19.770042"
+     inkscape:cy="310.90422"
      inkscape:document-units="px"
-     inkscape:current-layer="g922"
+     inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -324,5 +352,15 @@
          style="fill:#fff7d4"
          id="path888" />
     </g>
+    <rect
+       class="cls-1"
+       x="1.5875002"
+       y="212.35977"
+       width="4.792747"
+       height="2.7364676"
+       rx="0.50645787"
+       ry="0.29913795"
+       id="rect997-0"
+       style="display:inline;fill:url(#linearGradient1005-6);fill-opacity:1;stroke-width:0.1907995" />
   </g>
 </svg>

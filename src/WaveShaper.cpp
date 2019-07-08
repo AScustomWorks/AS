@@ -43,8 +43,8 @@ struct WaveShaper : Module {
 	
 	WaveShaper() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(WaveShaper::AMOUNT_PARAM, -5.0f, 5.0f, 0.0f, "Shape");
-		configParam(WaveShaper::SCALE_PARAM, -1.0f, 1.0f, 1.0f, "Scale");
+		configParam(WaveShaper::AMOUNT_PARAM, -5.0f, 5.0f, 0.0f, "Shape", "%", 0.0f, 100.0f);
+		configParam(WaveShaper::SCALE_PARAM, -1.0f, 1.0f, 1.0f, "Scale", "%", 0.0f, 100.0f);
 		configParam(WaveShaper::RANGE_PARAM, 0.0f, 1.0f, 0.0f, "Range");
 		configParam(WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
 	}

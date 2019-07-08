@@ -78,15 +78,15 @@ struct Mixer4ch : Module {
 		configParam(Mixer4ch::CH2_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 2 Pan");
 		configParam(Mixer4ch::CH3_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 3 Pan");
 		configParam(Mixer4ch::CH4_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 4 Pan");
-		configParam(Mixer4ch::CH1_PARAM, 0.0f, 1.0f, 0.8f, "CH 1 Gain");
-		configParam(Mixer4ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain");
-		configParam(Mixer4ch::CH3_PARAM, 0.0f, 1.0f, 0.8f, "CH 3 Gain");
-		configParam(Mixer4ch::CH4_PARAM, 0.0f, 1.0f, 0.8f, "CH 4 Gain");
+		configParam(Mixer4ch::CH1_PARAM, 0.0f, 1.0f, 0.8f, "CH 1 Gain", "%", 0.0f,100.0f);
+		configParam(Mixer4ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain", "%", 0.0f,100.0f);
+		configParam(Mixer4ch::CH3_PARAM, 0.0f, 1.0f, 0.8f, "CH 3 Gain", "%", 0.0f,100.0f);
+		configParam(Mixer4ch::CH4_PARAM, 0.0f, 1.0f, 0.8f, "CH 4 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer4ch::CH1MUTE , 0.0f, 1.0f, 0.0f, "CH 1 Mute");
 		configParam(Mixer4ch::CH2MUTE , 0.0f, 1.0f, 0.0f, "CH 2 Mute");
 		configParam(Mixer4ch::CH3MUTE , 0.0f, 1.0f, 0.0f, "CH 3 Mute");
 		configParam(Mixer4ch::CH4MUTE , 0.0f, 1.0f, 0.0f, "CH 4 Mute");
-		configParam(Mixer4ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain");
+		configParam(Mixer4ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain", "%", 0.0f,100.0f);
 		configParam(Mixer4ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f, "Mix Mute");
 		//reset();
 	}

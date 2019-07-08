@@ -34,9 +34,9 @@ struct AtNuVrTr : Module {
 	AtNuVrTr() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(AtNuVrTr::ATEN1_PARAM, -1.0f, 1.0f, 0.0f, "CH 1 gain");
-		configParam(AtNuVrTr::OFFSET1_PARAM, -10.0f, 10.0f, 0.0f, "CH 1 offset");
+		configParam(AtNuVrTr::OFFSET1_PARAM, -10.0f, 10.0f, 0.0f, "CH 1 offset", " V");
 		configParam(AtNuVrTr::ATEN2_PARAM, -1.0f, 1.0f, 0.0f, "CH 2 gain");
-		configParam(AtNuVrTr::OFFSET2_PARAM, -10.0f, 10.0f, 0.0f, "CH 2 offset");
+		configParam(AtNuVrTr::OFFSET2_PARAM, -10.0f, 10.0f, 0.0f, "CH 2 offset", " V");
 		
 	}
 	

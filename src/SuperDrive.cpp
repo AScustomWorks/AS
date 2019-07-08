@@ -65,9 +65,9 @@ struct SuperDriveFx : Module{
 
 	SuperDriveFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(SuperDriveFx::DRIVE_PARAM, 0.1f, 1.0f, 0.1f, "Drive");
-		configParam(SuperDriveFx::TONE_PARAM, 0.0f, 1.0f, 0.5f, "Tone");
-		configParam(SuperDriveFx::OUTPUT_GAIN_PARAM, 0.0f, 1.0f, 0.5f, "Gain");
+		configParam(SuperDriveFx::DRIVE_PARAM, 0.0f, 1.0f, 0.0f, "Drive", "%", 0.0f, 100.0f);
+		configParam(SuperDriveFx::TONE_PARAM, 0.0f, 1.0f, 0.5f, "Tone", "%", 0.0f, 100.0f);
+		configParam(SuperDriveFx::OUTPUT_GAIN_PARAM, 0.0f, 1.0f, 0.5f, "Gain", "%", 0.0f, 100.0f);
 		configParam(SuperDriveFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
 				
 	}
@@ -90,7 +90,9 @@ struct SuperDriveFx : Module{
 		float input_signal = inputs[SIGNAL_INPUT].getVoltage();
 		//OVERDRIVE SIGNAL
 		//float drive = params[DRIVE_PARAM].getValue();
+		
 		drive = clamp(params[DRIVE_PARAM].getValue() + inputs[DRIVE_CV_INPUT].getVoltage() / 10.0f, 0.1f, 1.0f);
+		//drive = clamp(params[DRIVE_PARAM].getValue() + inputs[DRIVE_CV_INPUT].getVoltage() / 10.0f, 0.1f, 1.0f);
 
 		drive = drive * drive_scale;
 		//precalc

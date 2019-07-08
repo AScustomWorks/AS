@@ -193,7 +193,7 @@ struct TriggersMKIIWidget : ModuleWidget {
         addChild(display1); 	
 
         //PARAM
-        addParam(createParam<as_KnobBlack>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1));
+        addParam(createParam<as_KnobBlackSnap>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1));
         //SWITCH
         addParam(createParam<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1));
         addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
@@ -212,7 +212,7 @@ struct TriggersMKIIWidget : ModuleWidget {
         addChild(display2); 	
 
         //PARAM
-        addParam(createParam<as_KnobBlack>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2));
+        addParam(createParam<as_KnobBlackSnap>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2));
         //SWITCH
         addParam(createParam<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2));
         addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));

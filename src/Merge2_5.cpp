@@ -44,10 +44,17 @@ struct Merge2_5 : Module {
 		float IN24 = inputs[INPUT24].getVoltage();
 		float IN25 = inputs[INPUT25].getVoltage();
 
-		
 		// Set outputs
-		outputs[OUTPUT1].setVoltage(IN11 + IN12 + IN13 + IN14 + IN15);
-		outputs[OUTPUT2].setVoltage(IN21 + IN22 + IN23 + IN24 + IN25);
+		/*
+		If output 2 is not connected, output 1 sums the value of the second input row
+		so the module becomes a merge 10x1, nice and simple idea!
+		*/
+		if(!outputs[OUTPUT2].isConnected()){
+			outputs[OUTPUT1].setVoltage(IN11 + IN12 + IN13 + IN14 + IN15 + IN21 + IN22 + IN23 + IN24 + IN25);
+		}else{
+			outputs[OUTPUT1].setVoltage(IN11 + IN12 + IN13 + IN14 + IN15);
+			outputs[OUTPUT2].setVoltage(IN21 + IN22 + IN23 + IN24 + IN25);
+		}
 
 	}
 };

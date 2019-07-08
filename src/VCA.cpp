@@ -33,9 +33,9 @@ struct VCA : Module {
 
 	VCA() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
-		configParam(VCA::LEVEL1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain");
-		configParam(VCA::LEVEL2_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Response");
-		configParam(VCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Gain");
+		configParam(VCA::LEVEL1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain", "%", 0.0f, 100.0f);
+		configParam(VCA::LEVEL2_PARAM, 0.0f, 1.0f, 0.5f, "CH 2 Gain", "%", 0.0f, 100.0f);
+		configParam(VCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");
 		configParam(VCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");	
 	}
 

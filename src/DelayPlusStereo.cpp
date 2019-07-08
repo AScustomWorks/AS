@@ -109,15 +109,16 @@ struct DelayPlusStereoFx : Module {
 	DelayPlusStereoFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
-		configParam(DelayPlusStereoFx::TIME_PARAM_1, 0.0f, 10.0f, 0.375f, "Time L");
-		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_1, 0.0f, 1.0f, 0.5f, "Feedback L");
-		configParam(DelayPlusStereoFx::COLOR_PARAM_1, 0.0f, 1.0f, 0.5f, "Color L");
-		configParam(DelayPlusStereoFx::TIME_PARAM_2, 0.0f, 10.0f, 0.750f, "Time R");
-		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_2, 0.0f, 1.0f, 0.5f, "Feedback R");
-		configParam(DelayPlusStereoFx::COLOR_PARAM_2, 0.0f, 1.0f, 0.5f, "Color R");
+
+		configParam(DelayPlusStereoFx::TIME_PARAM_1, 0.0f, 10.0f, 0.375f, "Time L", " MS", 0.0f, 1000.0f);
+		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_1, 0.0f, 1.0f, 0.5f, "Feedback L", "%", 0.0f, 100.0f);
+		configParam(DelayPlusStereoFx::COLOR_PARAM_1, 0.0f, 1.0f, 0.5f, "Color L", "%", 0.0f, 100.0f);
+		configParam(DelayPlusStereoFx::TIME_PARAM_2, 0.0f, 10.0f, 0.750f, "Time R", " MS", 0.0f, 1000.0f);
+		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_2, 0.0f, 1.0f, 0.5f, "Feedback R", "%", 0.0f, 100.0f);
+		configParam(DelayPlusStereoFx::COLOR_PARAM_2, 0.0f, 1.0f, 0.5f, "Color R", "%", 0.0f, 100.0f);
 		configParam(DelayPlusStereoFx::FBK_LINK_PARAM, 0.0f, 1.0f, 0.0f, "Link channels");
 		configParam(DelayPlusStereoFx::COLOR_LINK_PARAM, 0.0f, 1.0f, 0.0f, "Link Color");
-		configParam(DelayPlusStereoFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix");
+		configParam(DelayPlusStereoFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix", "%", 0.0f, 100.0f);
 		configParam(DelayPlusStereoFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
 
 	}
@@ -144,7 +145,7 @@ struct DelayPlusStereoFx : Module {
 
 		// Compute delay time in seconds
 		//float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM_1].getValue() + inputs[TIME_CV_INPUT_1].getVoltage() / 10.0, 0.0, 1.0));
-		float delay1 = clamp(params[TIME_PARAM_1].getValue() + inputs[TIME_CV_INPUT_1].getVoltage(), 0.001f, 10.0f);
+		float delay1 = clamp(params[TIME_PARAM_1].getValue() + inputs[TIME_CV_INPUT_1].getVoltage(), 0.0f, 10.0f);
 		//LCD display tempo  - show value as ms
 		lcd_tempo1 = std::round(delay1*1000);
 		// Number of delay samples
@@ -213,7 +214,7 @@ struct DelayPlusStereoFx : Module {
 
 		// Compute delay time in seconds
 		//float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM_1].getValue() + inputs[TIME_CV_INPUT_1].getVoltage() / 10.0, 0.0, 1.0));
-		float delay2 = clamp(params[TIME_PARAM_2].getValue() + inputs[TIME_CV_INPUT_2].getVoltage(), 0.001f, 10.0f);
+		float delay2 = clamp(params[TIME_PARAM_2].getValue() + inputs[TIME_CV_INPUT_2].getVoltage(), 0.0f, 10.0f);
 		//LCD display tempo  - show value as ms
 		lcd_tempo2 = std::round(delay2*1000);
 		// Number of delay samples
@@ -419,9 +420,9 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		addParam(createParam<as_FxKnobWhite>(Vec(106, 130), module, DelayPlusStereoFx::FEEDBACK_PARAM_2));
 		addParam(createParam<as_FxKnobWhite>(Vec(106, 180), module, DelayPlusStereoFx::COLOR_PARAM_2));
 		//FEEDBACK LINK SWITCH
-		addParam(createParam<as_CKSS>(Vec(82, 145), module, DelayPlusStereoFx::FBK_LINK_PARAM));
+		addParam(createParam<as_CKSSwhite>(Vec(82, 145), module, DelayPlusStereoFx::FBK_LINK_PARAM));
 		//COLOR LINK SWITCH
-		addParam(createParam<as_CKSS>(Vec(82, 195), module, DelayPlusStereoFx::COLOR_LINK_PARAM));
+		addParam(createParam<as_CKSSwhite>(Vec(82, 195), module, DelayPlusStereoFx::COLOR_LINK_PARAM));
 		//MIX KNOB
 		addParam(createParam<as_FxKnobWhite>(Vec(71, 251), module, DelayPlusStereoFx::MIX_PARAM));
 		//BYPASS SWITCH

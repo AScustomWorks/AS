@@ -34,8 +34,8 @@ struct SawOsc : Module {
 
 	SawOsc() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(SawOsc::PITCH_PARAM, -3.0f, 3.0f, 0.0f, "Frequency");
-		configParam(SawOsc::PW_PARAM, -4.2f, 5.0f, -4.2f, "Modulation");
+		configParam(SawOsc::PITCH_PARAM, -3.0f, 3.0f, 0.0f, "Value", " V");
+		configParam(SawOsc::PW_PARAM, 0.0f, 10.0f, 0.0f, "Modulation", "%", 0.0f, 10.0f);
 		configParam(SawOsc::BASE_PARAM, 0.0f, 1.0f, 1.0f, "Base Frequency: A - C");
 		
 	}
@@ -44,10 +44,11 @@ struct SawOsc : Module {
 		// Implement a simple sine oscillator
 		float deltaTime = 1.0f / args.sampleRate;
 		// Compute the frequency from the pitch parameter and input
-		base_freq = params[BASE_PARAM].getValue();
+		base_freq = params[BASE_PARAM].getValue();	
+
 		float pitch = params[PITCH_PARAM].getValue();
 		pitch += inputs[PITCH_INPUT].getVoltage();
-		pitch = clamp(pitch, -4.0f, 4.0f);
+		pitch = clamp(pitch, -3.0f, 6.0f);
 
 		if(base_freq==1){
 			//Note A4
@@ -63,7 +64,9 @@ struct SawOsc : Module {
 			phase -= 1.0f;
 
 	//Mod param
-		float pw = params[PW_PARAM].getValue()*0.1f+1.0f;
+		//float pw = params[PW_PARAM].getValue()*0.1f+1.0f;
+		float pw = rescale(params[PW_PARAM].getValue(), 0.0f, 10.0f, -4.2f, 5.0f)*0.1f+1.0f;
+
 		//Mod input
 		float minput = inputs[PW_INPUT].getVoltage()*0.3f;
 		//Mod param+input

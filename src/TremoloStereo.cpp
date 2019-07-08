@@ -119,9 +119,9 @@ struct TremoloStereoFx : Module{
 	TremoloStereoFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(TremoloStereoFx::INVERT_PARAM, 0.0f, 1.0f, 1.0f, "Shape Phase Invert");
-		configParam(TremoloStereoFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f, "Shape");
-		configParam(TremoloStereoFx::FREQ_PARAM, 0.0f, 3.5f, 1.75f, "Speed");
-		configParam(TremoloStereoFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend");
+		configParam(TremoloStereoFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f, "Shape", "%", 0.0f, 100.0f);
+		configParam(TremoloStereoFx::FREQ_PARAM, 0.0f, 1.0f, 0.5f, "Speed", "%", 0.0f, 100.0f);
+		configParam(TremoloStereoFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend", "%", 0.0f, 100.0f);
 		configParam(TremoloStereoFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
 	}
 
@@ -148,7 +148,9 @@ struct TremoloStereoFx : Module{
 			input_signal_R = clamp(inputs[SIGNAL_INPUT_R].getVoltage(),-10.0f,10.0f);
 		}
 
-		float lfo_pitch = clamp(params[FREQ_PARAM].getValue() + inputs[FREQ_CV_INPUT].getVoltage(), 0.0f, 3.5f);
+		float lfo_pitch = clamp(rescale(params[FREQ_PARAM].getValue(), 0.0f, 1.0f, 0.0f, 3.5f) + rescale(inputs[FREQ_CV_INPUT].getVoltage()/10, 0.0f, 1.0f, 0.0f, 3.5f),0.0f, 3.5f);
+
+		//float lfo_pitch = clamp(rescale(params[FREQ_PARAM].getValue(), 0.0f, 1.0f, 0.0f, 3.5f) + inputs[FREQ_CV_INPUT].getVoltage(), 0.0f, 3.5f);
 		//LFO L
 		oscillatorL.setPitch( lfo_pitch );
 		oscillatorL.offset = (0.0f);
@@ -247,7 +249,7 @@ struct TremoloStereoFxWidget : ModuleWidget {
 		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		//phase switch
-		addParam(createParam<as_CKSS>(Vec(13, 100), module, TremoloStereoFx::INVERT_PARAM));
+		addParam(createParam<as_CKSSwhite>(Vec(13, 100), module, TremoloStereoFx::INVERT_PARAM));
 		//KNOBS  
 		addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, TremoloStereoFx::WAVE_PARAM));
 		addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, TremoloStereoFx::FREQ_PARAM));

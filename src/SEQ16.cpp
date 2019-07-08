@@ -78,7 +78,7 @@ struct SEQ16 : Module {
 
 	SEQ16() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(SEQ16::CLOCK_PARAM, -2.0f, 6.0f, 2.0f, "Clock Tempo", "BPM");
+		configParam(SEQ16::CLOCK_PARAM, -2.0f, 6.0f, 1.0f, "Clock Tempo", "BPM", 2.f, 60.f);
 		configParam(SEQ16::RUN_PARAM , 0.0f, 1.0f, 0.0f, "Run Switch");
 		configParam(SEQ16::RESET_PARAM , 0.0f, 1.0f, 0.0f, "Reset Switch");
 		configParam(SEQ16::TRIGGER_PARAM , 0.0f, 1.0f, 0.0f, "Manual Step Edit Trigger");
@@ -87,10 +87,10 @@ struct SEQ16 : Module {
 		configParam(SEQ16::GATE_MODE_PARAM, 0.0f, 2.0f, 0.0f, "Trigger Mode Switch");
 		configParam(SEQ16::STEPS_PARAM, 1.0f, 16.0f, 16.0f, "Step Length");
 		for (int i = 0; i < 16; i++) {		
-			configParam(SEQ16::ROW1_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value");
-			configParam(SEQ16::ROW2_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value");
-			configParam(SEQ16::ROW3_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value");
-			configParam(SEQ16::GATE_PARAM + i, 0.0f, 1.0f, 0.0f, "Step Gate");
+			configParam(SEQ16::ROW1_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value", " V");
+			configParam(SEQ16::ROW2_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value", " V");
+			configParam(SEQ16::ROW3_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value", " V");
+			configParam(SEQ16::GATE_PARAM + i, 0.0f, 1.0f, 0.0f, "Step Gate", " V");
 		}
 	}
 
@@ -405,7 +405,7 @@ struct SEQ16Widget : ModuleWidget {
 		//GATE MODE SWITCH
 		addParam(createParam<as_CKSSThree>(Vec(portX[6]+2, main_lds_y-4), module, SEQ16::GATE_MODE_PARAM));
 		//STEPS KNOBS
-		addParam(createParam<as_KnobBlack>(Vec(portX[7]-elements_offst, 56), module, SEQ16::STEPS_PARAM));
+		addParam(createParam<as_KnobBlackSnap>(Vec(portX[7]-elements_offst, 56), module, SEQ16::STEPS_PARAM));
 		static const float main_inputs_offst = 1;
 		static const float main_inputs_y = 98;
 		//SEQ VC INPUTS

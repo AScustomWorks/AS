@@ -137,6 +137,13 @@ struct as_CKSS : app::SvgSwitch {
 	}
 };
 
+struct as_CKSSwhite : app::SvgSwitch {
+	as_CKSSwhite() {
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSS_white_0.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSS_white_1.svg")));
+	}
+};
+
 struct as_CKSSH : app::SvgSwitch {
 	as_CKSSH() {
 		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_CKSSH_0.svg")));

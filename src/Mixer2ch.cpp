@@ -60,11 +60,11 @@ struct Mixer2ch : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(Mixer2ch::CH1_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 1 Pan");
 		configParam(Mixer2ch::CH2_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 2 Pan");
-		configParam(Mixer2ch::CH1_PARAM, 0.0f, 1.0f, 0.8f, "CH 1 Gain");
-		configParam(Mixer2ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain");
+		configParam(Mixer2ch::CH1_PARAM, 0.0f, 1.0f, 0.8f, "CH 1 Gain", "%", 0.0f,100.0f);
+		configParam(Mixer2ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer2ch::CH1MUTE , 0.0f, 1.0f, 0.0f, "CH 1 Mute");
 		configParam(Mixer2ch::CH2MUTE , 0.0f, 1.0f, 0.0f, "CH 2 Mute");
-		configParam(Mixer2ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain");
+		configParam(Mixer2ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain", "%", 0.0f,100.0f);
 		configParam(Mixer2ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f, "Mix Mute");
 	}
 

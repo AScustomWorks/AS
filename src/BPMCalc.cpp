@@ -172,11 +172,10 @@ struct BPMCalc : Module {
       pulse = false;
 
 	}
-
   
 	BPMCalc() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-    configParam(BPMCalc::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo");
+    configParam(BPMCalc::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo", " BPM", 0.0f);
     }
 
   void onReset() override {
@@ -593,7 +592,7 @@ struct BPMCalcWidget : ModuleWidget {
     addChild(createLight<DisplayLedLight<RedLight>>(Vec(77, 56), module, BPMCalc::CLOCK_LOCK_LIGHT));
     addChild(createLight<DisplayLedLight<RedLight>>(Vec(77, 66), module, BPMCalc::CLOCK_LIGHT)); 
     //TEMPO KNOB
-    addParam(createParam<as_KnobBlack>(Vec(156, 45), module, BPMCalc::TEMPO_PARAM));
+    addParam(createParam<as_KnobBlackSnap>(Vec(156, 45), module, BPMCalc::TEMPO_PARAM));
     //CALCULATOR DISPLAY 
     TxtDisplay *display1 = new TxtDisplay();
     display1->module = module;

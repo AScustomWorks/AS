@@ -18,6 +18,14 @@ If you enjoy those modules you can support the development by making a donation,
 
 # AS modules
 
+### V 1.0.2 update
+
+More graphic updates.
+
+Now every knob tooltip shows the proper parameter value according to it's function.
+
+BPM Clock got the BPM range switch removed to work ok with the tooltips, 30-300 BPM is now the default range.
+
 ### V 1.0.1 update
 
 Small graphic refresh/fixes, output ports on every module are now gold colored to make easier to find them
@@ -53,6 +61,8 @@ V 0.6.5: Added a Regular/Extended switch to change the clock from 40-250 to 30-3
 V 0.6.6: Added a CV input for the "RUN" switch.
 
 V 0.6.7: Added a CV output for the "RUN" switch, sends a trigger signal on each press of the switch.
+
+V 1.0.2: BPM Clock got the BPM range switch removed to work ok with the tooltips, 30-300 BPM is now the default range.
 
 ### BPM to delay/hz calculator
 A BPM to delay/hz calculator to setup easier those nice delay effects.
@@ -92,6 +102,8 @@ V 0.6.13 New feature: If the input 2 is not active the second row of outputs tak
 2x5 CV Signal merger.
 
 V 0.5.7: First relase of this module.
+
+V 1.0.2 New feature: If the output 2 is not active the output 1 sums up the values of the second row of inputs too, so the module becomes a merge 10 x 1.
 
 ### Mono VU Meter
 V 0.5.4, New module added, Mono VU Meter made to match the 8CH Mixer.
@@ -209,7 +221,7 @@ V 0.5.5: First relase of this module.
 
 V 0.6,9: Small fix on the ms CV input to take the proper values fron BPM calc module.
 
-V 1.0.1: Changer thru port to act as pre/post delay with a switch for each channel (Omri Cohen request)
+V 1.0.1: Added a switch to each thru port to change the output from pre/post delay (Omri Cohen request)
 
 ### CV 2 T
 CV to Trigger module. Feed a midi signal to the CV inputs and it will output one trigger signal when the incoming signal rises above 0v, and another trigger signal when the incoming signal returns to 0v. Useful to use your external hardware controller/keyboard as a trigger.

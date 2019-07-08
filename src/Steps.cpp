@@ -248,7 +248,7 @@ struct StepsWidget : ModuleWidget {
       addParam(createParam<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 ));
       addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
 
-      addParam(createParam<as_KnobBlack>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1)); 
+      addParam(createParam<as_KnobBlackSnap>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1)); 
 
       addInput(createInput<as_PJ301MPort>(Vec(3, 120), module, Steps::RESET_IN_1));
       addInput(createInput<as_PJ301MPort>(Vec(33, 120), module, Steps::CLK_IN_1));
@@ -275,7 +275,7 @@ struct StepsWidget : ModuleWidget {
       addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset), module, Steps::RST_BUTTON2 ));
       addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset), module, Steps::RESET_LIGHT2));
 
-      addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2)); 
+      addParam(createParam<as_KnobBlackSnap>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2)); 
 
       addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset), module, Steps::RESET_IN_2));
       addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset), module, Steps::CLK_IN_2));
@@ -302,7 +302,7 @@ struct StepsWidget : ModuleWidget {
       addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset*2), module, Steps::RST_BUTTON3 ));
       addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset*2), module, Steps::RESET_LIGHT3));
 
-      addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3)); 
+      addParam(createParam<as_KnobBlackSnap>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3)); 
 
       addInput(createInput<as_PJ301MPort>(Vec(3, 120 + group_offset*2), module, Steps::RESET_IN_3));
       addInput(createInput<as_PJ301MPort>(Vec(33, 120 + group_offset*2), module, Steps::CLK_IN_3));

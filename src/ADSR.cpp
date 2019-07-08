@@ -41,10 +41,10 @@ struct ADSR : Module {
 
 	ADSR() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(ADSR::ATTACK_PARAM, 0.0f, 1.0f, 0.5f, "Atacck");
-		configParam(ADSR::DECAY_PARAM, 0.0f, 1.0f, 0.5f, "Decay");
-		configParam(ADSR::SUSTAIN_PARAM, 0.0f, 1.0f, 0.5f, "Sustain");
-		configParam(ADSR::RELEASE_PARAM, 0.0f, 1.0f, 0.5f, "Release");
+		configParam(ADSR::ATTACK_PARAM, 0.0f, 1.0f, 0.5f, "Attack", "%", 0.0f, 100.0f);
+		configParam(ADSR::DECAY_PARAM, 0.0f, 1.0f, 0.5f, "Decay", "%", 0.0f, 100.0f);
+		configParam(ADSR::SUSTAIN_PARAM, 0.0f, 1.0f, 0.5f, "Sustain", "%", 0.0f, 100.0f);
+		configParam(ADSR::RELEASE_PARAM, 0.0f, 1.0f, 0.5f, "Release", "%", 0.0f, 100.0f);
 
 	}
 	void process(const ProcessArgs &args) override {

@@ -128,13 +128,13 @@ struct TriLFO : Module {
 
 	TriLFO() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(TriLFO::FREQ1_PARAM, -8.0f, 6.0f, -1.0f, "CH 1 Frequency");
+		configParam(TriLFO::FREQ1_PARAM, -8.0f, 10.0f, -1.0f, "CH 1 Frequency", " Hz", 2, 1);
 		configParam(TriLFO::OFFSET1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Offset");
 		configParam(TriLFO::INVERT1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Invert");
-		configParam(TriLFO::FREQ2_PARAM, -8.0f, 6.0f, -1.0f, "CH 2 Frequency");
+		configParam(TriLFO::FREQ2_PARAM, -8.0f, 10.0f, -1.0f, "CH 2 Frequency", " Hz", 2, 1);
 		configParam(TriLFO::OFFSET2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Offset");
 		configParam(TriLFO::INVERT2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Invert");
-		configParam(TriLFO::FREQ3_PARAM, -8.0f, 6.0f, -1.0f, "CH 3 Frequency");
+		configParam(TriLFO::FREQ3_PARAM, -8.0f, 10.0f, -1.0f, "CH 3 Frequency", " Hz", 2, 1);
 		configParam(TriLFO::OFFSET3_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Offset");
 		configParam(TriLFO::INVERT3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Invert");	
 	}

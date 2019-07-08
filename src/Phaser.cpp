@@ -53,9 +53,9 @@ struct PhaserFx : Module{
 
 	PhaserFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f, "Rate");
-		configParam(PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f, "Feedback");
-		configParam(PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f, "Depth");
+		configParam(PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f, "Rate", "%", 0.0f, 100.0f);
+		configParam(PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f, "Feedback", "%", 0.0f, 100.0f);
+		configParam(PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f, "Depth", "%", 0.0f, 100.0f);
 		configParam(PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
 	}
 

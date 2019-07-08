@@ -176,7 +176,8 @@ struct BPMCalc2 : Module {
   
 	BPMCalc2() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-    configParam(BPMCalc2::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo");
+    //configParam(BPMCalc2::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo");
+    configParam(BPMCalc2::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo", " BPM", 0.0f);
   }
 
   void onReset() override {
@@ -390,7 +391,7 @@ struct BPMCalc2Widget : ModuleWidget {
     addChild(createLight<DisplayLedLight<RedLight>>(Vec(57, 56), module, BPMCalc2::CLOCK_LOCK_LIGHT));
     addChild(createLight<DisplayLedLight<RedLight>>(Vec(57, 66), module, BPMCalc2::CLOCK_LIGHT)); 
     //TEMPO KNOB
-    addParam(createParam<as_KnobBlack>(Vec(45, 84), module, BPMCalc2::TEMPO_PARAM));
+    addParam(createParam<as_KnobBlackSnap>(Vec(45, 84), module, BPMCalc2::TEMPO_PARAM));
 
     //MS outputs
     int const out_offset = 40;

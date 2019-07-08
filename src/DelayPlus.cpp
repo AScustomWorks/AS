@@ -75,10 +75,10 @@ struct DelayPlusFx : Module {
 
 	DelayPlusFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(DelayPlusFx::TIME_PARAM, 0.0f, 10.0f, 0.350f, "Time");
-		configParam(DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f, "Feedback");
-		configParam(DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f, "Color");
-		configParam(DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix");
+		configParam(DelayPlusFx::TIME_PARAM, 0.0f, 10.0f, 0.350f, "Time", " MS", 0.0f, 1000.0f);
+		configParam(DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f, "Feedback", "%", 0.0f, 100.0f);
+		configParam(DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f, "Color", "%", 0.0f, 100.0f);
+		configParam(DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix", "%", 0.0f, 100.0f);
 		configParam(DelayPlusFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
 	}
 
@@ -98,7 +98,7 @@ struct DelayPlusFx : Module {
 
 		// Compute delay time in seconds
 		//float delay = 1e-3 * powf(10.0 / 1e-3, clampf(params[TIME_PARAM].getValue() + inputs[TIME_INPUT].getVoltage() / 10.0, 0.0, 1.0));
-		float delay = clamp(params[TIME_PARAM].getValue() + inputs[TIME_INPUT].getVoltage(), 0.001f, 10.0f);
+		float delay = clamp(params[TIME_PARAM].getValue() + inputs[TIME_INPUT].getVoltage(), 0.0f, 10.0f);
 		//LCD display tempo  - show value as ms
 		lcd_tempo = std::round(delay*1000);
 		// Number of delay samples

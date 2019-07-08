@@ -111,9 +111,9 @@ struct TremoloFx : Module{
 	TremoloFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(TremoloFx::INVERT_PARAM, 0.0f, 1.0f, 1.0f, "Shape Phase Invert");
-		configParam(TremoloFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f, "Shape");
-		configParam(TremoloFx::FREQ_PARAM, 0.0f, 3.5f, 1.75f, "Speed");
-		configParam(TremoloFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend");
+		configParam(TremoloFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f, "Shape", "%", 0.0f, 100.0f);
+		configParam(TremoloFx::FREQ_PARAM, 0.0f, 1.0f, 0.5f, "Speed", "%", 0.0f, 100.0f);
+		configParam(TremoloFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend", "%", 0.0f, 100.0f);
 		configParam(TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
 	}
 
@@ -135,7 +135,9 @@ struct TremoloFx : Module{
 		input_signal = clamp(inputs[SIGNAL_INPUT].getVoltage(),-10.0f,10.0f);
 
 		//oscillator.setPitch(params[FREQ_PARAM].getValue());
-		oscillator.setPitch( clamp(params[FREQ_PARAM].getValue() + inputs[FREQ_CV_INPUT].getVoltage(), 0.0f, 3.5f) );
+		
+
+		oscillator.setPitch( clamp(rescale(params[FREQ_PARAM].getValue(), 0.0f, 1.0f, 0.0f, 3.5f) + rescale(inputs[FREQ_CV_INPUT].getVoltage()/10, 0.0f, 1.0f, 0.0f, 3.5f),0.0f, 3.5f) );
 		oscillator.offset = (1.0f);
 		oscillator.invert = (params[INVERT_PARAM].getValue() <= 0.0f);
 		oscillator.setPulseWidth(0.5f);
@@ -217,7 +219,7 @@ struct TremoloFxWidget : ModuleWidget {
 		addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 		//phase switch
-		addParam(createParam<as_CKSS>(Vec(13, 100), module, TremoloFx::INVERT_PARAM));
+		addParam(createParam<as_CKSSwhite>(Vec(13, 100), module, TremoloFx::INVERT_PARAM));
 		//KNOBS  
 		addParam(createParam<as_FxKnobWhite>(Vec(43, 60), module, TremoloFx::WAVE_PARAM));
 		addParam(createParam<as_FxKnobWhite>(Vec(43, 125), module, TremoloFx::FREQ_PARAM));

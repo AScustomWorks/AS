@@ -7,6 +7,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="60"
@@ -17,7 +18,34 @@
    inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    sodipodi:docname="StereoVUmeter.svg">
   <defs
-     id="defs2" />
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1003"
+       id="linearGradient1005-6"
+       x1="3.25"
+       y1="84.555527"
+       x2="3.25"
+       y2="73.209999"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.2482637,0,0,0.25293419,1.9223203,193.7895)" />
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1003">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.05490196"
+         offset="0"
+         id="stop999" />
+      <stop
+         id="stop1007"
+         offset="0.42975992"
+         style="stop-color:#ffffff;stop-opacity:0.03921569" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop1001" />
+    </linearGradient>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,11 +53,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.0696518"
-     inkscape:cx="17.859214"
-     inkscape:cy="63.250892"
+     inkscape:zoom="1.6765255"
+     inkscape:cx="35.012267"
+     inkscape:cy="315.01177"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -328,5 +356,15 @@
          d="m 14.331839,97.440867 v 2.497523 h -1.192693 c -0.729024,0.03905 -1.351806,-0.520038 -1.391646,-1.24902 0.03984,-0.728981 0.662622,-1.287554 1.391646,-1.248503 z"
          id="path920" />
     </g>
+    <rect
+       class="cls-1"
+       x="2.7291772"
+       y="212.30685"
+       width="10.371972"
+       height="2.6926727"
+       rx="0.50645787"
+       ry="0.29913795"
+       id="rect997-0"
+       style="display:inline;fill:url(#linearGradient1005-6);fill-opacity:1;stroke-width:0.1907995" />
   </g>
 </svg>

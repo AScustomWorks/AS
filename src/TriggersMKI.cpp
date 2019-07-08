@@ -45,9 +45,9 @@ struct TriggersMKI: Module {
 
     TriggersMKI() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-        configParam(TriggersMKI::VOLTAGE_PARAM, -10.0f, 10.0f, 0.0f, "Voltage");
+        configParam(TriggersMKI::VOLTAGE_PARAM, -10.0f, 10.0f, 0.0f, "Volts", " V");
         configParam(TriggersMKI::RUN_SWITCH, 0.0, 1.0, 0.0, "Latch Switch");
-        configParam(TriggersMKI::MOMENTARY_SWITCH, 0.0, 1.0, 0.0, "CH 1 Momentary Switch");
+        configParam(TriggersMKI::MOMENTARY_SWITCH, 0.0, 1.0, 0.0, "Momentary Switch");
     }
 
     void process(const ProcessArgs &args) override{

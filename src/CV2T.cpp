@@ -64,10 +64,10 @@ struct Cv2T : Module {
 
 	Cv2T() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(Cv2T::TRIG_SWITCH_1 , 0.0f, 1.0f, 0.0f, "Trigger CH 1");
-		configParam(Cv2T::TRIG_SWITCH_2 , 0.0f, 1.0f, 0.0f, "Trigger CH 2");
-		configParam(Cv2T::TRIG_SWITCH_3 , 0.0f, 1.0f, 0.0f, "Trigger CH 3");
-		configParam(Cv2T::TRIG_SWITCH_4 , 0.0f, 1.0f, 0.0f, "Trigger CH 4");
+		configParam(Cv2T::TRIG_SWITCH_1 , 0.0f, 1.0f, 0.0f, "CH 1 Trigger");
+		configParam(Cv2T::TRIG_SWITCH_2 , 0.0f, 1.0f, 0.0f, "CH 2 Trigger");
+		configParam(Cv2T::TRIG_SWITCH_3 , 0.0f, 1.0f, 0.0f, "CH 3 Trigger");
+		configParam(Cv2T::TRIG_SWITCH_4 , 0.0f, 1.0f, 0.0f, "CH 4 Trigger");
 	}
 
 	void process(const ProcessArgs &args) override {

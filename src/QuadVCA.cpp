@@ -52,10 +52,10 @@ struct QuadVCA : Module {
 
 	QuadVCA() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(QuadVCA::GAIN1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain");
-		configParam(QuadVCA::GAIN2_PARAM, 0.0f, 1.0f, 0.5f, "CH 2 Gain");
-		configParam(QuadVCA::GAIN3_PARAM, 0.0f, 1.0f, 0.5f, "CH 3 Gain");
-		configParam(QuadVCA::GAIN4_PARAM, 0.0f, 1.0f, 0.5f, "CH 4 Gain");
+		configParam(QuadVCA::GAIN1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain", "%", 0.0f, 100.0f);
+		configParam(QuadVCA::GAIN2_PARAM, 0.0f, 1.0f, 0.5f, "CH 2 Gain", "%", 0.0f, 100.0f);
+		configParam(QuadVCA::GAIN3_PARAM, 0.0f, 1.0f, 0.5f, "CH 3 Gain", "%", 0.0f, 100.0f);
+		configParam(QuadVCA::GAIN4_PARAM, 0.0f, 1.0f, 0.5f, "CH 4 Gain", "%", 0.0f, 100.0f);
 		configParam(QuadVCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Response");
 		configParam(QuadVCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");
 		configParam(QuadVCA::MODE3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Response");

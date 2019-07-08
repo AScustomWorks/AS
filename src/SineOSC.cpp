@@ -33,7 +33,7 @@ struct SineOsc : Module {
 
 	SineOsc() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(SineOsc::FREQ_PARAM, -3.0f, 3.0f, 0.0f, "Frequency");
+		configParam(SineOsc::FREQ_PARAM, -3.0f, 3.0f, 0.0f, "Value", " V");
 		configParam(SineOsc::BASE_PARAM, 0.0f, 1.0f, 1.0f, "Base Frequency: A - C");
 
 	}
@@ -47,7 +47,7 @@ void SineOsc::process(const ProcessArgs &args) {
 	base_freq = params[BASE_PARAM].getValue();
 	float pitch = params[FREQ_PARAM].getValue();
 	pitch += inputs[FREQ_CV].getVoltage();
-	pitch = clamp(pitch, -4.0f, 4.0f);
+	pitch = clamp(pitch, -3.0f, 6.0f);
 
 	if(base_freq==1){
 		//Note A4

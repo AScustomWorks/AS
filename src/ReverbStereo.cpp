@@ -64,9 +64,9 @@ struct ReverbStereoFx : Module{
 
 	ReverbStereoFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(ReverbStereoFx::DECAY_PARAM, 0.0f, 0.95f, 0.475f, "Decay");
-		configParam(ReverbStereoFx::DAMP_PARAM, 0.0f, 1.0f, 0.5f, "Damp");
-		configParam(ReverbStereoFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend");
+		configParam(ReverbStereoFx::DECAY_PARAM, 0.0f, 1.0f, 0.5f, "Decay", "%", 0.0f, 100.0f);
+		configParam(ReverbStereoFx::DAMP_PARAM, 0.0f, 1.0f, 0.5f, "Damp", "%", 0.0f, 100.0f);
+		configParam(ReverbStereoFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Wet", "%", 0.0f, 100.0f);
 		configParam(ReverbStereoFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
 
 		float gSampleRate = APP->engine->getSampleRate();
@@ -112,7 +112,8 @@ struct ReverbStereoFx : Module{
 			input_signal_R = clamp(inputs[SIGNAL_INPUT_R].getVoltage(),-10.0f,10.0f);
 		}
 
-		roomsize = clamp(params[DECAY_PARAM].getValue() + inputs[DECAY_CV_INPUT].getVoltage() / 10.0f, 0.0f, 0.88f);
+		//roomsize = clamp(params[DECAY_PARAM].getValue() + inputs[DECAY_CV_INPUT].getVoltage() / 10.0f, 0.0f, 0.88f);
+		roomsize = clamp(rescale(params[DECAY_PARAM].getValue(), 0.0f, 1.0f, 0.0f, 0.95f) + inputs[DECAY_CV_INPUT].getVoltage() / 10.0f, 0.0f, 0.95f);
 		damp = clamp(params[DAMP_PARAM].getValue() + inputs[DAMP_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 
 		if( old_damp != damp ) reverb.setdamp(damp);

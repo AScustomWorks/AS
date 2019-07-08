@@ -218,7 +218,7 @@ struct KillGateWidget : ModuleWidget {
       addParam(createParam<LEDBezel>(Vec(11, 82), module, KillGate::RST_BUTTON1 ));
       addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, KillGate::RESET_LIGHT1));
 
-      addParam(createParam<as_KnobBlack>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1)); 
+      addParam(createParam<as_KnobBlackSnap>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1)); 
 
       addInput(createInput<as_PJ301MPort>(Vec(10, 125), module, KillGate::RESET_IN_1));
       addInput(createInput<as_PJ301MPort>(Vec(55, 125), module, KillGate::CLK_IN_1));
@@ -247,7 +247,7 @@ struct KillGateWidget : ModuleWidget {
       addParam(createParam<LEDBezel>(Vec(11, 82+ group_offset), module, KillGate::RST_BUTTON2 ));
       addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, KillGate::RESET_LIGHT2));
 
-      addParam(createParam<as_KnobBlack>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2)); 
+      addParam(createParam<as_KnobBlackSnap>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2)); 
 
       addInput(createInput<as_PJ301MPort>(Vec(10, 125 + group_offset), module, KillGate::RESET_IN_2));
       addInput(createInput<as_PJ301MPort>(Vec(55, 125 + group_offset), module, KillGate::CLK_IN_2));

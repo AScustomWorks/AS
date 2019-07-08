@@ -36,7 +36,7 @@ struct ReScale: Module {
 
     ReScale() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-        configParam(ReScale::CONVERT_PARAM, 0.0f, 3.0f, 0.0f, "Convert Mode");
+        configParam(ReScale::CONVERT_PARAM, 1.0f, 4.0f, 1.0f, "Convert Mode");
 
     }
 
@@ -47,52 +47,52 @@ struct ReScale: Module {
         if(inputs[INPUT_0].isConnected()){
 
             input_value = clamp(inputs[INPUT_0].getVoltage(), -5.0f,5.0f);
-            if(selection==0){
+            if(selection==1){
                 rescaled_value = input_value;
-            }else if(selection==1){
-                rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 5.0f);
             }else if(selection==2){
-                rescaled_value = rescale(input_value, -5.0f, 5.0f, -10.0f, 10.0f);
+                rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 5.0f);
             }else if(selection==3){
+                rescaled_value = rescale(input_value, -5.0f, 5.0f, -10.0f, 10.0f);
+            }else if(selection==4){
                 rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
             }
 
         }else if(inputs[INPUT_1].isConnected()){
 
             input_value = clamp(inputs[INPUT_1].getVoltage(), 0.0f, 5.0f);
-            if(selection==0){
+            if(selection==1){
                 rescaled_value = rescale(input_value, 0.0f, 5.0f, -5.0f, 5.0f);
-            }else if(selection==1){
-                rescaled_value = input_value;
             }else if(selection==2){
-                rescaled_value = rescale(input_value, 0.0f, 5.0f, -10.0f, 10.0f);
+                rescaled_value = input_value;
             }else if(selection==3){
+                rescaled_value = rescale(input_value, 0.0f, 5.0f, -10.0f, 10.0f);
+            }else if(selection==4){
                 rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
             }
 
         }else if(inputs[INPUT_2].isConnected()){
             
             input_value = clamp(inputs[INPUT_2].getVoltage(), 0.0f, 10.0f);
-            if(selection==0){
+            if(selection==1){
                 rescaled_value = rescale(input_value, 0.0f, 10.0f, -5.0f, 5.0f);
-            }else if(selection==1){
-                rescaled_value = rescale(input_value, 0.0f, 10.0f, 0.0f, 5.0f);        
             }else if(selection==2){
-                rescaled_value = rescale(input_value, 0.0f, 10.0f, -10.0f, 10.0f);
+                rescaled_value = rescale(input_value, 0.0f, 10.0f, 0.0f, 5.0f);        
             }else if(selection==3){
+                rescaled_value = rescale(input_value, 0.0f, 10.0f, -10.0f, 10.0f);
+            }else if(selection==4){
                 rescaled_value = input_value;
             }
 
         }else if(inputs[INPUT_3].isConnected()){
             
             input_value = inputs[INPUT_3].getVoltage();
-            if(selection==0){
+            if(selection==1){
                 rescaled_value = input_value;
-            }else if(selection==1){
-                rescaled_value = input_value;      
             }else if(selection==2){
-                rescaled_value = input_value;
+                rescaled_value = input_value;      
             }else if(selection==3){
+                rescaled_value = input_value;
+            }else if(selection==4){
                 //take the input of a midi KB, get the voltage minus octave, convert it to 1V/KEY
                 float ext_key = getNoteInVolts(input_value);
                 rescaled_value = clamp( rescale( ext_key, 0.0f, 1.0f, 0.0f, 11.0f ), 0.0f, 10.0f );

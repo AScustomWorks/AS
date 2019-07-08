@@ -53,11 +53,11 @@ struct SignalDelay : Module {
 
 	SignalDelay() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
-		configParam(SignalDelay::TIME_1_PARAM, 0.0f, 10.0f, 0.350f, "CH 1 Time");
-		configParam(SignalDelay::TIME_2_PARAM, 0.0f, 10.0f, 0.350f, "CH 2 Time");
+		configParam(SignalDelay::TIME_1_PARAM, 0.0f, 10.0f, 0.350f, "CH 1 Delay", " MS", 0.0f, 1000.0f);
+		configParam(SignalDelay::TIME_2_PARAM, 0.0f, 10.0f, 0.350f, "CH 2 Delay", " MS", 0.0f, 1000.0f);
 		configParam(SignalDelay::SWITCH_1_MODE, 0.0f, 1.0f, 1.0f, "CH 1 send output mode: Pre/Post delay");
 		configParam(SignalDelay::SWITCH_2_MODE, 0.0f, 1.0f, 1.0f, "CH 2 send output mode: Pre/Post delay");
-
+		//configParam(int paramId, float minValue, float maxValue, float defaultValue, std::string label = "", std::string unit = "", float displayBase = 0.f, float displayMultiplier = 1.f, float displayOffset = 0.f)
 	}
 
 
@@ -71,7 +71,7 @@ struct SignalDelay : Module {
 		float dry1 = in1 + lastWet1 * feedback1;
 		// Compute delay time in seconds
 		//delay time in seconds. Linear reading, now easy to setup any value by the digit
-		float delay1 = clamp(params[TIME_1_PARAM].getValue() + inputs[TIME_1_INPUT].getVoltage(), 0.001f, 10.0f);
+		float delay1 = clamp(params[TIME_1_PARAM].getValue() + inputs[TIME_1_INPUT].getVoltage(), 0.0f, 10.0f);
 		//LCD display tempo  - show value as ms
 		lcd_tempo1 = std::round(delay1*1000);
 		// Number of delay samples
@@ -121,7 +121,7 @@ struct SignalDelay : Module {
 		float dry2 = in2 + lastWet2 * feedback2;
 		// Compute delay time in seconds
 		//delay time in seconds. Linear reading, now easy to setup any value by the digit
-		float delay2 = clamp(params[TIME_2_PARAM].getValue() + inputs[TIME_2_INPUT].getVoltage(), 0.001f, 10.0f);
+		float delay2 = clamp(params[TIME_2_PARAM].getValue() + inputs[TIME_2_INPUT].getVoltage(), 0.0f, 10.0f);
 		//LCD display tempo  - show value as ms
 		lcd_tempo2 = std::round(delay2*1000);
 		// Number of delay samples

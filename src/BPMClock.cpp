@@ -113,9 +113,15 @@ struct BPMClock : Module {
   int eighths_count_limit = 2;
   int bars_count_limit = 16;
   
+  //float min_bpm = 40.0f;
+  //float max_bpm = 250.0f;
+
+  float min_bpm = 30.0f;
+  float max_bpm = 300.0f;
+
 	BPMClock() {
     config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-    configParam(BPMClock::TEMPO_PARAM, 40.0f, 250.0f, 120.0f, "Tempo");
+    configParam(BPMClock::TEMPO_PARAM, min_bpm, max_bpm, 120.0f, "Tempo", " BPM");
     configParam(BPMClock::MODE_PARAM, 0.0f, 1.0f, 1.0f, "Mode: Regular/Extended");
     configParam(BPMClock::TIMESIGTOP_PARAM,2.0f, 15.0f, 4.0f, "Time Signature Top");
     configParam(BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f, "Time Signature Bottom");
@@ -134,15 +140,20 @@ struct BPMClock : Module {
 
     run_pulse = runPulse.process(1.0 / args.sampleRate);
     outputs[RUN_OUTPUT].setVoltage((run_pulse ? 10.0f : 0.0f));
-
+    /*
     if (params[MODE_PARAM].getValue()){
+      min_bpm = 40.0f;
+      max_bpm = 250.0f;
       //regular 40 to 250 bpm mode
       tempo = std::round(params[TEMPO_PARAM].getValue());
     }else{
+      min_bpm = 30.0f;
+      max_bpm = 300.0f;
       //extended 30 to 300 mode
       tempo = std::round(rescale(params[TEMPO_PARAM].getValue(),40.0f,250.0f, 30.0f, 300.0f) );
     }
-    //tempo = std::round(params[TEMPO_PARAM].getValue());
+    */
+    tempo = std::round(params[TEMPO_PARAM].getValue());
 
     time_sig_top = std::round(params[TIMESIGTOP_PARAM].getValue());
     time_sig_bottom = std::round(params[TIMESIGBOTTOM_PARAM].getValue());
@@ -409,9 +420,9 @@ struct BPMClockWidget : ModuleWidget {
     }
     addChild(display); 
     //TEMPO KNOB
-    addParam(createParam<as_KnobBlack>(Vec(8, 69), module, BPMClock::TEMPO_PARAM));
+    addParam(createParam<as_KnobBlackSnap>(Vec(8, 69), module, BPMClock::TEMPO_PARAM));
     //OLD/NEW SWITCH FROM 40-250 TO 30-300
-    addParam(createParam<as_CKSS>(Vec(67, 77), module, BPMClock::MODE_PARAM));
+   // addParam(createParam<as_CKSS>(Vec(67, 77), module, BPMClock::MODE_PARAM));
     //SIG TOP DISPLAY 
     SigDisplayWidget *display2 = new SigDisplayWidget();
     display2->box.pos = Vec(54,123);
