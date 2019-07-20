@@ -14,7 +14,7 @@ AS is compatible with VCV Rack 1.0.X. releases, (see previous releases for 0.6.X
 If you enjoy those modules you can support the development by making a donation, it will be appreciated!. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
 Or just buy my paid plugins AS Drums n Filters & AS Seqs n Tools and get even more modules and fun.
-Buy them on the [VCV plugin library] (https://vcvrack.com/plugins.html#Alfredo%20Santamaria)
+Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20Santamaria)
 
 
 ![AS](https://github.com/AScustomWorks/AS/blob/master/AS.JPG)
