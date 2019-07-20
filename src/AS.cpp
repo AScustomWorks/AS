@@ -54,11 +54,13 @@ void init(rack::Plugin *p) {
 	p->addModel(modelReverbStereoFx);
 
 	p->addModel(modelSuperDriveFx);
+	p->addModel(modelSuperDriveStereoFx);
 
 	p->addModel(modelTremoloFx);
 	p->addModel(modelTremoloStereoFx);
 	
 	p->addModel(modelWaveShaper);
+	p->addModel(modelWaveShaperStereo);
 	//BLANK PANELS
 	p->addModel(modelBlankPanel4);
 	p->addModel(modelBlankPanel6);

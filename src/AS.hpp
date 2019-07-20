@@ -54,11 +54,13 @@ extern Model *modelReverbFx;
 extern Model *modelReverbStereoFx;
 
 extern Model *modelSuperDriveFx;
+extern Model *modelSuperDriveStereoFx;
 
 extern Model *modelTremoloFx;
 extern Model *modelTremoloStereoFx;
 
 extern Model *modelWaveShaper;
+extern Model *modelWaveShaperStereo;
 
 extern Model *modelBlankPanel4;
 extern Model *modelBlankPanel6;

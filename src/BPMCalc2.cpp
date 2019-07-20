@@ -76,28 +76,6 @@ struct BPMCalc2 : Module {
   float trth_note_d = 1.0f;
   float trth_note = 1.0f;
   float trth_note_t = 1.0f;
-  //hz variables
-  float hz_bar = 1.0f;
-  float half_hz_d = 1.0f;
-  float half_hz = 1.0f;
-  float half_hz_t = 1.0f;
-
-  float qt_hz_d = 1.0f;
-  float qt_hz = 1.0f;
-  float qt_hz_t = 1.0f;
-
-  float eight_hz_d = 1.0f;
-  float eight_hz = 1.0f;
-  float eight_hz_t = 1.0f;
-
-  float sixth_hz_d = 1.0f;
-  float sixth_hz = 1.0f;
-  float sixth_hz_t = 1.0f;
-
-  float trth_hz_d = 1.0f;
-  float trth_hz = 1.0f;
-  float trth_hz_t = 1.0f;
-
 
   void calculateValues(float bpm){ 
 
@@ -111,53 +89,25 @@ struct BPMCalc2 : Module {
 
         half_note_d = ( millisecondsPerBeat * 3 );
         half_note = ( millisecondsPerBeat * 2 );
-        half_note_t = ( millisecondsPerBeat * 2 * 2 / 3 );
+        half_note_t = ( half_note * 2 / 3 );
 
         qt_note_d = ( millisecondsPerBeat / 2 ) * 3;
         qt_note = millisecondsPerBeat;
-        qt_note_t = ( millisecondsPerBeat * 2 ) / 3;
+        qt_note_t =  half_note  / 3;
 
         eight_note_d = ( millisecondsPerBeat / 4 ) * 3;
         eight_note = millisecondsPerBeat / 2;
         eight_note_t = millisecondsPerBeat / 3;
 
-        sixth_note_d = ( millisecondsPerBeat / 4 ) * 1.5;
         sixth_note = millisecondsPerBeat / 4;
+        sixth_note_d = ( sixth_note ) * 1.5;
         sixth_note_t = millisecondsPerBeat / 6;
-
-        trth_note_d = ( millisecondsPerBeat / 8 ) * 1.5;
+      
         trth_note = millisecondsPerBeat / 8;
-        trth_note_t = millisecondsPerBeat / 8 * 2 / 3;
-        //hz measures
-        hz_bar = (1/secondsPerMeasure);
-
-        half_hz_d = mult / half_note_d;
-        half_hz = mult / half_note;
-        half_hz_t = mult / half_note_t;
-
-        qt_hz_d = mult / qt_note_d;
-        qt_hz = mult / qt_note;
-        qt_hz_t = mult / qt_note_t;
-
-        eight_hz_d = mult / eight_note_d;
-        eight_hz = mult / eight_note;
-        eight_hz_t = mult / eight_note_t;
-
-        sixth_hz_d = mult / sixth_note_d;
-        sixth_hz = mult / sixth_note;
-        sixth_hz_t = mult / sixth_note_t;
-
-        trth_hz_d = mult / trth_note_d;
-        trth_hz = mult / trth_note;
-        trth_hz_t = mult / trth_note_t;
-
+        trth_note_d = ( trth_note ) * 1.5;
+        trth_note_t = trth_note * 2 / 3;
+ 
          last_bpm = bpm;
-        //seems like round calcs are not really needed:
-        /*
-        half_note_d = std::round(millisecondsPerBeat * 3 * mult)/mult;
-        half_note = std::round(millisecondsPerBeat * 2 * mult)/mult;
-        half_note_t = std::round(millisecondsPerBeat * 2 * 2 / 3 * mult)/mult;
-        */
   }
 
   void refreshDetector() {
@@ -176,7 +126,6 @@ struct BPMCalc2 : Module {
   
 	BPMCalc2() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-    //configParam(BPMCalc2::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo");
     configParam(BPMCalc2::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo", " BPM", 0.0f);
   }
 

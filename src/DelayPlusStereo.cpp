@@ -206,7 +206,8 @@ struct DelayPlusStereoFx : Module {
 		// DELAY R - Feed input to delay block
 		//CHECK IF LINK IS ENABLED FOR FEEDBACK KNOBS
 		if(params[FBK_LINK_PARAM].getValue()){
-				feedback2 = feedback1; 
+				feedback2 = feedback1;
+				params[FEEDBACK_PARAM_2].setValue(params[FEEDBACK_PARAM_1].getValue());
 		}else{
 				feedback2 = clamp(params[FEEDBACK_PARAM_2].getValue() + inputs[FEEDBACK__CV_INPUT_2].getVoltage() / 10.0f, 0.0f, 1.0f);
 		}
@@ -257,6 +258,7 @@ struct DelayPlusStereoFx : Module {
 			// Apply color to delay wet output
 			if ( params[COLOR_LINK_PARAM].getValue() ) {
 				color2 = color1;
+				params[COLOR_PARAM_2].setValue(params[COLOR_PARAM_1].getValue());
 			} else {
 				color2 = clamp(params[COLOR_PARAM_2].getValue() + inputs[COLOR_CV_INPUT_2].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}

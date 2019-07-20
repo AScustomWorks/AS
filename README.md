@@ -13,10 +13,26 @@ AS is compatible with VCV Rack 1.0.X. releases, (see previous releases for 0.6.X
 
 If you enjoy those modules you can support the development by making a donation, it will be appreciated!. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
+Or just buy my paid plugins AS Drums n Filters & AS Seqs n Tools and get even more modules and fun.
+Buy them on the [VCV plugin library] (https://vcvrack.com/plugins.html#Alfredo%20Santamaria)
+
 
 ![AS](https://github.com/AScustomWorks/AS/blob/master/AS.JPG)
 
 # AS modules
+
+### V 1.0.3 update
+
+BPM Calc and BPM Calc 2: small code optimization
+
+Delay Plus Stereo FX: Now when the Feedback or Color channels are linked, the right knob reflects the setting from the left knob
+
+Super Drive FX Stereo module added
+
+WaveShaper module: CV inputs to control shape and scale added, wave mod input added.
+
+WaveShaper FX Stereo module added, same features as WaveShaper, but stereo.
+
 
 ### V 1.0.2 update
 
@@ -24,7 +40,7 @@ More graphic updates.
 
 Now every knob tooltip shows the proper parameter value according to it's function.
 
-BPM Clock got the BPM range switch removed to work ok with the tooltips, 30-300 BPM is now the default range.
+BPM Clock got the BPM range switch removed to work ok with the tooltips, 30-300 BPM is now the default range. (Your old patches using BPM Clock will need to adjust the BPM setting).
 
 ### V 1.0.1 update
 
@@ -71,10 +87,14 @@ V 0.6.4: First relase of this module.
 
 V 0.6.5: Added an external input to detect a BPM from a LFO or some other sources, BPM detection code based on Koralfx Beatovnik from Tomek Sosnowski, nice work Tomek!.
 
+V 1.0.3: Small code optimization
+
 ### BPM to delay/ms calculator
 New slimmed down BPM Delay/MS Calculator module, just like the old BPM to delay/hz calculator module but without the calc values display to free some HP space.
 
 V 0.6.11: First relase of this module.
+
+V 1.0.3: Small code optimization
 
 ### 2 Channel Mixer
 Same as 8 channel mixer, but 2 channels only for those small setups(OmriCohen request).
@@ -249,6 +269,8 @@ Stereo version of the Delay Plus module, with link switches for Feedback and Col
 
 V 0.6.7: First relase of this module.
 
+V 1.0.3: Now when the Feedback or Color channels are linked, the right knob reflects the setting from the left knob
+
 ### Phaser
 Autodafe's Phaser Fx module. Mods: graphics, bypass switch.
 
@@ -266,6 +288,11 @@ V 0.5.4: First relase of this module.
 V 0.6.3: bypass CV input added.
 
 V 0.6.5: Now it features soft bypass to avoid switching noise(Results may change according to signal levels).
+
+### SuperDrive Stereo
+Stereo Overdrive/clipping Fx module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
+
+V 1.0.3: First relase of this module.
 
 ### Reverb
 Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP and BLEND parameters, a little bit tamed Reverb with mixed output signal.
@@ -305,6 +332,15 @@ V 0.5.4: Updated look.
 V 0.6.3: bypass CV input added.
 
 V 0.6.5: Now it features soft bypass to avoid switching noise.
+
+V1.0.3: CV inputs to control shape and scale added, wave mod input added. Use the wave mod input to feed adifferent OSC or LFO signal to modulate the shape, use the CV inputs to get even more variations on the resulting sound.
+
+### WaveShaper Stereo
+Like WaveShaper module, but Stereo.
+
+WaveShaper module: CV inputs to control shape and scale added, wave mod input added.
+
+V 1.0.3: First relase of this module.
 
 ### Blank Panel
 Blank panels in 4, 6 & 8 HP.
