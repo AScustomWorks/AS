@@ -5,7 +5,7 @@ AS is a collection of modules for [VCV Rack](https://vcvrack.com/) by Alfredo Sa
 
 AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria , All rights reserved.
 Panel graphics in res/ are © 2017
-Derivative works may not use the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps,etc.).
+Derivative works may not use the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps, etc.).
 
 ### Releases
 
@@ -57,7 +57,7 @@ V 0.5.3: Code fix, now the VCA module works ok when there's no envelope input pr
 ### QuadVCA/Mixer
 AS VCA module x 4, plus mixer functionality (user request).
 
-V 0.5.5: First relase of this module.
+V 0.5.5: First release of this module.
 
 ### BPM Clock
 Strum's Mental VCV Master Clock. Mods: graphics, reset trigger input and output.
@@ -83,7 +83,7 @@ V 1.0.2: BPM Clock got the BPM range switch removed to work ok with the tooltips
 ### BPM to delay/hz calculator
 A BPM to delay/hz calculator to setup easier those nice delay effects.
 
-V 0.6.4: First relase of this module.
+V 0.6.4: First release of this module.
 
 V 0.6.5: Added an external input to detect a BPM from a LFO or some other sources, BPM detection code based on Koralfx Beatovnik from Tomek Sosnowski, nice work Tomek!.
 
@@ -92,22 +92,22 @@ V 1.0.3: Small code optimization
 ### BPM to delay/ms calculator
 New slimmed down BPM Delay/MS Calculator module, just like the old BPM to delay/hz calculator module but without the calc values display to free some HP space.
 
-V 0.6.11: First relase of this module.
+V 0.6.11: First release of this module.
 
 V 1.0.3: Small code optimization
 
 ### 2 Channel Mixer
 Same as 8 channel mixer, but 2 channels only for those small setups(OmriCohen request).
 
-V 0.6.13: First relase of this module.
+V 0.6.13: First release of this module.
 
 ### 4 Channel Mixer
 Same as 8 channel mixer, but 4 channels only for those small setups(OmriCohen request).
 
-V 0.6.13: First relase of this module.
+V 0.6.13: First release of this module.
 
 ### 8 Channel Mixer
-Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware,the default setting for each channel volume is at 70% in stead of 0%.
+Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware, the default setting for each channel volume is at 70% in stead of 0%.
 
 V 0.5.2: added MIX L & R input to chain mixers without giving up 2 mixer channels.
 
@@ -121,7 +121,7 @@ V 0.6.13 New feature: If the input 2 is not active the second row of outputs tak
 ### Merge 2x5
 2x5 CV Signal merger.
 
-V 0.5.7: First relase of this module.
+V 0.5.7: First release of this module.
 
 V 1.0.2 New feature: If the output 2 is not active the output 1 sums up the values of the second row of inputs too, so the module becomes a merge 10 x 1.
 
@@ -159,12 +159,12 @@ V 0.5.7 Module size reduced to 4HP
 V 0.6.10 Added a base frequency switch to change from A (original and default) to C (to match the current VCV standard).
 
 ### TriLFO
-Fundamental LFO module. Mods:graphics, controls stripped to the basics but you get 3 LFOS on the same space.
+Fundamental LFO module. Mods: graphics, controls stripped to the basics but you get 3 LFOS on the same space.
 
 ### AtNuVrTr Dual attenuverter module
 Just like Befaco Attenuverter module but with added cv inputs to modulate both Attenueverter and Offset parameters.
 
-V 0.6.1: First relase of this module.
+V 0.6.1: First release of this module.
 
 ### Triggers REMOVED
 A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigger outputs, trigger volts knob going from 1 to 10 v output.
@@ -174,7 +174,7 @@ A couple of manual trigger buttons, one ON/OFF, one temporary, both with 4 trigg
 ### Triggers MKI
 A manual CV signal trigger module with latch and temporary triggers, volts knob lets you adjust the range from -10v to 10v output.
 
-V 0.5.7: First relase of this module.
+V 0.5.7: First release of this module.
 V 0.6.1: Changed the volts range to -10v +10v and now the display shows positive values in green, and negative values in red.
 
 ### Triggers MKII
@@ -185,14 +185,14 @@ The labels list includes:
     " GTR 2","LEAD 1","LEAD 2"," PAD 1"," PAD 2","CHORDS","  FX 1","  FX 2"," SEQ 1"," SEQ 2"," MIX 1"," MIX 2",    
     " AUX 1"," AUX 2","    ON","   OFF"," START","  STOP"," PAUSE","    UP","  DOWN","  LEFT"," RIGHT", "RUN"
 
-V 0.5.7: First relase of this module.
+V 0.5.7: First release of this module.
 
 V 0.6.5: Added "RUN" label at the end of the list.
 
 ### Triggers MKIII
 A manual CV signal temporary trigger module with labeling integrated, now you can type directly the labels you want to use. Also added a handy second EXT input.
 
-V 0.6.9: First relase of this module.
+V 0.6.9: First release of this module.
 
 ### ReScale
 Utility module to convert from one voltage range to another, available inputs are:
@@ -202,42 +202,42 @@ Utility module to convert from one voltage range to another, available inputs ar
  *1V/OCT option is to convert any voltage source to 1 octave 1V/OCT range.
 
 
-V 0.6.9: First relase of this module.
+V 0.6.9: First release of this module.
 
 ### Steps
 Strum's Mental VCV Counters module. Mods: graphics, 3 counters, up to 64 steps each, added reset lights to the buttons.
 
-V 0.5.4: First relase of this module.
+V 0.5.4: First release of this module.
 
 V 0.5.5: code tweaks.
 
 ### Launch Gate
 Delay the start of a flow of signals by a set number of clock ticks (TAOS request).
 
-V 0.5.5: First relase of this module.
+V 0.5.5: First release of this module.
 
 V 0.6.5: Now it features soft mute, so you can use it both for audio and cv signals without any switching noise.
 
 ### Kill Gate
 Cut the flow of signals after a set number of clock ticks (TAOS request).
 
-V 0.5.6: First relase of this module.
+V 0.5.6: First release of this module.
 
 V 0.6.5: Now it features soft mute, so you can use it both for audio and cv signals without any switching noise.
 
 ### Flow
 Cut the flow of signals with a switch or a cv signal  (TAOS request).
 
-V 0.6.0: First relase of this module.
+V 0.6.0: First release of this module.
 
 V 0.6.5: Now it features soft mute, so you can use it both for audio and cv signals without any switching noise.
 
-V 0.6.9: Switch selector added to reverse the default ON/OFF swtiches light behavior(by usrer request).
+V 0.6.9: Switch selector added to reverse the default ON/OFF swtiches light behavior (by user request).
 
 ### Signal Delay
 Delay the incomming CV signal by set milliseconds, with signal thru and delayed output. You can chain several Signal Delay modules together for unlimited length of delays. (TAOS request).
 
-V 0.5.5: First relase of this module.
+V 0.5.5: First release of this module.
 
 V 0.6,9: Small fix on the ms CV input to take the proper values fron BPM calc module.
 
@@ -246,12 +246,12 @@ V 1.0.1: Added a switch to each thru port to change the output from pre/post del
 ### CV 2 T
 CV to Trigger module. Feed a midi signal to the CV inputs and it will output one trigger signal when the incoming signal rises above 0v, and another trigger signal when the incoming signal returns to 0v. Useful to use your external hardware controller/keyboard as a trigger.
 
-V 0.6.7: First relase of this module.
+V 0.6.7: First release of this module.
 
 ### Zero Crossing CV 2 T
 Zero crossing CV to Trigger module. Each time a CV input hits 0v it will generate a trigger signal on the respective output. User request.
 
-V 0.6.10: First relase of this module.
+V 0.6.10: First release of this module.
 
 ### Delay Plus
 Fundamental Delay module. Mods: graphics, digital display to show delay time in MS , wet signal send & return, bypass switch.
@@ -267,7 +267,7 @@ V 0.6.5: Now it features soft bypass to avoid switching noise.
 ### Delay Plus Stereo
 Stereo version of the Delay Plus module, with link switches for Feedback and Color parameters. If the respective switch is active, the left knob controls the changes for both left and right channels.
 
-V 0.6.7: First relase of this module.
+V 0.6.7: First release of this module.
 
 V 1.0.3: Now when the Feedback or Color channels are linked, the right knob reflects the setting from the left knob
 
@@ -283,7 +283,7 @@ V 0.6.5: Now it features soft bypass to avoid switching noise.
 ### SuperDrive
 Overdrive/clipping Fx module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
 
-V 0.5.4: First relase of this module.
+V 0.5.4: First release of this module.
 
 V 0.6.3: bypass CV input added.
 
@@ -292,12 +292,12 @@ V 0.6.5: Now it features soft bypass to avoid switching noise(Results may change
 ### SuperDrive Stereo
 Stereo Overdrive/clipping Fx module with DRIVE, TONE and GAIN parameters, to get those acid bass lines we all love!.
 
-V 1.0.3: First relase of this module.
+V 1.0.3: First release of this module.
 
 ### Reverb
 Reverb Fx module based on ML_modules reverb and Freeverb code, with DECAY, DAMP and BLEND parameters, a little bit tamed Reverb with mixed output signal.
 
-0.5.4: First relase of this module.
+0.5.4: First release of this module.
 
 V 0.6.3: bypass CV input added.
 
@@ -306,12 +306,12 @@ V 0.6.5: Now it features soft bypass to avoid switching noise.
 ### Reverb Stereo
 Stereo version of the Reverb module, BLEND is replaced with a DRY /WET knob, to work better when used with a mixer send/return ports.
 
-V 0.6.7: First relase of this module.
+V 0.6.7: First release of this module.
 
 ### Tremolo
-Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (set your effect, duplicate the module and invert the phase for stereo tremolo setup)your Tremolo to go!.
+Tremolo Fx module with SHAPE, SPEED and BLEND parameters, and a phase switch (set your effect, duplicate the module and invert the phase for stereo tremolo setup) your Tremolo to go!.
 
-0.5.6: First relase of this module.
+0.5.6: First release of this module.
 
 V 0.6.3: bypass CV input added.
 
@@ -320,7 +320,7 @@ V 0.6.5: Now it features soft bypass to avoid switching noise.
 ### Tremolo Stereo
 Stereo version of the Tremolo module, use the phase switch to change from synced L and R channels to inverted phase, to get stereo panning effect.
 
-V 0.6.7: First relase of this module.
+V 0.6.7: First release of this module.
 
 ### WaveShaper
 HetrickCV Wave Shaper module. Mods: graphics, bypass switch.
@@ -340,7 +340,7 @@ Like WaveShaper module, but Stereo.
 
 WaveShaper module: CV inputs to control shape and scale added, wave mod input added.
 
-V 1.0.3: First relase of this module.
+V 1.0.3: First release of this module.
 
 ### Blank Panel
 Blank panels in 4, 6 & 8 HP.
