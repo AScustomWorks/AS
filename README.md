@@ -21,6 +21,10 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
+### V 1.0.4 update
+
+Just a fix on the plugin.json file
+
 ### V 1.0.3 update
 
 BPM Calc and BPM Calc 2: small code optimization
