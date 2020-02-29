@@ -107,7 +107,7 @@ Same as 8 channel mixer, but 4 channels only for those small setups(OmriCohen re
 V 0.6.13: First release of this module.
 
 ### 8 Channel Mixer
-Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware, the default setting for each channel volume is at 70% in stead of 0%.
+Fundamental/Autodafe mixer module. Mods: graphics, sliders for channel volume, stereo or mono output(L channel outputs L+R signal if R channel is not active). Now with main mix mute button. Beware, the default setting for each channel volume is at 70% instead of 0%.
 
 V 0.5.2: added MIX L & R input to chain mixers without giving up 2 mixer channels.
 
