@@ -1,5 +1,5 @@
 //**************************************************************************************
-//WaveSahper module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
+//WaveShaper module for VCV Rack by Alfredo Santamaria - AS - https://github.com/AScustomWorks/AS
 //
 //Code taken from HetrickCV plugins by Michael Hetrick https://github.com/mhetrick/hetrickcv
 //**************************************************************************************
