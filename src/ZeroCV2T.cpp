@@ -83,7 +83,7 @@ struct ZeroCV2T : Module {
 			for (int i = 0; i < inputs[CV_IN_1].getChannels(); i++) {
 				if ( trig_1.process( params[TRIG_SWITCH_1].getValue() ) ) {
 					trigLight1 = 1.0;
-					for (int j = 0; j < 16; j++) {
+					for (int j = 0; j < inputs[CV_IN_1].getChannels(); j++) {
 						trigPulse1[j].trigger( trigger_length );
 					}
 				}
@@ -126,7 +126,7 @@ struct ZeroCV2T : Module {
 			for (int i = 0; i < inputs[CV_IN_2].getChannels(); i++) {
 				if ( trig_2.process( params[TRIG_SWITCH_2].getValue() ) ) {
 					trigLight2 = 1.0;
-					for (int j = 0; j < 16; j++) {
+					for (int j = 0; j < inputs[CV_IN_2].getChannels(); j++) {
 						trigPulse2[j].trigger( trigger_length );
 					}
 				}
@@ -169,7 +169,7 @@ struct ZeroCV2T : Module {
 			for (int i = 0; i < inputs[CV_IN_3].getChannels(); i++) {
 				if ( trig_3.process( params[TRIG_SWITCH_3].getValue() ) ) {
 					trigLight3 = 1.0;
-					for (int j = 0; j < 16; j++) {
+					for (int j = 0; j < inputs[CV_IN_3].getChannels(); j++) {
 						trigPulse3[j].trigger( trigger_length );
 					}
 				}
@@ -212,7 +212,7 @@ struct ZeroCV2T : Module {
 			for (int i = 0; i < inputs[CV_IN_4].getChannels(); i++) {
 				if ( trig_4.process( params[TRIG_SWITCH_4].getValue() ) ) {
 					trigLight4 = 1.0;
-					for (int j = 0; j < 16; j++) {
+					for (int j = 0; j < inputs[CV_IN_4].getChannels(); j++) {
 						trigPulse4[j].trigger( trigger_length );
 					}
 				}
