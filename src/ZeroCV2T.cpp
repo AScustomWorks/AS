@@ -38,13 +38,9 @@ struct ZeroCV2T : Module {
 
 	dsp::SchmittTrigger trig_1, trig_2, trig_3, trig_4;
 
-	dsp::PulseGenerator trigPulse1, trigPulse2, trigPulse3, trigPulse4;
-	bool trig_pulse_1 = false;
-	bool trig_pulse_2 = false;
-	bool trig_pulse_3 = false;
-	bool trig_pulse_4 = false;
+	dsp::PulseGenerator trigPulse1[16], trigPulse2[16], trigPulse3[16], trigPulse4[16];
 
-	float trigger_length = 0.0001f;
+	float trigger_length = 0.001f;
 
 	const float lightLambda = 0.075f;
 	float trigLight1 = 0.0f;
@@ -52,131 +48,194 @@ struct ZeroCV2T : Module {
 	float trigLight3 = 0.0f;
 	float trigLight4 = 0.0f;
 
-	bool cv_1_engaged = false;
-	bool cv_2_engaged = false;
-	bool cv_3_engaged = false;
-	bool cv_4_engaged = false;
+	bool cv_1_engaged[16] = {false};
+	bool cv_2_engaged[16] = {false};
+	bool cv_3_engaged[16] = {false};
+	bool cv_4_engaged[16] = {false};
 
-	float current_cv_1_volts = 0.0f;
-	float current_cv_2_volts = 0.0f;
-	float current_cv_3_volts = 0.0f;
-	float current_cv_4_volts = 0.0f;
 	float trigger_treshold = 0.0005f;
 
 	ZeroCV2T() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(ZeroCV2T::TRIG_SWITCH_1 , 0.0f, 1.0f, 0.0f, "CH 1 Trigger");
-		configParam(ZeroCV2T::TRIG_SWITCH_2 , 0.0f, 1.0f, 0.0f, "CH 2 Trigger");
-		configParam(ZeroCV2T::TRIG_SWITCH_3 , 0.0f, 1.0f, 0.0f, "CH 3 Trigger");
-		configParam(ZeroCV2T::TRIG_SWITCH_4 , 0.0f, 1.0f, 0.0f, "CH 4 Trigger");
+		configParam(ZeroCV2T::TRIG_SWITCH_1 , 0.0f, 1.0f, 0.0f, "Port 1 Trigger");
+		configParam(ZeroCV2T::TRIG_SWITCH_2 , 0.0f, 1.0f, 0.0f, "Port 2 Trigger");
+		configParam(ZeroCV2T::TRIG_SWITCH_3 , 0.0f, 1.0f, 0.0f, "Port 3 Trigger");
+		configParam(ZeroCV2T::TRIG_SWITCH_4 , 0.0f, 1.0f, 0.0f, "Port 4 Trigger");
 	}
 
 	void process(const ProcessArgs &args) override {
 
 		//CV TRIG 1
-		if ( trig_1.process( params[TRIG_SWITCH_1].getValue() ) ) {
-			trigLight1 = 1.0;
-			trigPulse1.trigger( trigger_length );
-		}
-		current_cv_1_volts = inputs[CV_IN_1].getVoltage();
+		if (inputs[CV_IN_1].getChannels() == 0) {
+			outputs[TRIG_OUT_1].setChannels(1);
 
-		if ( fabs( current_cv_1_volts ) < trigger_treshold ){
-			if(!cv_1_engaged){
-				cv_1_engaged = true;
+			if ( trig_1.process( params[TRIG_SWITCH_1].getValue() ) ) {
 				trigLight1 = 1.0;
-				trigPulse1.trigger( trigger_length );
-				// send trigger
+				trigPulse1[0].trigger( trigger_length );
 			}
+
+			trigLight1 -= trigLight1 / lightLambda / args.sampleRate;
+			lights[TRIG_LED_1].value = trigLight1;
+			outputs[TRIG_OUT_1].setVoltage(trigPulse1[0].process(args.sampleTime) ? 10.f : 0.f);
 		} else {
-			if ( fabs( current_cv_1_volts ) > trigger_treshold ) {
-				// reenable trigger
-				cv_1_engaged = false;
+			outputs[TRIG_OUT_1].setChannels(inputs[CV_IN_1].getChannels());
+
+			for (int i = 0; i < inputs[CV_IN_1].getChannels(); i++) {
+				if ( trig_1.process( params[TRIG_SWITCH_1].getValue() ) ) {
+					trigLight1 = 1.0;
+					for (int j = 0; j < inputs[CV_IN_1].getChannels(); j++) {
+						trigPulse1[j].trigger( trigger_length );
+					}
+				}
+
+				if ( fabs( inputs[CV_IN_1].getVoltage(i) ) < trigger_treshold ){
+					if(!cv_1_engaged[i]){
+						cv_1_engaged[i] = true;
+						trigLight1 = 1.0;
+						trigPulse1[i].trigger( trigger_length );
+						// send trigger
+					}
+				} else {
+					if ( fabs( inputs[CV_IN_1].getVoltage(i) ) > trigger_treshold ) {
+						// reenable trigger
+						cv_1_engaged[i] = false;
+					}
+				}
+
+				trigLight1 -= trigLight1 / lightLambda / args.sampleRate;
+				lights[TRIG_LED_1].value = trigLight1;
+				outputs[TRIG_OUT_1].setVoltage(trigPulse1[i].process(args.sampleTime) ? 10.0f : 0.0f , i);
 			}
 		}
-		
-		trigLight1 -= trigLight1 / lightLambda / args.sampleRate;
-		lights[TRIG_LED_1].value = trigLight1;
-		trig_pulse_1 = trigPulse1.process( 1.0 / args.sampleRate );
-		outputs[TRIG_OUT_1].setVoltage(( trig_pulse_1 ? 10.0f : 0.0f ));
 
 		//CV 2 TRIG 2
-		if ( trig_2.process( params[TRIG_SWITCH_2].getValue() ) ) {
-			trigLight2 = 1.0;
-			trigPulse2.trigger( trigger_length );
-		}
-		current_cv_2_volts = inputs[CV_IN_2].getVoltage();
+		if (inputs[CV_IN_2].getChannels() == 0) {
+			outputs[TRIG_OUT_2].setChannels(1);
 
-		if ( fabs( current_cv_2_volts ) < trigger_treshold ){
-			if(!cv_2_engaged){
-				cv_2_engaged = true;
+			if ( trig_2.process( params[TRIG_SWITCH_2].getValue() ) ) {
 				trigLight2 = 1.0;
-				trigPulse2.trigger( trigger_length );
-				// send trigger
+				trigPulse2[0].trigger( trigger_length );
 			}
+
+			trigLight2 -= trigLight2 / lightLambda / args.sampleRate;
+			lights[TRIG_LED_2].value = trigLight2;
+			outputs[TRIG_OUT_2].setVoltage(trigPulse2[0].process(args.sampleTime) ? 10.f : 0.f);
 		} else {
-			if ( fabs( current_cv_2_volts ) > trigger_treshold ) {
-				// reenable trigger
-				cv_2_engaged = false;
+			outputs[TRIG_OUT_2].setChannels(inputs[CV_IN_2].getChannels());
+
+			for (int i = 0; i < inputs[CV_IN_2].getChannels(); i++) {
+				if ( trig_2.process( params[TRIG_SWITCH_2].getValue() ) ) {
+					trigLight2 = 1.0;
+					for (int j = 0; j < inputs[CV_IN_2].getChannels(); j++) {
+						trigPulse2[j].trigger( trigger_length );
+					}
+				}
+
+				if ( fabs( inputs[CV_IN_2].getVoltage(i) ) < trigger_treshold ){
+					if(!cv_2_engaged[i]){
+						cv_2_engaged[i] = true;
+						trigLight2 = 1.0;
+						trigPulse2[i].trigger( trigger_length );
+						// send trigger
+					}
+				} else {
+					if ( fabs( inputs[CV_IN_2].getVoltage(i) ) > trigger_treshold ) {
+						// reenable trigger
+						cv_2_engaged[i] = false;
+					}
+				}
+
+				trigLight2 -= trigLight2 / lightLambda / args.sampleRate;
+				lights[TRIG_LED_2].value = trigLight2;
+				outputs[TRIG_OUT_2].setVoltage(trigPulse2[i].process(args.sampleTime) ? 10.0f : 0.0f , i);
 			}
 		}
-
-		trigLight2 -= trigLight2 / lightLambda / args.sampleRate;
-		lights[TRIG_LED_2].value = trigLight2;
-		trig_pulse_2 = trigPulse2.process( 1.0 / args.sampleRate );
-		outputs[TRIG_OUT_2].setVoltage(( trig_pulse_2 ? 10.0f : 0.0f ));
-
 
 		//CV 2 TRIG 3
-		if ( trig_3.process( params[TRIG_SWITCH_3].getValue() ) ) {
-			trigLight3 = 1.0;
-			trigPulse3.trigger( trigger_length );
-		}
-		current_cv_3_volts = inputs[CV_IN_3].getVoltage();
-		
-		if ( fabs( current_cv_3_volts ) < trigger_treshold ){
-			if(!cv_3_engaged){
-				cv_3_engaged = true;
-				trigLight3 = 1.0;
-				trigPulse3.trigger( trigger_length );
-				// send trigger
-			}
-		} else {
-			if ( fabs( current_cv_3_volts ) > trigger_treshold ) {
-				// reenable trigger
-				cv_3_engaged = false;
-			}
-		}
+		if (inputs[CV_IN_3].getChannels() == 0) {
+			outputs[TRIG_OUT_3].setChannels(1);
 
-		trigLight3 -= trigLight3 / lightLambda / args.sampleRate;
-		lights[TRIG_LED_3].value = trigLight3;
-		trig_pulse_3 = trigPulse3.process( 1.0 / args.sampleRate );
-		outputs[TRIG_OUT_3].setVoltage(( trig_pulse_3 ? 10.0f : 0.0f ));
+			if ( trig_3.process( params[TRIG_SWITCH_3].getValue() ) ) {
+				trigLight3 = 1.0;
+				trigPulse3[0].trigger( trigger_length );
+			}
+
+			trigLight3 -= trigLight3 / lightLambda / args.sampleRate;
+			lights[TRIG_LED_3].value = trigLight3;
+			outputs[TRIG_OUT_3].setVoltage(trigPulse3[0].process(args.sampleTime) ? 10.f : 0.f);
+		} else {
+			outputs[TRIG_OUT_3].setChannels(inputs[CV_IN_3].getChannels());
+
+			for (int i = 0; i < inputs[CV_IN_3].getChannels(); i++) {
+				if ( trig_3.process( params[TRIG_SWITCH_3].getValue() ) ) {
+					trigLight3 = 1.0;
+					for (int j = 0; j < inputs[CV_IN_3].getChannels(); j++) {
+						trigPulse3[j].trigger( trigger_length );
+					}
+				}
+
+				if ( fabs( inputs[CV_IN_3].getVoltage(i) ) < trigger_treshold ){
+					if(!cv_3_engaged[i]){
+						cv_3_engaged[i] = true;
+						trigLight3 = 1.0;
+						trigPulse3[i].trigger( trigger_length );
+						// send trigger
+					}
+				} else {
+					if ( fabs( inputs[CV_IN_3].getVoltage(i) ) > trigger_treshold ) {
+						// reenable trigger
+						cv_3_engaged[i] = false;
+					}
+				}
+
+				trigLight3 -= trigLight3 / lightLambda / args.sampleRate;
+				lights[TRIG_LED_3].value = trigLight3;
+				outputs[TRIG_OUT_3].setVoltage(trigPulse3[i].process(args.sampleTime) ? 10.0f : 0.0f , i);
+			}
+		}
 
 		//CV 2 TRIG 4
-		if ( trig_4.process( params[TRIG_SWITCH_4].getValue() ) ) {
-			trigLight4 = 1.0;
-			trigPulse4.trigger( trigger_length );
-		}
-		current_cv_4_volts = inputs[CV_IN_4].getVoltage();
-		
-		if ( fabs( current_cv_4_volts ) < trigger_treshold ){
-			if(!cv_4_engaged){
-				cv_4_engaged = true;
-				trigLight4 = 1.0;
-				trigPulse4.trigger( trigger_length );
-				// send trigger
-			}
-		} else {
-			if ( fabs( current_cv_4_volts ) > trigger_treshold ) {
-				// reenable trigger
-				cv_4_engaged = false;
-			}
-		}
+		if (inputs[CV_IN_4].getChannels() == 0) {
+			outputs[TRIG_OUT_4].setChannels(1);
 
-		trigLight4 -= trigLight4 / lightLambda / args.sampleRate;
-		lights[TRIG_LED_4].value = trigLight4;
-		trig_pulse_4 = trigPulse4.process( 1.0 / args.sampleRate );
-		outputs[TRIG_OUT_4].setVoltage(( trig_pulse_4 ? 10.0f : 0.0f ));
+			if ( trig_4.process( params[TRIG_SWITCH_4].getValue() ) ) {
+				trigLight4 = 1.0;
+				trigPulse4[0].trigger( trigger_length );
+			}
+
+			trigLight4 -= trigLight4 / lightLambda / args.sampleRate;
+			lights[TRIG_LED_4].value = trigLight4;
+			outputs[TRIG_OUT_4].setVoltage(trigPulse4[0].process(args.sampleTime) ? 10.f : 0.f);
+		} else {
+			outputs[TRIG_OUT_4].setChannels(inputs[CV_IN_4].getChannels());
+
+			for (int i = 0; i < inputs[CV_IN_4].getChannels(); i++) {
+				if ( trig_4.process( params[TRIG_SWITCH_4].getValue() ) ) {
+					trigLight4 = 1.0;
+					for (int j = 0; j < inputs[CV_IN_4].getChannels(); j++) {
+						trigPulse4[j].trigger( trigger_length );
+					}
+				}
+
+				if ( fabs( inputs[CV_IN_4].getVoltage(i) ) < trigger_treshold ){
+					if(!cv_4_engaged[i]){
+						cv_4_engaged[i] = true;
+						trigLight4 = 1.0;
+						trigPulse4[i].trigger( trigger_length );
+						// send trigger
+					}
+				} else {
+					if ( fabs( inputs[CV_IN_4].getVoltage(i) ) > trigger_treshold ) {
+						// reenable trigger
+						cv_4_engaged[i] = false;
+					}
+				}
+
+				trigLight4 -= trigLight4 / lightLambda / args.sampleRate;
+				lights[TRIG_LED_4].value = trigLight4;
+				outputs[TRIG_OUT_4].setVoltage(trigPulse4[i].process(args.sampleTime) ? 10.0f : 0.0f , i);
+			}
+		}
 
 
 	}
@@ -185,12 +244,12 @@ struct ZeroCV2T : Module {
 };
 
 
-struct ZeroCV2TWidget : ModuleWidget { 
+struct ZeroCV2TWidget : ModuleWidget {
 
 	ZeroCV2TWidget(ZeroCV2T *module) {
 		setModule(module);
 		setPanel(APP->window->loadSvg(asset::plugin(pluginInstance, "res/ZeroCV2T.svg")));
-	
+
 		//SCREWS - SPECIAL SPACING FOR RACK WIDTH*4
 		addChild(createWidget<as_HexScrew>(Vec(0, 0)));
 		addChild(createWidget<as_HexScrew>(Vec(box.size.x - RACK_GRID_WIDTH, 0)));
@@ -230,7 +289,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*3), module, ZeroCV2T::CV_IN_4));
 		//OUTPUTS
 		addOutput(createOutput<as_PJ301MPortGold>(Vec(32, 100+gp_offset*3), module, ZeroCV2T::TRIG_OUT_4));
-		
+
 	}
 };
 

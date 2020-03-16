@@ -8,3 +8,4 @@ slug.txt
 .gitignore
 /dep/*
 /old_v0.6/*
+plugin.dll
