@@ -40,7 +40,7 @@ struct ZeroCV2T : Module {
 
 	dsp::PulseGenerator trigPulse1[16], trigPulse2[16], trigPulse3[16], trigPulse4[16];
 
-	float trigger_length = 0.0001f;
+	float trigger_length = 0.001f;
 
 	const float lightLambda = 0.075f;
 	float trigLight1 = 0.0f;
