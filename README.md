@@ -21,6 +21,12 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
+### V 1.0.5 update
+
+ZCV2T Zero crossing CV to Trigger module, anlexmatos made the update to support CV polyphony
+
+PhaserFx long od bleeding bug between phaser modules finally fixed
+
 ### V 1.0.4 update
 
 Just a fix on the plugin.json file

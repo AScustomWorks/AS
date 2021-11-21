@@ -51,6 +51,97 @@ struct PhaserFx : Module{
 	float fade_out_dry = 1.0f;
     const float fade_speed = 0.001f;
 
+	/*Phaser fx code goes here to fix the bleed betwen modules*/
+	#define SR (44100.f)  //sample rate
+	#define F_PI (3.14159f)
+
+	class Phaser{
+	public:
+		Phaser()  //initialise to some useful defaults...
+			: _fb( 0.7f )
+			, _lfoPhase( 0.0f )
+			, _depth( 1.0f )
+			, _zm1( 0.f )
+		{
+			Range( 440.0f, 1600.0f );
+			Rate( 0.5f );
+		}
+
+		void Range( float fMin, float fMax ){ // Hz
+			_dmin = fMin / (SR/2.0f);
+			_dmax = fMax / (SR/2.0f);
+		}
+
+		void Rate( float rate ){ // cps
+			_lfoInc = 2.0f * F_PI * (rate / SR);
+		}
+
+		void Feedback( float fb ){ // 0 -> <1.
+			_fb = fb;
+		}
+
+		void Depth( float depth ){  // 0 -> 1.
+			_depth = depth;
+		}
+
+		float Update( float inSamp ){
+			//calculate and update phaser sweep lfo...
+			float d  = _dmin + (_dmax-_dmin) * ((sin( _lfoPhase ) + 1.f)/2.f);
+			_lfoPhase += _lfoInc;
+			if( _lfoPhase >= F_PI * 2.0f )
+				_lfoPhase -= F_PI * 2.0f;
+
+			//update filter coeffs
+			for( int i=0; i<6; i++ )
+				_alps[i].Delay( d );
+
+			//calculate output
+			float y = 	_alps[0].Update(
+						_alps[1].Update(
+						_alps[2].Update(
+						_alps[3].Update(
+							_alps[4].Update(
+							_alps[5].Update( inSamp + _zm1 * _fb ))))));
+			_zm1 = y;
+
+			return inSamp + y * _depth;
+		}
+	private:
+		class AllpassDelay{
+		public:
+			AllpassDelay()
+				: _a1( 0.0f )
+				, _zm1( 0.0f )
+				{}
+
+			void Delay( float delay ){ //sample delay time
+				_a1 = (1.0f - delay) / (1.0f + delay);
+			}
+
+			float Update( float inSamp ){
+				float y = inSamp * -_a1 + _zm1;
+				_zm1 = y * _a1 + inSamp;
+
+				return y;
+			}
+		private:
+			float _a1, _zm1;
+		};
+
+		AllpassDelay _alps[6];
+
+		float _dmin, _dmax; //range
+		float _fb; //feedback
+		float _lfoPhase;
+		float _lfoInc;
+		float _depth;
+
+		float _zm1;
+	};
+
+	Phaser *pha = new Phaser();
+	/**/
+
 	PhaserFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f, "Rate", "%", 0.0f, 100.0f);
@@ -91,95 +182,6 @@ struct PhaserFx : Module{
 	}
 
 };
-
-#define SR (44100.f)  //sample rate
-#define F_PI (3.14159f)
-
-class Phaser{
-public:
-	Phaser()  //initialise to some useful defaults...
-    	: _fb( 0.7f )
-    	, _lfoPhase( 0.0f )
-    	, _depth( 1.0f )
-        , _zm1( 0.f )
-    {
-    	Range( 440.0f, 1600.0f );
-    	Rate( 0.5f );
-    }
-
-    void Range( float fMin, float fMax ){ // Hz
-    	_dmin = fMin / (SR/2.0f);
-        _dmax = fMax / (SR/2.0f);
-    }
-
-    void Rate( float rate ){ // cps
-    	_lfoInc = 2.0f * F_PI * (rate / SR);
-    }
-
-    void Feedback( float fb ){ // 0 -> <1.
-    	_fb = fb;
-    }
-
-    void Depth( float depth ){  // 0 -> 1.
-     	_depth = depth;
-    }
-
-    float Update( float inSamp ){
-    	//calculate and update phaser sweep lfo...
-        float d  = _dmin + (_dmax-_dmin) * ((sin( _lfoPhase ) + 1.f)/2.f);
-        _lfoPhase += _lfoInc;
-        if( _lfoPhase >= F_PI * 2.0f )
-        	_lfoPhase -= F_PI * 2.0f;
-
-        //update filter coeffs
-        for( int i=0; i<6; i++ )
-        	_alps[i].Delay( d );
-
-        //calculate output
-        float y = 	_alps[0].Update(
-        			 _alps[1].Update(
-                      _alps[2].Update(
-                       _alps[3].Update(
-                        _alps[4].Update(
-                         _alps[5].Update( inSamp + _zm1 * _fb ))))));
-        _zm1 = y;
-
-        return inSamp + y * _depth;
-    }
-private:
-	class AllpassDelay{
-    public:
-    	AllpassDelay()
-        	: _a1( 0.0f )
-            , _zm1( 0.0f )
-            {}
-
-        void Delay( float delay ){ //sample delay time
-        	_a1 = (1.0f - delay) / (1.0f + delay);
-        }
-
-        float Update( float inSamp ){
-        	float y = inSamp * -_a1 + _zm1;
-        	_zm1 = y * _a1 + inSamp;
-
-            return y;
-        }
-    private:
-    	float _a1, _zm1;
-    };
-
-    AllpassDelay _alps[6];
-
-    float _dmin, _dmax; //range
-    float _fb; //feedback
-    float _lfoPhase;
-    float _lfoInc;
-    float _depth;
-
-    float _zm1;
-};
-
-Phaser *pha = new Phaser();
 
 void PhaserFx::process(const ProcessArgs &args) {
 
