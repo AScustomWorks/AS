@@ -5,7 +5,7 @@ AS is a collection of modules for [VCV Rack](https://vcvrack.com/) by Alfredo Sa
 
 AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria , All rights reserved.
 Panel graphics in res/ are © 2017
-Derivative works may not use the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps, etc.).
+Derivative works may not use in any way the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps, etc.).
 
 ### Releases
 
@@ -21,7 +21,7 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
-### V 1.0.5 update
+### V 1.0.5 update, final update for V1 plugin
 
 ZCV2T Zero crossing CV to Trigger module, anlexmatos made the update to support CV polyphony
 
