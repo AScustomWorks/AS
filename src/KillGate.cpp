@@ -158,28 +158,31 @@ struct NumberDisplayWidget : TransparentWidget {
 
   int *value = NULL;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  NumberDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
-
-  void draw(const DrawArgs &args) override {
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
     if (!value) {
       return;
     }   
-    // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+		font = APP->window->loadFont(fontPath);
+		// text 
+		if (font) {
+      nvgFontSize(args.vg, 18);
+      nvgFontFaceId(args.vg, font->handle);
+      nvgTextLetterSpacing(args.vg, 2.5);
 
-    std::stringstream to_display;   
-    to_display << std::right  << std::setw(2) << *value;
+      std::stringstream to_display;   
+      to_display << std::right  << std::setw(2) << *value;
 
-    Vec textPos = Vec(4.0f, 17.0f); 
+      Vec textPos = Vec(4.0f, 17.0f); 
 
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+      NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+      nvgFillColor(args.vg, textColor);
+      nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    }
   }
 };
 ////////////////////////////////////
@@ -216,7 +219,7 @@ struct KillGateWidget : ModuleWidget {
     int group_offset = 160;
 
       addParam(createParam<LEDBezel>(Vec(11, 82), module, KillGate::RST_BUTTON1 ));
-      addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3), module, KillGate::RESET_LIGHT1));
+      addChild(createLight<LEDBezelLight<RedLight>>(Vec(11+2.2, 82+2.3), module, KillGate::RESET_LIGHT1));
 
       addParam(createParam<as_KnobBlackSnap>(Vec(43, 73), module, KillGate::COUNT_NUM_PARAM_1)); 
 
@@ -245,7 +248,7 @@ struct KillGateWidget : ModuleWidget {
       addChild(display4);
 
       addParam(createParam<LEDBezel>(Vec(11, 82+ group_offset), module, KillGate::RST_BUTTON2 ));
-      addChild(createLight<LedLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, KillGate::RESET_LIGHT2));
+      addChild(createLight<LEDBezelLight<RedLight>>(Vec(11+2.2, 82+2.3+ group_offset), module, KillGate::RESET_LIGHT2));
 
       addParam(createParam<as_KnobBlackSnap>(Vec(43, 73 + group_offset), module, KillGate::COUNT_NUM_PARAM_2)); 
 

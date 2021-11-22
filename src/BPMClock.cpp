@@ -301,48 +301,31 @@ struct BPMClock : Module {
 struct BpmDisplayWidget : TransparentWidget {
   float *value = NULL;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  BpmDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
-
-  void draw(const DrawArgs &args) override {
+  void drawLayer(const DrawArgs& args, int layer) override {
+    if (layer != 1){
+      return;
+    }
     if (!value) {
       return;
     }
-      // Display Background is now drawn on the svg panel
-    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
-    /*NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(args.vg);
-    nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(args.vg, backgroundColor);
-    nvgFill(args.vg);
-    nvgStrokeWidth(args.vg, 1.5);
-    nvgStrokeColor(args.vg, borderColor);
-    nvgStroke(args.vg);  
-    */  
+    font = APP->window->loadFont(fontPath);
     // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+    if (font) {
+      nvgFontSize(args.vg, 18);
+      nvgFontFaceId(args.vg, font->handle);
+      nvgTextLetterSpacing(args.vg, 2.5);
 
-    std::stringstream to_display;   
-    to_display << std::setw(3) << *value;
+      std::stringstream to_display;   
+      to_display << std::setw(3) << *value;
 
-    Vec textPos = Vec(4.0f, 17.0f); 
-    /*
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "~~~", NULL);
+      Vec textPos = Vec(4.0f, 17.0f); 
 
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "\\\\\\", NULL);
-    */
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+      NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+      nvgFillColor(args.vg, textColor);
+      nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    }
   }
 };
 ////////////////////////////////////
@@ -350,51 +333,31 @@ struct SigDisplayWidget : TransparentWidget {
 
   int *value = NULL;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  SigDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-    
-    
-  };
-
-  void draw(const DrawArgs &args) override {
+  void drawLayer(const DrawArgs& args, int layer) override {
+    if (layer != 1){
+      return;
+    }
     if (!value) {
       return;
     }
-    
-    // Display Background is now drawn on the svg panel
-    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
-    /* NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(args.vg);
-    nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(args.vg, backgroundColor);
-    nvgFill(args.vg);
-    nvgStrokeWidth(args.vg, 1.0);
-    nvgStrokeColor(args.vg, borderColor);
-    nvgStroke(args.vg); 
-    */   
+    font = APP->window->loadFont(fontPath);
     // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+    if (font) {
+      nvgFontSize(args.vg, 18);
+      nvgFontFaceId(args.vg, font->handle);
+      nvgTextLetterSpacing(args.vg, 2.5);
 
-    std::stringstream to_display;   
-    to_display << std::setw(2) << *value;
+      std::stringstream to_display;   
+      to_display << std::setw(2) << *value;
 
-    Vec textPos = Vec(3.0f, 17.0f); 
-    /*
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "~~", NULL);
+      Vec textPos = Vec(3.0f, 17.0f); 
 
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "\\\\", NULL);
-    */
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+      NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+      nvgFillColor(args.vg, textColor);
+      nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    }
   }
 };
 //////////////////////////////////
@@ -445,10 +408,10 @@ struct BPMClockWidget : ModuleWidget {
     addParam(createParam<as_Knob>(Vec(8, 150), module, BPMClock::TIMESIGBOTTOM_PARAM));
     //RESET & RUN LEDS
     addParam(createParam<LEDBezel>(Vec(33.5, 202), module, BPMClock::RUN_SWITCH ));
-    addChild(createLight<LedLight<RedLight>>(Vec(35.7, 204.3), module, BPMClock::RUN_LED));
+    addChild(createLight<LEDBezelLight<RedLight>>(Vec(35.7, 204.3), module, BPMClock::RUN_LED));
 
     addParam(createParam<LEDBezel>(Vec(33.5, 241), module, BPMClock::RESET_SWITCH ));
-    addChild(createLight<LedLight<RedLight>>(Vec(35.7, 243.2), module, BPMClock::RESET_LED));
+    addChild(createLight<LEDBezelLight<RedLight>>(Vec(35.7, 243.2), module, BPMClock::RESET_LED));
     //RESET INPUT
     addInput(createInput<as_PJ301MPort>(Vec(6, 240), module, BPMClock::RESET_INPUT));
     //RESET OUTPUT

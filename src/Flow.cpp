@@ -156,13 +156,15 @@ struct FlowWidget : ModuleWidget {
         //OLD/NEW SWITCH FROM 40-250 TO 30-300
         addParam(createParam<as_CKSS>(Vec(67, 23), module, Flow::MODE_PARAM));
 
-        static const float led_offset = 3.3;
+        static const float led_offset = 6.0;//3.3;
         static const float led_center = 15;
         static const float y_offset = 150;
         //TRIGGER 1
         //SWITCH
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 50), module, Flow::SWITCH_1));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 50+led_offset), module, Flow::TRIGGER_LED_1));
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 50), module, Flow::SWITCH_1));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 50+led_offset), module, Flow::TRIGGER_LED_1)); */
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 50), module, Flow::SWITCH_1));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 50+led_offset), module, Flow::TRIGGER_LED_1));
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(10, 140), module, Flow::CV_TRIG_INPUT_1));
         addInput(createInput<as_PJ301MPort>(Vec(55, 140), module, Flow::RESET_1));
@@ -170,8 +172,10 @@ struct FlowWidget : ModuleWidget {
         addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 174), module, Flow::OUTPUT_1));
         //TRIGGER 2
         //SWITCH
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 50+y_offset), module, Flow::SWITCH_2));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 50+led_offset+y_offset), module, Flow::TRIGGER_LED_2));
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 50+y_offset), module, Flow::SWITCH_2));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 50+led_offset+y_offset), module, Flow::TRIGGER_LED_2)); */
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 50+y_offset), module, Flow::SWITCH_2));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 50+led_offset+y_offset), module, Flow::TRIGGER_LED_2));
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(10, 140+y_offset), module, Flow::CV_TRIG_INPUT_2));
         addInput(createInput<as_PJ301MPort>(Vec(55, 140+y_offset), module, Flow::RESET_2));

@@ -138,32 +138,37 @@ static const char *label_values[] = {
 ///////////////////////////////////
 struct LabelDisplayWidget : TransparentWidget {
 
-  int *value = NULL;
-  std::shared_ptr<Font> font;
+    int *value = NULL;
+    std::shared_ptr<Font> font;
+    std::string fontPath = asset::plugin(pluginInstance, "res/saxmono.ttf");
 
-  LabelDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/saxmono.ttf"));
-  };
 
-  void draw(const DrawArgs &args) override {
-    if (!value) {
-      return;
-    }      
-    // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.0);
+    void drawLayer(const DrawArgs& args, int layer) override {
+        if (layer != 1){
+            return;
+        }
+        if (!value) {
+        return;
+        }
 
-    std::stringstream to_display;   
-    to_display << std::right  << std::setw(5) << *value;
+        font = APP->window->loadFont(fontPath);
+        // text 
+        if (font) {
+            nvgFontSize(args.vg, 18);
+            nvgFontFaceId(args.vg, font->handle);
+            nvgTextLetterSpacing(args.vg, 2.0);
 
-    Vec textPos = Vec(4.0f, 16.0f); 
+            std::stringstream to_display;   
+            to_display << std::right  << std::setw(5) << *value;
 
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    //nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
-    nvgText(args.vg, textPos.x, textPos.y, label_values[*value], NULL);
-  }
+            Vec textPos = Vec(4.0f, 16.0f); 
+
+            NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+            nvgFillColor(args.vg, textColor);
+            //nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+            nvgText(args.vg, textPos.x, textPos.y, label_values[*value], NULL);
+        }
+    }
 };
 ////////////////////////////////////
 
@@ -179,7 +184,7 @@ struct TriggersMKIIWidget : ModuleWidget {
         addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        static const float led_offset = 3.3;
+        static const float led_offset = 6.0;//3.3;
         static const float led_center = 15;
         static const float y_offset = 150;
         //TRIGGER 1
@@ -195,8 +200,11 @@ struct TriggersMKIIWidget : ModuleWidget {
         //PARAM
         addParam(createParam<as_KnobBlackSnap>(Vec(46, 77), module, TriggersMKII::LABEL_PARAM_1));
         //SWITCH
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1)); */
+
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 132), module, TriggersMKII::TRIGGER_SWITCH_1));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 132+led_offset), module, TriggersMKII::TRIGGER_LED_1));
         //PORTS
         addOutput(createOutput<as_PJ301MPortGold>(Vec(7, 78), module, TriggersMKII::TRIGGER_OUT1));
         addInput(createInput<as_PJ301MPort>(Vec(7, 104), module, TriggersMKII::CV_TRIG_INPUT_1));
@@ -214,8 +222,10 @@ struct TriggersMKIIWidget : ModuleWidget {
         //PARAM
         addParam(createParam<as_KnobBlackSnap>(Vec(46, 77+y_offset), module, TriggersMKII::LABEL_PARAM_2));
         //SWITCH
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2)); */
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 132+y_offset), module, TriggersMKII::MOMENTARY_SWITCH_2));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 132+led_offset+y_offset), module, TriggersMKII::MOMENTARY_LED_2));
         //PORTS
         addOutput(createOutput<as_PJ301MPortGold>(Vec(7, 78+y_offset), module, TriggersMKII::MOMENTARY_OUT2));
         addInput(createInput<as_PJ301MPort>(Vec(7, 104+y_offset), module, TriggersMKII::CV_TRIG_INPUT_2));

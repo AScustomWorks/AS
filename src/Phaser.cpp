@@ -183,6 +183,7 @@ struct PhaserFx : Module{
 
 };
 
+
 void PhaserFx::process(const ProcessArgs &args) {
 
 	if (bypass_button_trig.process(params[BYPASS_SWITCH].getValue())	|| bypass_cv_trig.process(inputs[BYPASS_CV_INPUT].getVoltage()) ){
@@ -256,7 +257,7 @@ struct PhaserFxWidget : ModuleWidget {
 		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, PhaserFx::DEPTH_LIGHT));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(55, 260), module, PhaserFx::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, PhaserFx::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, PhaserFx::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, PhaserFx::INPUT));
 		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, PhaserFx::OUT));

@@ -174,7 +174,7 @@ struct TriggersMKIIIWidget : ModuleWidget {
         addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        static const float led_offset = 3.3;
+        static const float led_offset = 6.0;//3.3;
         static const float led_center = 15;
         static const float y_offset = 150;
         //TRIGGER 1
@@ -189,8 +189,12 @@ struct TriggersMKIIIWidget : ModuleWidget {
         addChild(textField1);
         
         //SWITCH
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 122), module, TriggersMKIII::TRIGGER_SWITCH_1));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 122+led_offset), module, TriggersMKIII::TRIGGER_LED_1));
+/*      addParam(createParam<BigLEDBezel>(Vec(led_center, 122), module, TriggersMKIII::TRIGGER_SWITCH_1));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 122+led_offset), module, TriggersMKIII::TRIGGER_LED_1)); */
+
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 122), module, TriggersMKIII::TRIGGER_SWITCH_1));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 122+led_offset), module, TriggersMKIII::TRIGGER_LED_1));
+
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(8, 90), module, TriggersMKIII::CV_TRIG_INPUT_1_1));
         addInput(createInput<as_PJ301MPort>(Vec(33, 90), module, TriggersMKIII::CV_TRIG_INPUT_1_2));
@@ -208,8 +212,11 @@ struct TriggersMKIIIWidget : ModuleWidget {
         
         
         //SWITCH
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 122+y_offset), module, TriggersMKIII::TRIGGER_SWITCH_2));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 122+led_offset+y_offset), module, TriggersMKIII::TRIGGER_LED_2));
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 122+y_offset), module, TriggersMKIII::TRIGGER_SWITCH_2));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 122+led_offset+y_offset), module, TriggersMKIII::TRIGGER_LED_2)); */
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 122+y_offset), module, TriggersMKIII::TRIGGER_SWITCH_2));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 122+led_offset+y_offset), module, TriggersMKIII::TRIGGER_LED_2));
+
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(8, 90+y_offset), module, TriggersMKIII::CV_TRIG_INPUT_2_1));
         addInput(createInput<as_PJ301MPort>(Vec(33, 90+y_offset), module, TriggersMKIII::CV_TRIG_INPUT_2_2));

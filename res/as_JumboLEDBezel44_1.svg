@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="43.97" height="43.97" viewBox="0 0 43.97 43.97">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-962.99" y1="2625.1" x2="-921.22" y2="2625.1" gradientTransform="matrix(0, 1, 1, 0, -2603.11, 964.09)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2b2b2b"/>
+      <stop offset="1" stop-color="#0d0c0c"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="46.85" y1="358.21" x2="46.85" y2="375.47" gradientTransform="translate(68.83 378.03) rotate(180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#363333"/>
+      <stop offset="1" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="-166.01" y1="-17.44" x2="-166.01" y2="-0.18" gradientTransform="translate(188 41.59)" xlink:href="#linear-gradient-2"/>
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="Layer_3" data-name="Layer 3">
+      <g>
+        <g>
+          <g id="g5959-5">
+            <path id="path5961-3" d="M44,22A22,22,0,1,1,22,0,22,22,0,0,1,44,22"/>
+          </g>
+          <g id="g5959-5-2" data-name="g5959-5">
+            <path id="path5961-3-2" data-name="path5961-3" d="M1.1,22A20.89,20.89,0,1,1,22,42.88,20.89,20.89,0,0,1,1.1,22" style="fill: url(#linear-gradient)"/>
+          </g>
+          <g>
+            <g id="g5959-5-3" data-name="g5959-5">
+              <path id="path5961-3-3" data-name="path5961-3" d="M41.78,22A19.79,19.79,0,1,1,22,2.2,19.8,19.8,0,0,1,41.78,22" style="fill: #222223"/>
+            </g>
+            <g id="g5959-5-4" data-name="g5959-5" style="opacity: 0.28999999165535">
+              <path id="path5961-3-4" data-name="path5961-3" d="M22,2.2A19.79,19.79,0,1,1,2.2,22,19.79,19.79,0,0,1,22,2.2" style="fill: #222223"/>
+            </g>
+          </g>
+        </g>
+        <g>
+          <path d="M22,3.89a20.22,20.22,0,0,1,17.41,10,18.89,18.89,0,0,0-34.82,0A20.19,20.19,0,0,1,22,3.89Z" style="fill: url(#linear-gradient-2)"/>
+          <path d="M22,40.08A20.17,20.17,0,0,1,4.58,30.13a18.89,18.89,0,0,0,34.82,0A20.19,20.19,0,0,1,22,40.08Z" style="fill: url(#linear-gradient-3)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

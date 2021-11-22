@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="linear-gradient" x1="18" y1="0.24" x2="18" y2="34.78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e6e7e8"/>
+      <stop offset="1" stop-color="#282828"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="18" y1="0.24" x2="18" y2="34.78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#848588"/>
+      <stop offset="0.09" stop-color="#78797c"/>
+      <stop offset="0.51" stop-color="#424344"/>
+      <stop offset="0.83" stop-color="#212121"/>
+      <stop offset="1" stop-color="#141414"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="18" y1="1.12" x2="18" y2="33.95" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-4" x1="18" y1="-16.76" x2="18" y2="17.78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffafc" stop-opacity="0.8"/>
+      <stop offset="0.15" stop-color="#fffafc" stop-opacity="0.79"/>
+      <stop offset="0.29" stop-color="#fffafc" stop-opacity="0.74"/>
+      <stop offset="0.43" stop-color="#fffbfc" stop-opacity="0.67"/>
+      <stop offset="0.56" stop-color="#fffbfd" stop-opacity="0.57"/>
+      <stop offset="0.7" stop-color="#fffcfd" stop-opacity="0.43"/>
+      <stop offset="0.83" stop-color="#fffdfe" stop-opacity="0.27"/>
+      <stop offset="0.95" stop-color="#fff" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="AS_Knob">
+      <g id="Bg">
+        <path id="path910" d="M36,18A18,18,0,1,1,18,0h0A18,18,0,0,1,36,18" style="fill: url(#linear-gradient)"/>
+        <g>
+          <path id="path910-2" data-name="path910" d="M36,18A18,18,0,1,1,18,0h0A18,18,0,0,1,36,18" style="opacity: 0.30000000000000004;fill: url(#linear-gradient-2)"/>
+          <path id="path910-3" data-name="path910" d="M35.11,18A17.11,17.11,0,1,1,18,.89h0A17.11,17.11,0,0,1,35.11,18" style="opacity: 0.6000000000000001;fill: url(#linear-gradient-3)"/>
+          <path d="M18,0A18,18,0,0,0,.46,14,31.56,31.56,0,0,0,18,19a31.56,31.56,0,0,0,17.54-5A18,18,0,0,0,18,0Z" style="opacity: 0.30000000000000004;fill: url(#linear-gradient-4)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

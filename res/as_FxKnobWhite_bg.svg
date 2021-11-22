@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="linear-gradient" x1="18" y1="-16.76" x2="18" y2="17.78" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffafc"/>
+      <stop offset="0.18" stop-color="#fffafc" stop-opacity="0.99"/>
+      <stop offset="0.34" stop-color="#fffafc" stop-opacity="0.94"/>
+      <stop offset="0.49" stop-color="#fffbfd" stop-opacity="0.87"/>
+      <stop offset="0.65" stop-color="#fffcfd" stop-opacity="0.77"/>
+      <stop offset="0.8" stop-color="#fffdfe" stop-opacity="0.63"/>
+      <stop offset="0.94" stop-color="#fffeff" stop-opacity="0.47"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="FX_knob_white" data-name="FX knob white">
+      <g id="BG">
+        <circle cx="18" cy="18" r="17.03" style="fill: #f0efe4"/>
+        <path d="M18,0A18,18,0,1,0,36,18,18,18,0,0,0,18,0Zm0,35A17,17,0,1,1,35,18,17,17,0,0,1,18,35Z" style="fill: #afaca0"/>
+        <path d="M18,0A18,18,0,0,0,.46,14,31.56,31.56,0,0,0,18,19a31.56,31.56,0,0,0,17.54-5A18,18,0,0,0,18,0Z" style="fill: url(#linear-gradient)"/>
+      </g>
+    </g>
+  </g>
+</svg>

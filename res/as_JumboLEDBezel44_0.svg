@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="43.97" height="43.97" viewBox="0 0 43.97 43.97">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-1494.9" y1="-768.35" x2="-1453.13" y2="-768.35" gradientTransform="translate(-746.36 1496) rotate(90)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9c989a"/>
+      <stop offset="1" stop-color="#0a0a0a"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="21.99" y1="41.52" x2="21.99" y2="1.93" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#363333"/>
+      <stop offset="1" stop-color="#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="21.99" y1="24.15" x2="21.99" y2="41.41" xlink:href="#linear-gradient-2"/>
+    <linearGradient id="linear-gradient-4" x1="-3.16" y1="316.57" x2="-3.16" y2="333.83" gradientTransform="translate(18.83 336.39) rotate(180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4d4848"/>
+      <stop offset="1" stop-color="#333"/>
+    </linearGradient>
+  </defs>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="Layer_3" data-name="Layer 3">
+      <g>
+        <g id="g5959-5">
+          <path id="path5961-3" d="M44,22A22,22,0,1,1,22,0,22,22,0,0,1,44,22"/>
+        </g>
+        <g id="g5959-5-2" data-name="g5959-5" style="opacity: 0.7000000000000001">
+          <path id="path5961-3-2" data-name="path5961-3" d="M1.1,22A20.89,20.89,0,1,1,22,42.88,20.89,20.89,0,0,1,1.1,22" style="fill: url(#linear-gradient)"/>
+        </g>
+        <g id="g5959-5-3" data-name="g5959-5">
+          <path id="path5961-3-3" data-name="path5961-3" d="M22,1.83A20.16,20.16,0,1,1,1.83,22,20.16,20.16,0,0,1,22,1.83" style="fill: url(#linear-gradient-2)"/>
+        </g>
+        <g>
+          <path d="M22,40.08A20.17,20.17,0,0,1,4.58,30.13a18.89,18.89,0,0,0,34.82,0A20.19,20.19,0,0,1,22,40.08Z" style="fill: url(#linear-gradient-3)"/>
+          <path d="M22,3.89a20.22,20.22,0,0,1,17.41,10,18.89,18.89,0,0,0-34.82,0A20.19,20.19,0,0,1,22,3.89Z" style="fill: url(#linear-gradient-4)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

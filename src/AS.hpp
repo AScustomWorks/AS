@@ -74,24 +74,43 @@ extern Model *modelBlankPanelSpecial;
 
 struct as_HexScrew : app::SvgScrew {
 	as_HexScrew() {
-		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-hexscrew.svg")));
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_hexscrew.svg")));
+		//setSvg(Svg::load(asset::plugin(pluginInstance, "res/v2/as_hexscrew.svg")));
 		sw->wrap();
 		box.size = sw->box.size;
 	}
 };
+//Update For V2 for the 3D looks
+struct AsBaseKnob : app::SvgKnob {
 
-struct as_Knob : app::SvgKnob {
-	as_Knob() {
-        minAngle = -0.83 * M_PI;
+	widget::SvgWidget* bg;
+	widget::SvgWidget* fg;
+
+	AsBaseKnob() {
+		//rotation angles, override in custon knob struct as needed
+		minAngle = -0.83 * M_PI;
 		maxAngle = 0.83 * M_PI;
-		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-knob.svg")));
+		//The actual rotating graphic is defined on each struct setting with setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-knob.svg")));
+		//background static graphic with highlight and gradients as needed
+		bg = new widget::SvgWidget;
+		fb->addChildBelow(bg, tw);
+		//foreground (knob cap)-> a static graphic with highlights and gradients as needed
+		fg = new widget::SvgWidget;
+		fb->addChildAbove(fg, tw);
 	}
 };
-struct as_KnobBlack : app::SvgKnob {
+
+struct as_Knob : AsBaseKnob {
+
+	as_Knob() {
+		setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_knob.svg")));
+        bg->setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_knob_bg.svg")));
+	}
+};
+struct as_KnobBlack : AsBaseKnob {
 	as_KnobBlack() {
-        minAngle = -0.83 * M_PI;
-		maxAngle = 0.83 * M_PI;
-		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-knobBlack.svg")));
+        setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_knobBlack.svg")));
+        bg->setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_knobBlack_bg.svg")));
 	}
 };
 
@@ -110,18 +129,16 @@ struct as_KnobBlackSnap4 : as_KnobBlack {
 };
 
 
-struct as_FxKnobWhite : app::SvgKnob {
+struct as_FxKnobWhite : AsBaseKnob {
 	as_FxKnobWhite() {
-        minAngle = -0.83 * M_PI;
-		maxAngle = 0.83 * M_PI;
-		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-FxKnobWhite.svg")));
+		setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_FxKnobWhite.svg")));
+        bg->setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_FxKnobWhite_bg.svg")));
 	}
 };
-struct as_FxKnobBlack : app::SvgKnob {
+struct as_FxKnobBlack : AsBaseKnob {
 	as_FxKnobBlack() {
-        minAngle = -0.83 * M_PI;
-		maxAngle = 0.83 * M_PI;
-		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-FxKnobBlack.svg")));
+		setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_FxKnobBlack.svg")));
+        bg->setSvg(Svg::load(asset::plugin(pluginInstance, "res/as_FxKnobBlack_bg.svg")));
 	}
 };
 
@@ -181,6 +198,54 @@ struct GiantLight : BASE {
                 this->box.size = mm2px(Vec(18.0, 18.0));
         }
 };
+/*updated jumbo leds*/
+struct JumboLEDBezel44 : app::SvgSwitch {
+        JumboLEDBezel44() {
+			momentary = true;
+            addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_JumboLEDBezel44_0.svg")));
+        }
+};
+
+struct JumboLEDBezel60 : app::SvgSwitch {
+        JumboLEDBezel60() {
+			momentary = true;
+            addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_JumboLEDBezel60_0.svg")));
+        }
+};
+
+
+
+template <typename BASE>
+struct JumboLedLight60 : BASE {
+	JumboLedLight60() {
+		this->box.size = Vec(48.0, 48.0);
+	}
+};
+
+struct JumboLedSwitch60 : app::SvgSwitch {
+	JumboLedSwitch60() {
+		momentary = true;
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_JumboLEDBezel60_0.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_JumboLEDBezel60_1.svg")));
+	}
+};
+
+template <typename BASE>
+struct JumboLedLight44 : BASE {
+	JumboLedLight44() {
+		this->box.size = Vec(34.0,34.0);
+	}
+};
+
+struct JumboLedSwitch44 : app::SvgSwitch {
+	JumboLedSwitch44() {
+		momentary = true;
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_JumboLEDBezel44_0.svg")));
+		addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_JumboLEDBezel44_1.svg")));
+	}
+};
+
+
 
 template <typename BASE>
  struct MeterLight : BASE {
@@ -221,7 +286,7 @@ struct YellowRedLight : GrayModuleLightWidget {
 
 struct as_PJ301MPort : app::SvgPort {
 	as_PJ301MPort() {
-		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as-PJ301M.svg")));
+		setSvg(APP->window->loadSvg(asset::plugin(pluginInstance, "res/as_PJ301M.svg")));
 	}
 };
 
@@ -236,11 +301,11 @@ struct as_SlidePot : app::SvgSlider {
 		Vec margin = Vec(4, 4);
 		maxHandlePos = Vec(-1.5, -8).plus(margin);
 		minHandlePos = Vec(-1.5, 87).plus(margin);
-		setBackgroundSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-SlidePot.svg")));
+		setBackgroundSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as_SlidePot.svg")));
 		background->wrap();
 		background->box.pos = margin;
 		box.size = background->box.size.plus(margin.mult(2));
-		setHandleSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-SlidePotHandle.svg")));
+		setHandleSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as_SlidePotHandle.svg")));
 		handle->wrap();
 	}
 };
@@ -250,11 +315,11 @@ struct as_FaderPot : app::SvgSlider {
 		Vec margin = Vec(4, 4);
 		maxHandlePos = Vec(-1.5, -8).plus(margin);
 		minHandlePos = Vec(-1.5, 57).plus(margin);
-		setBackgroundSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-FaderPot.svg")));
+		setBackgroundSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as_FaderPot.svg")));
 		background->wrap();
 		background->box.pos = margin;
 		box.size = background->box.size.plus(margin.mult(2));
-		setHandleSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as-SlidePotHandle.svg")));
+		setHandleSvg(APP->window->loadSvg(asset::plugin(pluginInstance,"res/as_SlidePotHandle.svg")));
 		handle->wrap();
 	}
 };

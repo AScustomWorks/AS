@@ -228,7 +228,7 @@ struct WaveShaperStereoWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(33, 182), module, WaveShaperStereo::RANGE_CV_INPUT));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(55, 260), module, WaveShaperStereo::BYPASS_SWITCH));
-		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, WaveShaperStereo::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, WaveShaperStereo::BYPASS_LED));
 		//BYPASS CV INPUT
 		addInput(createInput<as_PJ301MPort>(Vec(10, 259), module, WaveShaperStereo::BYPASS_CV_INPUT));
 		//INPUTS
