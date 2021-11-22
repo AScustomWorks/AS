@@ -16,7 +16,7 @@ If you enjoy those modules you can support the development by making a donation,
 Or just buy my paid plugins AS Drums n Filters & AS Seqs n Tools and get even more modules and fun.
 Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20Santamaria)
 
-![AS](https://github.com/AScustomWorks/AS/blob/V2/AS-V2.JPG)
+![AS](https://github.com/AScustomWorks/AS/blob/V2/AS-V2.jpg)
 
 # AS modules
 
