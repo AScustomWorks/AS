@@ -132,40 +132,44 @@ struct TriggersMKI: Module {
 ///////////////////////////////////
 struct VoltsDisplayWidget : TransparentWidget {
 
-  float *value = NULL;
-  bool *negative;
-  std::shared_ptr<Font> font;
+    float *value = NULL;
+    bool *negative;
+    std::shared_ptr<Font> font;
+    std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  VoltsDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
 
-  void draw(const DrawArgs &args) override {
-    if (!value) {
-      return;
-    }
-   
-    // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+    void drawLayer(const DrawArgs& args, int layer) override {
+        if (layer != 1){
+            return;
+        }
+        if (!value) {
+        return;
+        }
 
-    char display_string[10];
-    sprintf(display_string,"%5.2f",*value);
+        font = APP->window->loadFont(fontPath);
+        // text 
+        if (font) {
+            nvgFontSize(args.vg, 18);
+            nvgFontFaceId(args.vg, font->handle);
+            nvgTextLetterSpacing(args.vg, 2.5);
 
-    Vec textPos = Vec(3.0f, 17.0f); 
+            char display_string[10];
+            sprintf(display_string,"%5.2f",*value);
 
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+            Vec textPos = Vec(3.0f, 17.0f); 
 
-    if(*negative){
-        textColor = nvgRGB(0xf0, 0x00, 0x00);
-    }else{
-        //textColor = nvgRGB(0x90, 0xc6, 0x3e);
-        textColor = nvgRGB(0x00, 0xaf, 0x25);
-    }
-    
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, display_string, NULL);
+            NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+
+            if(*negative){
+                textColor = nvgRGB(0xf0, 0x00, 0x00);
+            }else{
+                //textColor = nvgRGB(0x90, 0xc6, 0x3e);
+                textColor = nvgRGB(0x00, 0xaf, 0x25);
+            }
+            
+            nvgFillColor(args.vg, textColor);
+            nvgText(args.vg, textPos.x, textPos.y, display_string, NULL);
+        }
 
   }
 };
@@ -196,13 +200,19 @@ struct TriggersMKIWidget : ModuleWidget {
         //PARAMS
         addParam(createParam<as_KnobBlack>(Vec(26, 77), module, TriggersMKI::VOLTAGE_PARAM));
         //SWITCHES
-        static const float led_offset = 3.3;
+        static const float led_offset = 6.0;//3.3;
         static const float led_center = 15;
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 182), module, TriggersMKI::RUN_SWITCH));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 182+led_offset), module, TriggersMKI::RUN_LED));
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 182), module, TriggersMKI::RUN_SWITCH));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 182+led_offset), module, TriggersMKI::RUN_LED)); */
 
-        addParam(createParam<BigLEDBezel>(Vec(led_center, 262), module, TriggersMKI::MOMENTARY_SWITCH));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 262+led_offset), module, TriggersMKI::MOMENTARY_LED));
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 182), module, TriggersMKI::RUN_SWITCH));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 182+led_offset), module, TriggersMKI::RUN_LED));
+
+/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 262), module, TriggersMKI::MOMENTARY_SWITCH));
+        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 262+led_offset), module, TriggersMKI::MOMENTARY_LED)); */
+
+        addParam(createParam<JumboLEDBezel60>(Vec(led_center, 262), module, TriggersMKI::MOMENTARY_SWITCH));
+        addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 262+led_offset), module, TriggersMKI::MOMENTARY_LED));
 
         //PORTS
         addInput(createInput<as_PJ301MPort>(Vec(10, 145), module, TriggersMKI::CV_RUN_INPUT));

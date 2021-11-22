@@ -306,51 +306,36 @@ struct BPMCalc : Module {
 
 ////////////////////////////////////
 struct TempodisplayWidget : TransparentWidget {
+
   std::string *value = NULL;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  TempodisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
 
-  void draw(const DrawArgs &args) override{
     if (!value) {
       return;
     }
-     // Display Background is now drawn on the svg panel
-    /*
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(args.vg);
-    nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(args.vg, backgroundColor);
-    nvgFill(args.vg);
-    nvgStrokeWidth(args.vg, 1.5);
-    nvgStrokeColor(args.vg, borderColor);
-    nvgStroke(args.vg); 
-    */   
+
+    font = APP->window->loadFont(fontPath);
     // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+    if (font) {
+      nvgFontSize(args.vg, 18);
+      nvgFontFaceId(args.vg, font->handle);
+      nvgTextLetterSpacing(args.vg, 2.5);
 
-    std::stringstream to_display;   
-    to_display << std::setw(3) << *value;
+      std::stringstream to_display;   
+      to_display << std::setw(3) << *value;
 
-    Vec textPos = Vec(14.0f, 17.0f); 
+      Vec textPos = Vec(14.0f, 17.0f); 
 
-    /*
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "~~~", NULL);
-
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "\\\\\\", NULL);
-    */
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+      NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+      nvgFillColor(args.vg, textColor);
+      nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    }
   }
 };
 
@@ -362,198 +347,200 @@ struct TxtDisplay : TransparentWidget{
   int frame = 0;
   const int v_s = 14;
   const int h_off = 60;
-   const int hz_txt_off = 125;
+  const int hz_txt_off = 125;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/saxmono.ttf");
 
 
-  TxtDisplay(){
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/saxmono.ttf"));
-  }
-
-  void draw(const DrawArgs &args) override {
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
     if (++frame >= 16){
       frame = 0;
     }
     if (module) {
-      
-      nvgFontSize(args.vg, 13);
-      nvgFontFaceId(args.vg, font->handle);
-      nvgTextLetterSpacing(args.vg, 0);
-      nvgTextAlign(args.vg, NVG_ALIGN_LEFT);
-      NVGcolor  textColor = nvgRGB(0xf0, 0x00, 0x00);
-      nvgFillColor(args.vg, textColor);
-      //note texts
-      nvgText(args.vg, 0, 0+v_s * 0,  "     1:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 1,  "  •1/2:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 2,  "   1/2:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 3,  "  t1/2:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 4,  "  •1/4:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 5,  "   1/4:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 6,  "  t1/4:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 7,  "  •1/8:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 8,  "   1/8:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 9,  "  t1/8:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 10, " •1/16:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 11, "  1/16:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 12, " t1/16:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 13, " •1/32:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 14, "  1/32:", NULL);
-      nvgText(args.vg, 0, 0+v_s * 15, " t1/32:", NULL);
+      font = APP->window->loadFont(fontPath);
+      if(font){
+        nvgFontSize(args.vg, 13);
+        nvgFontFaceId(args.vg, font->handle);
+        nvgTextLetterSpacing(args.vg, 0);
+        nvgTextAlign(args.vg, NVG_ALIGN_LEFT);
+        NVGcolor  textColor = nvgRGB(0xf0, 0x00, 0x00);
+        nvgFillColor(args.vg, textColor);
+        //note texts
+        nvgText(args.vg, 0, 0+v_s * 0,  "     1:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 1,  "  •1/2:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 2,  "   1/2:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 3,  "  t1/2:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 4,  "  •1/4:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 5,  "   1/4:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 6,  "  t1/4:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 7,  "  •1/8:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 8,  "   1/8:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 9,  "  t1/8:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 10, " •1/16:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 11, "  1/16:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 12, " t1/16:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 13, " •1/32:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 14, "  1/32:", NULL);
+        nvgText(args.vg, 0, 0+v_s * 15, " t1/32:", NULL);
 
-      std::stringstream to_display;
-      to_display << std::fixed;
-      to_display.precision(0);
-      to_display.fill (' ');
-      //bar
-      to_display.width(4);
-      to_display <<  module->bar  << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 0,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //1/2
-      to_display.width(4);
-      to_display << module->half_note_d << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 1,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->half_note << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 2,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->half_note_t << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 3,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //1/4
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->qt_note_d << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 4,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->qt_note << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 5,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->qt_note_t << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 6,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //1/8
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->eight_note_d << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 7,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->eight_note << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 8,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->eight_note_t << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 9,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //1/16
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->sixth_note_d << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 10,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->sixth_note << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 11,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->sixth_note_t << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 12,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //1/32
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->trth_note_d << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 13,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->trth_note << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 14,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(4);
-      to_display << module->trth_note_t << " ms.";
-      nvgText(args.vg, 0 + h_off, 0 + v_s * 15,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
+        std::stringstream to_display;
+        to_display << std::fixed;
+        to_display.precision(0);
+        to_display.fill (' ');
+        //bar
+        to_display.width(4);
+        to_display <<  module->bar  << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 0,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //1/2
+        to_display.width(4);
+        to_display << module->half_note_d << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 1,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->half_note << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 2,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->half_note_t << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 3,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //1/4
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->qt_note_d << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 4,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->qt_note << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 5,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->qt_note_t << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 6,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //1/8
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->eight_note_d << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 7,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->eight_note << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 8,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->eight_note_t << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 9,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //1/16
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->sixth_note_d << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 10,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->sixth_note << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 11,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->sixth_note_t << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 12,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //1/32
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->trth_note_d << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 13,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->trth_note << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 14,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(4);
+        to_display << module->trth_note_t << " ms.";
+        nvgText(args.vg, 0 + h_off, 0 + v_s * 15,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
 
-      to_display.precision(2);
-      //hz bar
-      to_display.width(5);
-      to_display <<  module->hz_bar  << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 0,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //hz 1/2
-      to_display.width(5);
-      to_display << module->half_hz_d << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 1,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->half_hz << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 2,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->half_hz_t << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 3,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //hz 1/4
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->qt_hz_d << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 4,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->qt_hz << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 5,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->qt_hz_t << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 6,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //hz 1/8
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->eight_hz_d << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 7,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->eight_hz << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 8,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->eight_hz_t << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 9,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //hz 1/16
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->sixth_hz_d << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 10,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->sixth_hz << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 11,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->sixth_hz_t << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 12,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      //hz 1/32
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->trth_hz_d << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 13,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->trth_hz << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 14,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
-      to_display.width(5);
-      to_display << module->trth_hz_t << " hz.";
-      nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 15,  to_display.str().c_str(), NULL);
-      to_display.clear(); to_display.str("");
+        to_display.precision(2);
+        //hz bar
+        to_display.width(5);
+        to_display <<  module->hz_bar  << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 0,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //hz 1/2
+        to_display.width(5);
+        to_display << module->half_hz_d << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 1,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->half_hz << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 2,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->half_hz_t << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 3,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //hz 1/4
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->qt_hz_d << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 4,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->qt_hz << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 5,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->qt_hz_t << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 6,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //hz 1/8
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->eight_hz_d << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 7,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->eight_hz << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 8,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->eight_hz_t << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 9,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //hz 1/16
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->sixth_hz_d << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 10,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->sixth_hz << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 11,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->sixth_hz_t << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 12,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        //hz 1/32
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->trth_hz_d << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 13,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->trth_hz << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 14,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+        to_display.width(5);
+        to_display << module->trth_hz_t << " hz.";
+        nvgText(args.vg, 0 + hz_txt_off, 0 + v_s * 15,  to_display.str().c_str(), NULL);
+        to_display.clear(); to_display.str("");
+      }
     }
   }
 };

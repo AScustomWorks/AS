@@ -268,13 +268,13 @@ struct Mixer4chWidget : ModuleWidget{
 		//MUTES
 		static const float mutePosY = 310;
 		addParam(createParam<LEDBezel>(Vec(columnPos[0]+3, mutePosY), module, Mixer4ch::CH1MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT1));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT1));
 		addParam(createParam<LEDBezel>(Vec(columnPos[1]+3, mutePosY), module, Mixer4ch::CH2MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT2));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT2));
 		addParam(createParam<LEDBezel>(Vec(columnPos[2]+3, mutePosY), module, Mixer4ch::CH3MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[2]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT3));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(columnPos[2]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT3));
 		addParam(createParam<LEDBezel>(Vec(columnPos[3]+3, mutePosY), module, Mixer4ch::CH4MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[3]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT4));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(columnPos[3]+5.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT4));
 
 		//PORTS
 		static const float portsY[4] = {60,90,120,150};
@@ -307,7 +307,7 @@ struct Mixer4chWidget : ModuleWidget{
 		addInput(createInput<as_PJ301MPort>(Vec(mstrX, portsY[3]), module, Mixer4ch::MIX_CV_INPUT));
 		addParam(createParam<as_FaderPot>(Vec(mstrX, volPosY), module, Mixer4ch::MIX_PARAM));
 		addParam(createParam<LEDBezel>(Vec(mstrX, mutePosY), module, Mixer4ch::MASTER_MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(mstrX+2.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT_MASTER));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(mstrX+2.2, mutePosY+2), module, Mixer4ch::MUTE_LIGHT_MASTER));
 
 		//LINK
 		addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], 30), module, Mixer4ch::LINK_L));

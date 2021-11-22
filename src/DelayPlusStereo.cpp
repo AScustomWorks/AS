@@ -3,13 +3,9 @@
 //
 //Code taken from the Fundamentals plugins by Andrew Belt http://www.vcvrack.com
 //**************************************************************************************
+
 #include "AS.hpp"
-/*
-#include "dsp/samplerate.hpp"
-#include "dsp/ringbuffer.hpp"
-#include "dsp/filter.hpp"
-#include "dsp/digital.hpp"
-*/
+
 #include <sstream>
 #include <iomanip>
 
@@ -337,52 +333,38 @@ struct DelayPlusStereoFx : Module {
 ///////////////////////////////////
 struct MsDisplayWidget : TransparentWidget {
 
-  int *value = NULL;
-  std::shared_ptr<Font> font;
+	int *value = NULL;
+	std::shared_ptr<Font> font;
+	std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  MsDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
+		if (!value) {
+			return;
+		}
+		font = APP->window->loadFont(fontPath);
+		// text 
+		if (font) {
+			nvgFontSize(args.vg, 18);
+			nvgFontFaceId(args.vg, font->handle);
+			nvgTextLetterSpacing(args.vg, 2.5);
 
-  void draw(const DrawArgs &args) override{
-	if (!value) {
-      return;
-    }
-    /*// Background
-	NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(args.vg);
-    nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(args.vg, backgroundColor);
-    nvgFill(args.vg);
-    nvgStrokeWidth(args.vg, 1.5);
-    nvgStrokeColor(args.vg, borderColor);
-    nvgStroke(args.vg); 
-	*/   
-    // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+			std::stringstream to_display;   
+			to_display << std::right  << std::setw(5) << *value;
+			//to_display << std::right << *value;
+			Vec textPos = Vec(4.0f, 17.0f); 
+			
+			NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+			nvgFillColor(args.vg, textColor);
+			nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
 
-    std::stringstream to_display;   
-    to_display << std::right  << std::setw(5) << *value;
-	//to_display << std::right << *value;
+		}
 
-    Vec textPos = Vec(4.0f, 17.0f); 
-	/*
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "~~~~~", NULL);
-
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "\\\\\\\\\\", NULL);
-	*/
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
-  }
+	}
 };
+
 ////////////////////////////////////
 struct DelayPlusStereoFxWidget : ModuleWidget { 
 
@@ -429,7 +411,7 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		addParam(createParam<as_FxKnobWhite>(Vec(71, 251), module, DelayPlusStereoFx::MIX_PARAM));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(79, 292), module, DelayPlusStereoFx::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(79+2.2, 294), module, DelayPlusStereoFx::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(79+2.2, 294), module, DelayPlusStereoFx::BYPASS_LED));
 		//INPUTS CV L
 		addInput(createInput<as_PJ301MPort>(Vec(7, 87), module, DelayPlusStereoFx::TIME_CV_INPUT_1));
 		addInput(createInput<as_PJ301MPort>(Vec(7, 137), module, DelayPlusStereoFx::FEEDBACK__CV_INPUT_1));

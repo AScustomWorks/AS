@@ -260,7 +260,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//CV 2 TRIG 1
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101), module, ZeroCV2T::TRIG_SWITCH_1 ));
-		addChild(createLight<LedLight<RedLight>>(Vec(6+2.2, 103.2), module, ZeroCV2T::TRIG_LED_1));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(6+2.2, 103.2), module, ZeroCV2T::TRIG_LED_1));
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60), module, ZeroCV2T::CV_IN_1));
 		//OUTPUTS
@@ -268,7 +268,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//CV 2 TRIG 2
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101+gp_offset*1), module, ZeroCV2T::TRIG_SWITCH_2 ));
-		addChild(createLight<LedLight<RedLight>>(Vec(6+2.2, 103.2+gp_offset*1), module, ZeroCV2T::TRIG_LED_2));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(6+2.2, 103.2+gp_offset*1), module, ZeroCV2T::TRIG_LED_2));
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*1), module, ZeroCV2T::CV_IN_2));
 		//OUTPUTS
@@ -276,7 +276,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//CV 2 TRIG 3
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101+gp_offset*2), module, ZeroCV2T::TRIG_SWITCH_3 ));
-		addChild(createLight<LedLight<RedLight>>(Vec(6+2.2, 103.2+gp_offset*2), module, ZeroCV2T::TRIG_LED_3));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(6+2.2, 103.2+gp_offset*2), module, ZeroCV2T::TRIG_LED_3));
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*2), module, ZeroCV2T::CV_IN_3));
 		//OUTPUTS
@@ -284,7 +284,7 @@ struct ZeroCV2TWidget : ModuleWidget {
 		//CV 2 TRIG 4
 		//SWITCH & LED
 		addParam(createParam<LEDBezel>(Vec(6, 101+gp_offset*3), module, ZeroCV2T::TRIG_SWITCH_4 ));
-		addChild(createLight<LedLight<RedLight>>(Vec(6+2.2, 103.2+gp_offset*3), module, ZeroCV2T::TRIG_LED_4));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(6+2.2, 103.2+gp_offset*3), module, ZeroCV2T::TRIG_LED_4));
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(18,60+gp_offset*3), module, ZeroCV2T::CV_IN_4));
 		//OUTPUTS

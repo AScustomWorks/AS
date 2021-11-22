@@ -187,7 +187,7 @@ struct ReverbFxWidget : ModuleWidget {
 		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, ReverbFx::BLEND_LIGHT));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(55, 260), module, ReverbFx::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, ReverbFx::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, ReverbFx::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, ReverbFx::SIGNAL_INPUT));
 		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, ReverbFx::SIGNAL_OUTPUT));

@@ -169,31 +169,33 @@ struct SignalDelay : Module {
 ///////////////////////////////////
 struct MsDelayDisplayWidget : TransparentWidget {
 
-  int *value = NULL;
-  std::shared_ptr<Font> font;
+	int *value = NULL;
+	std::shared_ptr<Font> font;
+	std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  MsDelayDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
+		if (!value) {
+		return;
+		}   
+		font = APP->window->loadFont(fontPath);
+		// text 
+		if (font) {
+			nvgFontSize(args.vg, 18);
+			nvgFontFaceId(args.vg, font->handle);
+			nvgTextLetterSpacing(args.vg, 2.5);
 
-  void draw(const DrawArgs &args) override {
-	if (!value) {
-      return;
-	} 
-	
-    // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+			std::stringstream to_display;   
+			to_display << std::right  << std::setw(5) << *value;
 
-    std::stringstream to_display;   
-    to_display << std::right  << std::setw(5) << *value;
+			Vec textPos = Vec(4.0f, 17.0f); 
 
-    Vec textPos = Vec(4.0f, 17.0f); 
-
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+			NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+			nvgFillColor(args.vg, textColor);
+			nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+		}
   }
 };
 ////////////////////////////////////

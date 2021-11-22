@@ -210,7 +210,7 @@ struct ReverbStereoFxWidget : ModuleWidget {
 		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, ReverbStereoFx::BLEND_LIGHT));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(55, 260), module, ReverbStereoFx::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, ReverbStereoFx::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, ReverbStereoFx::BYPASS_LED));
 		//INPUTS
 		addInput(createInput<as_PJ301MPort>(Vec(15, 300), module, ReverbStereoFx::SIGNAL_INPUT_L));
 		addInput(createInput<as_PJ301MPort>(Vec(15, 330), module, ReverbStereoFx::SIGNAL_INPUT_R));

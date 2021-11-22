@@ -188,28 +188,28 @@ struct NumberDisplayWidget : TransparentWidget {
 
   int *value = NULL;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  NumberDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
-
-  void draw(const DrawArgs &args) override{
+  void draw(const DrawArgs &args) override {
     if (!value) {
       return;
-    }  
-    // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+    }   
+		font = APP->window->loadFont(fontPath);
+		// text 
+		if (font) {
+      nvgFontSize(args.vg, 18);
+      nvgFontFaceId(args.vg, font->handle);
+      nvgTextLetterSpacing(args.vg, 2.5);
 
-    std::stringstream to_display;   
-    to_display << std::right  << std::setw(2) << *value;
+      std::stringstream to_display;   
+      to_display << std::right  << std::setw(2) << *value;
 
-    Vec textPos = Vec(4.0f, 17.0f); 
+      Vec textPos = Vec(4.0f, 17.0f); 
 
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+      NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+      nvgFillColor(args.vg, textColor);
+      nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    }
   }
 };
 ////////////////////////////////////
@@ -246,7 +246,7 @@ struct StepsWidget : ModuleWidget {
     int group_offset = 100;
 
       addParam(createParam<LEDBezel>(Vec(5, 82), module, Steps::RST_BUTTON1 ));
-      addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
+      addChild(createLight<LEDBezelLight<RedLight>>(Vec(5+2.2, 82+2.3), module, Steps::RESET_LIGHT1));
 
       addParam(createParam<as_KnobBlackSnap>(Vec(43, 73), module, Steps::COUNT_NUM_PARAM_1)); 
 
@@ -273,7 +273,7 @@ struct StepsWidget : ModuleWidget {
       addChild(display4);
 
       addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset), module, Steps::RST_BUTTON2 ));
-      addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset), module, Steps::RESET_LIGHT2));
+      addChild(createLight<LEDBezelLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset), module, Steps::RESET_LIGHT2));
 
       addParam(createParam<as_KnobBlackSnap>(Vec(43, 73 + group_offset), module, Steps::COUNT_NUM_PARAM_2)); 
 
@@ -300,7 +300,7 @@ struct StepsWidget : ModuleWidget {
       addChild(display6);
 
       addParam(createParam<LEDBezel>(Vec(5, 82+ group_offset*2), module, Steps::RST_BUTTON3 ));
-      addChild(createLight<LedLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset*2), module, Steps::RESET_LIGHT3));
+      addChild(createLight<LEDBezelLight<RedLight>>(Vec(5+2.2, 82+2.3+ group_offset*2), module, Steps::RESET_LIGHT3));
 
       addParam(createParam<as_KnobBlackSnap>(Vec(43, 73 + group_offset*2), module, Steps::COUNT_NUM_PARAM_3)); 
 

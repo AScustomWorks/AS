@@ -176,7 +176,7 @@ struct WaveShaperWidget : ModuleWidget {
 		addParam(createParam<as_CKSSH>(Vec(33, 220), module, WaveShaper::RANGE_PARAM));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(55, 260), module, WaveShaper::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, WaveShaper::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, WaveShaper::BYPASS_LED));
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, WaveShaper::INPUT));
 		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, WaveShaper::OUTPUT));

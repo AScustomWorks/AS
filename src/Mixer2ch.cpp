@@ -214,9 +214,9 @@ struct Mixer2chWidget : ModuleWidget{
 		//MUTES
 		static const float mutePosY = 310;
 		addParam(createParam<LEDBezel>(Vec(columnPos[0]+3, mutePosY), module, Mixer2ch::CH1MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT1));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(columnPos[0]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT1));
 		addParam(createParam<LEDBezel>(Vec(columnPos[1]+3, mutePosY), module, Mixer2ch::CH2MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT2));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(columnPos[1]+5.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT2));
 
 		//PORTS
 		static const float portsY[4] = {60,90,120,150};
@@ -239,7 +239,7 @@ struct Mixer2chWidget : ModuleWidget{
 		addInput(createInput<as_PJ301MPort>(Vec(mstrX, portsY[3]), module, Mixer2ch::MIX_CV_INPUT));
 		addParam(createParam<as_FaderPot>(Vec(mstrX, volPosY), module, Mixer2ch::MIX_PARAM));
 		addParam(createParam<LEDBezel>(Vec(mstrX, mutePosY), module, Mixer2ch::MASTER_MUTE ));
-		addChild(createLight<LedLight<RedLight>>(Vec(mstrX+2.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT_MASTER));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(mstrX+2.2, mutePosY+2), module, Mixer2ch::MUTE_LIGHT_MASTER));
 
 		//LINK
 		addInput(createInput<as_PJ301MPort>(Vec(columnPos[0], 30), module, Mixer2ch::LINK_L));

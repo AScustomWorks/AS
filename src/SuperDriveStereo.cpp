@@ -239,7 +239,7 @@ struct SuperDriveStereoFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, SuperDriveStereoFx::GAIN_CV_INPUT));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(55, 260), module, SuperDriveStereoFx::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(57.2, 262), module, SuperDriveStereoFx::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, SuperDriveStereoFx::BYPASS_LED));
 		//BYPASS CV INPUT
 		addInput(createInput<as_PJ301MPort>(Vec(10, 259), module, SuperDriveStereoFx::BYPASS_CV_INPUT));
 		//INPUTS

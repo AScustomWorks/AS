@@ -300,53 +300,38 @@ struct SEQ16 : Module {
 
 struct StepsDisplayWidget : TransparentWidget {
 
-  int *value = NULL;
-  std::shared_ptr<Font> font;
+	int *value = NULL;
+	std::shared_ptr<Font> font;
+	std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  StepsDisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
 
-  void draw(const DrawArgs &args) override {
-	if (!value) {
-      return;
-    }
-    // Display Background is now drawn on the svg panel
-    //NVGcolor backgroundColor = nvgRGB(0x20, 0x20, 0x20);
-	/*
-	NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(args.vg);
-    nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(args.vg, backgroundColor);
-    nvgFill(args.vg);
-    nvgStrokeWidth(args.vg, 1.5);
-    nvgStrokeColor(args.vg, borderColor);
-    nvgStroke(args.vg);
-*/
-    nvgFontSize(args.vg, 22);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
+		if (!value) {
+			return;
+		}
+		font = APP->window->loadFont(fontPath);
+		// text 
+		if (font) {
+			nvgFontSize(args.vg, 22);
+			nvgFontFaceId(args.vg, font->handle);
+			nvgTextLetterSpacing(args.vg, 2.5);
 
-    char displayStr[3];
+			char displayStr[3];
 
-    sprintf(displayStr, "%2u", (unsigned) *value);
+			sprintf(displayStr, "%2u", (unsigned) *value);
 
-    Vec textPos = Vec(6, 23);
-	/*
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "~~", NULL);
+			Vec textPos = Vec(6, 23);
 
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "\\\\", NULL);
-	*/
+			NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+			nvgFillColor(args.vg, textColor);
+			nvgText(args.vg, textPos.x, textPos.y, displayStr,  NULL);
+		}
 
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, displayStr,  NULL);
-  }
+}
+
 };
 
 template <typename BASE>
@@ -393,15 +378,23 @@ struct SEQ16Widget : ModuleWidget {
 		//CLOCK KNOB
 		addParam(createParam<as_KnobBlack>(Vec(portX[1]-elements_offst, 56), module, SEQ16::CLOCK_PARAM));
 		//RUN RESET SWITCHES & LEDS
-		addParam(createParam<LEDBezel>(Vec(portX[2], main_lds_y), module, SEQ16::RUN_PARAM ));
-		addChild(createLight<MuteLight<RedLight>>(Vec(portX[2]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
-		addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RESET_PARAM ));
-		addChild(createLight<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
+/* 		addParam(createParam<LEDBezel>(Vec(portX[2], main_lds_y), module, SEQ16::RUN_PARAM ));
+		addChild(createLight<MuteLight<RedLight>>(Vec(portX[2]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT)); */
+		addParam(createParam<LEDBezel>(Vec(portX[2], main_lds_y), module, SEQ16::RUN_PARAM));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(portX[2]+2.2, main_lds_y+2), module, SEQ16::RUNNING_LIGHT));
+/* 		addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RESET_PARAM ));
+		addChild(createLight<MuteLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT)); */
+		addParam(createParam<LEDBezel>(Vec(portX[3], main_lds_y), module, SEQ16::RESET_PARAM));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(portX[3]+2.2, main_lds_y+2), module, SEQ16::RESET_LIGHT));
+
 		//STEP TRIGGER
-		addParam(createParam<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM ));
-		addChild(createLight<MuteLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT));
-			addParam(createParam<TL1105>(Vec(portX[9]+20, main_lds_y+40), module, SEQ16::PREV_STEP));
-			addParam(createParam<TL1105>(Vec(portX[10]+5, main_lds_y+40), module, SEQ16::NEXT_STEP));
+/* 		addParam(createParam<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM ));
+		addChild(createLight<MuteLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT)); */
+		addParam(createParam<LEDBezel>(Vec(portX[11], main_lds_y+35), module, SEQ16::TRIGGER_PARAM));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(portX[11]+2.2, main_lds_y+2+35), module, SEQ16::TRIGGER_LIGHT));
+
+		addParam(createParam<TL1105>(Vec(portX[9]+20, main_lds_y+40), module, SEQ16::PREV_STEP));
+		addParam(createParam<TL1105>(Vec(portX[10]+5, main_lds_y+40), module, SEQ16::NEXT_STEP));
 		//GATE MODE SWITCH
 		addParam(createParam<as_CKSSThree>(Vec(portX[6]+2, main_lds_y-4), module, SEQ16::GATE_MODE_PARAM));
 		//STEPS KNOBS

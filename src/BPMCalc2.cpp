@@ -262,50 +262,35 @@ struct BPMCalc2 : Module {
 
 ////////////////////////////////////
 struct TempodisplayWidget : TransparentWidget {
- std::string *value = NULL;
+  std::string *value = NULL;
   std::shared_ptr<Font> font;
+  std::string fontPath = asset::plugin(pluginInstance, "res/Segment7Standard.ttf");
 
-  TempodisplayWidget() {
-    font = APP->window->loadFont(asset::plugin(pluginInstance, "res/Segment7Standard.ttf"));
-  };
 
-  void draw(const DrawArgs &args) override{
+	void drawLayer(const DrawArgs& args, int layer) override {
+		if (layer != 1){
+			return;
+		}
     if (!value) {
       return;
     }
-    // Background
-    /*
-    NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-    NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-    nvgBeginPath(args.vg);
-    nvgRoundedRect(args.vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-    nvgFillColor(args.vg, backgroundColor);
-    nvgFill(args.vg);
-    nvgStrokeWidth(args.vg, 1.5);
-    nvgStrokeColor(args.vg, borderColor);
-    nvgStroke(args.vg); 
-    */   
+
+    font = APP->window->loadFont(fontPath);
     // text 
-    nvgFontSize(args.vg, 18);
-    nvgFontFaceId(args.vg, font->handle);
-    nvgTextLetterSpacing(args.vg, 2.5);
+    if (font) {
+      nvgFontSize(args.vg, 18);
+      nvgFontFaceId(args.vg, font->handle);
+      nvgTextLetterSpacing(args.vg, 2.5);
 
-    std::stringstream to_display;   
-    to_display << std::setw(3) << *value;
+      std::stringstream to_display;   
+      to_display << std::setw(3) << *value;
 
-    Vec textPos = Vec(14.0f, 17.0f); 
-    /*
-    NVGcolor textColor = nvgRGB(0xdf, 0xd2, 0x2c);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "~~~", NULL);
+      Vec textPos = Vec(14.0f, 17.0f); 
 
-    textColor = nvgRGB(0xda, 0xe9, 0x29);
-    nvgFillColor(args.vg, nvgTransRGBA(textColor, 16));
-    nvgText(args.vg, textPos.x, textPos.y, "\\\\\\", NULL);
-    */
-    NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
-    nvgFillColor(args.vg, textColor);
-    nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+      NVGcolor textColor = nvgRGB(0xf0, 0x00, 0x00);
+      nvgFillColor(args.vg, textColor);
+      nvgText(args.vg, textPos.x, textPos.y, to_display.str().c_str(), NULL);
+    }
   }
 };
 

@@ -274,7 +274,7 @@ struct TremoloStereoFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(33.5, 259), module, TremoloStereoFx::BYPASS_CV_INPUT));
 		//BYPASS SWITCH
 		addParam(createParam<LEDBezel>(Vec(61, 260), module, TremoloStereoFx::BYPASS_SWITCH ));
-		addChild(createLight<LedLight<RedLight>>(Vec(63.2, 262.2), module, TremoloStereoFx::BYPASS_LED));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(63.2, 262.2), module, TremoloStereoFx::BYPASS_LED));
 	
 	}
 };
