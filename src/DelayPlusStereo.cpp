@@ -25,6 +25,10 @@ struct DelayPlusStereoFx : Module {
 
 		MIX_PARAM,
 		BYPASS_SWITCH,
+
+		CLEAR_L_SWITCH,
+		CLEAR_R_SWITCH,
+
 		NUM_PARAMS
 	};
 	enum InputIds {
@@ -42,6 +46,10 @@ struct DelayPlusStereoFx : Module {
 		SIGNAL_INPUT_1,
 		SIGNAL_INPUT_2,
 		BYPASS_CV_INPUT,
+
+		CLEAR_L_INPUT,
+		CLEAR_R_INPUT,
+
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -54,6 +62,10 @@ struct DelayPlusStereoFx : Module {
 	};
 	  enum LightIds {
 		BYPASS_LED,
+
+		CLEAR_L_LED,
+		CLEAR_R_LED,
+
 		NUM_LIGHTS
 	}; 
 
@@ -75,6 +87,8 @@ struct DelayPlusStereoFx : Module {
 	dsp::SchmittTrigger bypass_button_trig;
 	dsp::SchmittTrigger bypass_cv_trig;
 
+	dsp::SchmittTrigger clear_L, clear_R;
+
 	int lcd_tempo1 = 0;
 	int lcd_tempo2 = 0;
 	bool fx_bypass = false;
@@ -95,6 +109,10 @@ struct DelayPlusStereoFx : Module {
 	float signal_input_1 = 0.0f;
 	float signal_input_2 = 0.0f;
 
+	const float lightLambda = 0.075;
+    float resetLight_L = 0.0f;
+	float resetLight_R = 0.0f;
+
 	void resetFades(){
 		fade_in_fx = 0.0f;
 		fade_in_dry = 0.0f;
@@ -106,16 +124,49 @@ struct DelayPlusStereoFx : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
 
-		configParam(DelayPlusStereoFx::TIME_PARAM_1, 0.0f, 10.0f, 0.375f, "Time L", " MS", 0.0f, 1000.0f);
-		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_1, 0.0f, 1.0f, 0.5f, "Feedback L", "%", 0.0f, 100.0f);
-		configParam(DelayPlusStereoFx::COLOR_PARAM_1, 0.0f, 1.0f, 0.5f, "Color L", "%", 0.0f, 100.0f);
-		configParam(DelayPlusStereoFx::TIME_PARAM_2, 0.0f, 10.0f, 0.750f, "Time R", " MS", 0.0f, 1000.0f);
-		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_2, 0.0f, 1.0f, 0.5f, "Feedback R", "%", 0.0f, 100.0f);
-		configParam(DelayPlusStereoFx::COLOR_PARAM_2, 0.0f, 1.0f, 0.5f, "Color R", "%", 0.0f, 100.0f);
-		configParam(DelayPlusStereoFx::FBK_LINK_PARAM, 0.0f, 1.0f, 0.0f, "Link channels");
-		configParam(DelayPlusStereoFx::COLOR_LINK_PARAM, 0.0f, 1.0f, 0.0f, "Link Color");
+		configParam(DelayPlusStereoFx::TIME_PARAM_1, 0.0f, 10.0f, 0.375f, "Left Time", " MS", 0.0f, 1000.0f);
+		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_1, 0.0f, 1.0f, 0.5f, "Left Feedback", "%", 0.0f, 100.0f);
+		configParam(DelayPlusStereoFx::COLOR_PARAM_1, 0.0f, 1.0f, 0.5f, "Left Color", "%", 0.0f, 100.0f);
+		configParam(DelayPlusStereoFx::TIME_PARAM_2, 0.0f, 10.0f, 0.750f, "Right Time", " MS", 0.0f, 1000.0f);
+		configParam(DelayPlusStereoFx::FEEDBACK_PARAM_2, 0.0f, 1.0f, 0.5f, "Right Feedback", "%", 0.0f, 100.0f);
+		configParam(DelayPlusStereoFx::COLOR_PARAM_2, 0.0f, 1.0f, 0.5f, "Right Color", "%", 0.0f, 100.0f);
+
 		configParam(DelayPlusStereoFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix", "%", 0.0f, 100.0f);
-		configParam(DelayPlusStereoFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
+
+		//New in V2, config switches info without displaying values
+		configSwitch(COLOR_LINK_PARAM, 0, 1, 0, "Link Color", {"Link", "Unlink"});
+		configSwitch(FBK_LINK_PARAM, 0, 1, 0, "Link Feedback", {"Link", "Unlink"});
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		configButton(CLEAR_L_SWITCH, "Clear Left Buffer");
+		configButton(CLEAR_R_SWITCH, "Clear Right Buffer");
+
+		//new V2, port labels
+		//Inputs
+		//Left
+		configInput(TIME_CV_INPUT_1, "Time Left CV");
+		configInput(FEEDBACK__CV_INPUT_1, "Feedback Left CV");
+		configInput(COLOR_CV_INPUT_1, "Color Left CV");
+		configInput(COLOR_RETURN_1, "Color Left Return");
+		configInput(SIGNAL_INPUT_1, "Left audio");
+		configInput(CLEAR_L_INPUT, "Clear Left Buffer");
+		//Right
+		configInput(TIME_CV_INPUT_2, "Time Right CV");
+		configInput(FEEDBACK__CV_INPUT_2, "Feedback Right CV");
+		configInput(COLOR_CV_INPUT_2, "Color Right CV");
+		configInput(COLOR_RETURN_2, "Color Right Return");
+		configInput(SIGNAL_INPUT_2, "Right audio");
+		configInput(CLEAR_R_INPUT, "Clear Right Buffer");
+
+		configInput(MIX_CV_INPUT, "Mix CV");
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(COLOR_SEND_1, "Color Left Send");
+		configOutput(COLOR_SEND_2, "Color Right Send");
+
+		configOutput(SIGNAL_OUTPUT_1, "Left audio");
+		configOutput(SIGNAL_OUTPUT_2, "Right audio");
 
 	}
 
@@ -172,6 +223,16 @@ struct DelayPlusStereoFx : Module {
 			historyBuffer1.startIncr(inFrames1);
 			outBuffer1.endIncr(outFrames1);
 		}
+
+		//Clear/reset delay buffer
+        if(clear_L.process(clamp(params[CLEAR_L_SWITCH].getValue() + inputs[CLEAR_L_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f))) {
+		    historyBuffer1.clear();
+			//trigger L led light
+			resetLight_L = 1.0;
+	    }
+
+        resetLight_L -= resetLight_L / lightLambda / args.sampleRate;
+        lights[CLEAR_L_LED].value = resetLight_L;
 
 		float out1;
 		float wet1 = 0.0f;
@@ -242,6 +303,17 @@ struct DelayPlusStereoFx : Module {
 			historyBuffer2.startIncr(inFrames2);
 			outBuffer2.endIncr(outFrames2);
 		}
+
+        //Clear/reset delay buffer
+        if(clear_R.process(clamp(params[CLEAR_R_SWITCH].getValue() + inputs[CLEAR_R_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f))) {
+		    historyBuffer2.clear();
+			//trigger R led light
+			resetLight_R = 1.0;
+	    }
+
+        resetLight_R -= resetLight_R / lightLambda / args.sampleRate;
+        lights[CLEAR_R_LED].value = resetLight_R;
+
 
 		float out2;
 		float wet2 = 0.0f;
@@ -408,10 +480,10 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		//COLOR LINK SWITCH
 		addParam(createParam<as_CKSSwhite>(Vec(82, 195), module, DelayPlusStereoFx::COLOR_LINK_PARAM));
 		//MIX KNOB
-		addParam(createParam<as_FxKnobWhite>(Vec(71, 251), module, DelayPlusStereoFx::MIX_PARAM));
+		addParam(createParam<as_FxKnobWhite>(Vec(71, 253), module, DelayPlusStereoFx::MIX_PARAM));
 		//BYPASS SWITCH
-		addParam(createParam<LEDBezel>(Vec(79, 292), module, DelayPlusStereoFx::BYPASS_SWITCH ));
-		addChild(createLight<LEDBezelLight<RedLight>>(Vec(79+2.2, 294), module, DelayPlusStereoFx::BYPASS_LED));
+		addParam(createParam<LEDBezel>(Vec(79, 296), module, DelayPlusStereoFx::BYPASS_SWITCH ));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(79+2.2, 298), module, DelayPlusStereoFx::BYPASS_LED));
 		//INPUTS CV L
 		addInput(createInput<as_PJ301MPort>(Vec(7, 87), module, DelayPlusStereoFx::TIME_CV_INPUT_1));
 		addInput(createInput<as_PJ301MPort>(Vec(7, 137), module, DelayPlusStereoFx::FEEDBACK__CV_INPUT_1));
@@ -432,7 +504,7 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(140, 224), module, DelayPlusStereoFx::COLOR_RETURN_2));
 
 		//MIX CV INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(40, 258), module, DelayPlusStereoFx::MIX_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(58, 330), module, DelayPlusStereoFx::MIX_CV_INPUT));
 		//SIGNAL INPUT L
 		addInput(createInput<as_PJ301MPort>(Vec(20, 300), module, DelayPlusStereoFx::SIGNAL_INPUT_1));
 		//SIGNAL INPUT R
@@ -443,7 +515,18 @@ struct DelayPlusStereoFxWidget : ModuleWidget {
 		addOutput(createOutput<as_PJ301MPortGold>(Vec(135, 330), module, DelayPlusStereoFx::SIGNAL_OUTPUT_2));
 
 		//BYPASS CV INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(78, 322), module, DelayPlusStereoFx::BYPASS_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(96, 330), module, DelayPlusStereoFx::BYPASS_CV_INPUT));
+
+		//Reset CV INPUTS
+		addInput(createInput<as_PJ301MPort>(Vec(7, 258), module, DelayPlusStereoFx::CLEAR_L_INPUT));
+        addInput(createInput<as_PJ301MPort>(Vec(150, 258), module, DelayPlusStereoFx::CLEAR_R_INPUT));
+
+		//Reset CV switches
+		addParam(createParam<LEDBezel>(Vec(36, 260), module, DelayPlusStereoFx::CLEAR_L_SWITCH));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(36+2.2, 262), module, DelayPlusStereoFx::CLEAR_L_LED));
+
+        addParam(createParam<LEDBezel>(Vec(124, 260), module, DelayPlusStereoFx::CLEAR_R_SWITCH));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(124+2.2, 262), module, DelayPlusStereoFx::CLEAR_R_LED));
 
 	}
 };

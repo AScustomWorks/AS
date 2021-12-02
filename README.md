@@ -20,6 +20,18 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
+### V 2.0.1 TriggersMKIII and DelayPlus Stereo updates
+
+New look for the black and gray knobs
+
+A small tweak on the FX knobs
+
+TriggersMKIII textfields updated to V2 code(was missing from the V2.0.0 update, and crashing rack when present on a patch)
+
+Delay Plus Stereo FX: Added a Clear Buffer switch and CV input for each channel (long time request)
+
+Also added input, output and switches tip labels for this two modules, the rest will come later
+
 ### V 2.0.0 update for compatibility with VCV RACK V2
 
 Graphics and code updated to work with V2
@@ -28,7 +40,7 @@ Graphics and code updated to work with V2
 
 ZCV2T Zero crossing CV to Trigger module, anlexmatos made the update to support CV polyphony
 
-PhaserFx long od bleeding bug between phaser modules finally fixed
+PhaserFx long old bleeding bug between phaser modules finally fixed
 
 ### V 1.0.4 update
 

@@ -4,6 +4,7 @@
 //**************************************************************************************
 #include "AS.hpp"
 
+
 struct TriggersMKIII: Module {
     enum ParamIds {
         TRIGGER_SWITCH_1,
@@ -38,131 +39,156 @@ struct TriggersMKIII: Module {
     dsp::PulseGenerator triggerPulse2;
     bool trg_pulse2 = false;
 
-    TextField* textField1;
-    TextField* textField2;
 
     const float lightLambda = 0.075f;
     float resetLight1 = 0.0f;
     float resetLight2 = 0.0f;
 
-    int label_num1 = 0;
-    int label_num2 = 0;
-
-
 
     TriggersMKIII() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+
+        configButton(TRIGGER_SWITCH_1, "Momentary Trigger 1");
+        configButton(TRIGGER_SWITCH_2, "Momentary Trigger 2");
+
+		configInput(CV_TRIG_INPUT_1_1, "CV external trigger");
+		configInput(CV_TRIG_INPUT_1_2, "CV external trigger");
+        configInput(CV_TRIG_INPUT_2_1, "CV external trigger");
+		configInput(CV_TRIG_INPUT_2_2, "CV external trigger");
+		//Outputs
+		configOutput(TRIGGER_OUT1, "Trigger");
+		configOutput(TRIGGER_OUT2, "Trigger");
+
+
     }
 
 
-void process(const ProcessArgs &args) override {
+	std::string label1, label2;
 
-    //TRIGGER 1
-    if (btnTrigger1.process(params[TRIGGER_SWITCH_1].getValue()) || extTrigger1_1.process(inputs[CV_TRIG_INPUT_1_1].getVoltage()) || extTrigger1_2.process(inputs[CV_TRIG_INPUT_1_2].getVoltage())) {
-        resetLight1 = 1.0;
-        triggerPulse1.trigger(1e-3f);
-    }
-    trg_pulse1 = triggerPulse1.process(1.0 * args.sampleTime);
-    outputs[TRIGGER_OUT1].setVoltage((trg_pulse1 ? 10.0f : 0.0f));
+    bool dirty1 = false;
+    bool dirty2 = false;
 
-    resetLight1 -= resetLight1 / lightLambda * args.sampleTime;
-    lights[TRIGGER_LED_1].value = resetLight1;
+	void onReset() override {
+		label1 = "";
+        label2 = "";
+        dirty1 = true;
+        dirty2 = true;
+	}
 
-    //TRIGGER 2
-    if (btnTrigger2.process(params[TRIGGER_SWITCH_2].getValue()) || extTrigger2_1.process(inputs[CV_TRIG_INPUT_2_1].getVoltage()) || extTrigger2_2.process(inputs[CV_TRIG_INPUT_2_2].getVoltage())) {
-        resetLight2 = 1.0;
-        triggerPulse2.trigger(1e-3f);
-    }
-
-    trg_pulse2 = triggerPulse2.process(1.0 * args.sampleTime);
-    outputs[TRIGGER_OUT2].setVoltage((trg_pulse2 ? 10.0f : 0.0f));
-
-    resetLight2 -= resetLight2 / lightLambda * args.sampleTime;
-    lights[TRIGGER_LED_2].value = resetLight2;
-    
-}
- 
-
-	json_t *dataToJson()override {
-		json_t *rootJ = json_object();
-		// text
-		json_object_set_new(rootJ, "label1", json_string(textField1->text.c_str()));
-        json_object_set_new(rootJ, "label2", json_string(textField2->text.c_str()));
+    //json updates for V2
+	json_t* dataToJson() override {
+		json_t* rootJ = json_object();
+		json_object_set_new(rootJ, "label1", json_stringn(label1.c_str(), label1.size()));
+        json_object_set_new(rootJ, "label2", json_stringn(label2.c_str(), label2.size()));
 		return rootJ;
 	}
 
-	void dataFromJson(json_t *rootJ)override {
-		json_t *text1J = json_object_get(rootJ, "label1");
+	void dataFromJson(json_t* rootJ) override {
+		json_t* text1J = json_object_get(rootJ, "label1");
 		if (text1J){
-			textField1->text = json_string_value(text1J);
+			label1 = json_string_value(text1J);
+            dirty1 = true;
         }
-        json_t *text2J = json_object_get(rootJ, "label2");
-		if (text2J){
-			textField2->text = json_string_value(text2J);
+        json_t* text2J = json_object_get(rootJ, "label2");
+        if (text2J){
+			label2 = json_string_value(text2J);
+            dirty2 = true;
         }
 	}
 
-};
 
-////////////////////////////////////old hacked Textfield
-/*
-struct CustomLedDisplayTextField : TextField {
-	std::shared_ptr<Font> font;
-	Vec textOffset;
-	NVGcolor color;
-	CustomLedDisplayTextField(){
-        font = APP->window->loadFont(asset::plugin(pluginInstance, "res/saxmono.ttf"));
-        color = nvgRGB(0xf0, 0x00, 0x00);
-        textOffset = Vec(5, 0);  
-    };
+    void process(const ProcessArgs &args) override {
 
-    void draw(NVGcontext *vg) override{
-        nvgScissor(vg, 0, 0, box.size.x, box.size.y);
-        // Background
-        NVGcolor backgroundColor = nvgRGB(0x20, 0x10, 0x10);
-        NVGcolor borderColor = nvgRGB(0x10, 0x10, 0x10);
-        nvgBeginPath(vg);
-        nvgRoundedRect(vg, 0.0, 0.0, box.size.x, box.size.y, 4.0);
-
-        nvgFillColor(vg, backgroundColor);
-        nvgFill(vg);
-        nvgStrokeWidth(vg, 1.5);
-        nvgStrokeColor(vg, borderColor);
-        nvgStroke(vg);
-        nvgFontSize(vg, 20);
-
-        // Text
-        if (font->handle >= 0) {
-            bndSetFont(font->handle);
-
-            NVGcolor highlightColor = nvgRGB(0xf0, 0x00, 0x00);//color;
-            highlightColor.a = 0.5;
-            int begin = min(cursor, selection);
-            int end = (this == gFocusedWidget) ? max(cursor, selection) : -1;
-            bndIconLabelCaret(vg, textOffset.x, textOffset.y,
-                box.size.x - 2*textOffset.x, box.size.y - 2*textOffset.y,
-                -1, color, 12, text.c_str(), highlightColor, begin, end);
+        //TRIGGER 1
+        if (btnTrigger1.process(params[TRIGGER_SWITCH_1].getValue()) || extTrigger1_1.process(inputs[CV_TRIG_INPUT_1_1].getVoltage()) || extTrigger1_2.process(inputs[CV_TRIG_INPUT_1_2].getVoltage())) {
+            resetLight1 = 1.0;
+            triggerPulse1.trigger(1e-3f);
         }
-        nvgResetScissor(vg);
-        bndSetFont(gGuiFont->handle);
-    }
+        trg_pulse1 = triggerPulse1.process(1.0 * args.sampleTime);
+        outputs[TRIGGER_OUT1].setVoltage((trg_pulse1 ? 10.0f : 0.0f));
 
-    int getTextPosition(Vec mousePos)override {
-        bndSetFont(font->handle);
-        int textPos = bndIconLabelTextPosition(gVg, textOffset.x, textOffset.y,
-            box.size.x - 2*textOffset.x, box.size.y - 2*textOffset.y,
-            -1, 12, text.c_str(), mousePos.x, mousePos.y);
-        bndSetFont(font->handle);
-        return textPos;
+        resetLight1 -= resetLight1 / lightLambda * args.sampleTime;
+        lights[TRIGGER_LED_1].value = resetLight1;
+
+        //TRIGGER 2
+        if (btnTrigger2.process(params[TRIGGER_SWITCH_2].getValue()) || extTrigger2_1.process(inputs[CV_TRIG_INPUT_2_1].getVoltage()) || extTrigger2_2.process(inputs[CV_TRIG_INPUT_2_2].getVoltage())) {
+            resetLight2 = 1.0;
+            triggerPulse2.trigger(1e-3f);
+        }
+
+        trg_pulse2 = triggerPulse2.process(1.0 * args.sampleTime);
+        outputs[TRIGGER_OUT2].setVoltage((trg_pulse2 ? 10.0f : 0.0f));
+
+        resetLight2 -= resetLight2 / lightLambda * args.sampleTime;
+        lights[TRIGGER_LED_2].value = resetLight2;
+        
     }
+    
+
 };
-*/
-////////////////////////////////////
+//Displays code updated for V2
+//Display 1
+struct TriggersTextField1 : LedDisplayTextField {
+	TriggersMKIII* module;
+
+	void step() override {
+		LedDisplayTextField::step();
+		if (module && module->dirty1) {
+			setText(module->label1);
+			module->dirty1 = false;
+		}
+	}
+
+	void onChange(const ChangeEvent& e) override {
+		if (module)
+			module->label1 = getText();
+	}
+};
+
+
+struct TriggersDisplay1 : LedDisplay {
+	void setModule(TriggersMKIII* module) {
+		TriggersTextField1* textField1 = createWidget<TriggersTextField1>(Vec(0, 0));
+		textField1->box.size = box.size;
+		textField1->multiline = false;
+		textField1->module = module;
+		addChild(textField1);
+	}
+};
+
+//Display 2
+
+struct TriggersTextField2 : LedDisplayTextField {
+	TriggersMKIII* module;
+
+	void step() override {
+		LedDisplayTextField::step();
+		if (module && module->dirty2) {
+			setText(module->label2);
+			module->dirty2 = false;
+		}
+	}
+
+	void onChange(const ChangeEvent& e) override {
+		if (module)
+			module->label2 = getText();
+	}
+};
+
+
+struct TriggersDisplay2 : LedDisplay {
+	void setModule(TriggersMKIII* module) {
+		TriggersTextField2* textField2 = createWidget<TriggersTextField2>(Vec(0, 0));
+		textField2->box.size = box.size;
+		textField2->multiline = false;
+		textField2->module = module;
+		addChild(textField2);
+	}
+};
+//end displays code
 
 struct TriggersMKIIIWidget : ModuleWidget { 
     
-    TextField* textField1;
-    TextField* textField2;
     
     TriggersMKIIIWidget(TriggersMKIII *module) {
         setModule(module);
@@ -178,19 +204,13 @@ struct TriggersMKIIIWidget : ModuleWidget {
         static const float led_center = 15;
         static const float y_offset = 150;
         //TRIGGER 1
-        
-        textField1 = createWidget<LedDisplayTextField>(Vec(6, 46));
-        textField1->box.size = Vec(78, 30);
-        textField1->multiline = false;
-        if (module) {
-           // display1->value = &module->lcd_tempo1;
-            module->textField1 = this->textField1;
-        }
-        addChild(textField1);
+
+		TriggersDisplay1* display1 = createWidget<TriggersDisplay1>(Vec(6, 46));
+		display1->box.size = Vec(78, 30);
+		display1->setModule(module);
+		addChild(display1);
         
         //SWITCH
-/*      addParam(createParam<BigLEDBezel>(Vec(led_center, 122), module, TriggersMKIII::TRIGGER_SWITCH_1));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 122+led_offset), module, TriggersMKIII::TRIGGER_LED_1)); */
 
         addParam(createParam<JumboLEDBezel60>(Vec(led_center, 122), module, TriggersMKIII::TRIGGER_SWITCH_1));
         addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 122+led_offset), module, TriggersMKIII::TRIGGER_LED_1));
@@ -201,19 +221,14 @@ struct TriggersMKIIIWidget : ModuleWidget {
         addOutput(createOutput<as_PJ301MPortGold>(Vec(58, 90), module, TriggersMKIII::TRIGGER_OUT1));
 
         //TRIGGER 2
-        
-        textField2 = createWidget<LedDisplayTextField>(Vec(6, 46+y_offset));
-        textField2->box.size = Vec(78, 30);
-        textField2->multiline = false;
-        if (module) {
-            module->textField2 = this->textField2;
-        }
-        addChild(textField2);
-        
+
+		TriggersDisplay2* display2 = createWidget<TriggersDisplay2>(Vec(6, 46+y_offset));
+		display2->box.size = Vec(78, 30);
+		display2->setModule(module);
+		addChild(display2);
         
         //SWITCH
-/*         addParam(createParam<BigLEDBezel>(Vec(led_center, 122+y_offset), module, TriggersMKIII::TRIGGER_SWITCH_2));
-        addChild(createLight<GiantLight<RedLight>>(Vec(led_center+led_offset, 122+led_offset+y_offset), module, TriggersMKIII::TRIGGER_LED_2)); */
+
         addParam(createParam<JumboLEDBezel60>(Vec(led_center, 122+y_offset), module, TriggersMKIII::TRIGGER_SWITCH_2));
         addChild(createLight<JumboLedLight60<RedLight>>(Vec(led_center+led_offset, 122+led_offset+y_offset), module, TriggersMKIII::TRIGGER_LED_2));
 
@@ -221,7 +236,6 @@ struct TriggersMKIIIWidget : ModuleWidget {
         addInput(createInput<as_PJ301MPort>(Vec(8, 90+y_offset), module, TriggersMKIII::CV_TRIG_INPUT_2_1));
         addInput(createInput<as_PJ301MPort>(Vec(33, 90+y_offset), module, TriggersMKIII::CV_TRIG_INPUT_2_2));
         addOutput(createOutput<as_PJ301MPortGold>(Vec(58, 90+y_offset), module, TriggersMKIII::TRIGGER_OUT2));
-
     
     }   
 
