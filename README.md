@@ -27,7 +27,7 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 Updated component grahpics to V2 look, some code cleanup and tooltips added to all the ports, switches and buttons, also readme.md and licence
 
 
-### V 2.0.2 TriggersMKIII and DelayPlus Stereo updates
+### V 2.0.1 TriggersMKIII and DelayPlus Stereo updates
 
 New look for the black and gray knobs
 
