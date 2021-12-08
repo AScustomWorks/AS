@@ -22,9 +22,9 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
-### V 2.0.2 TriggersMKIII and DelayPlus Stereo updates
+### V 2.0.2
 
-Updated component grahpics to V2 look, readme.md and licence
+Updated component grahpics to V2 look, some code cleanup and tooltips added to all the ports, switches and buttons, also readme.md and licence
 
 
 ### V 2.0.2 TriggersMKIII and DelayPlus Stereo updates
