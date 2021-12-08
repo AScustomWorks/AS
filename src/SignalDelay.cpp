@@ -55,9 +55,23 @@ struct SignalDelay : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
 		configParam(SignalDelay::TIME_1_PARAM, 0.0f, 10.0f, 0.350f, "CH 1 Delay", " MS", 0.0f, 1000.0f);
 		configParam(SignalDelay::TIME_2_PARAM, 0.0f, 10.0f, 0.350f, "CH 2 Delay", " MS", 0.0f, 1000.0f);
-		configParam(SignalDelay::SWITCH_1_MODE, 0.0f, 1.0f, 1.0f, "CH 1 send output mode: Pre/Post delay");
-		configParam(SignalDelay::SWITCH_2_MODE, 0.0f, 1.0f, 1.0f, "CH 2 send output mode: Pre/Post delay");
-		//configParam(int paramId, float minValue, float maxValue, float defaultValue, std::string label = "", std::string unit = "", float displayBase = 0.f, float displayMultiplier = 1.f, float displayOffset = 0.f)
+
+		//New in V2, config switches info without displaying values
+		configSwitch(SWITCH_1_MODE, 0.0f, 1.0f, 0.0f, "CH 2 send output mode", {"Post", "Pre"});
+		configSwitch(SWITCH_2_MODE, 0.0f, 1.0f, 0.0f, "CH 2 send output mode", {"Post", "Pre"});
+		
+		//new V2, port labels
+		//Inputs
+		configInput(TIME_1_INPUT, "CH 1 Time CV");
+		configInput(TIME_2_INPUT, "CH 2 Time CV");
+		configInput(IN_1_INPUT, "CH 1");
+		configInput(IN_2_INPUT, "CH 2");
+		//Outputs
+		configOutput(SEND_1_OUTPUT, "CH 1 Send");
+		configOutput(SEND_2_OUTPUT, "CH 2 Send");
+		configOutput(OUT_1_OUTPUT, "CH 1");	
+		configOutput(OUT_2_OUTPUT, "CH 2");				
+
 	}
 
 

@@ -127,6 +127,19 @@ struct BPMClock : Module {
     configParam(BPMClock::TIMESIGBOTTOM_PARAM,0.0f, 3.0f, 1.0f, "Time Signature Bottom");
     configParam(BPMClock::RUN_SWITCH , 0.0f, 1.0f, 0.0f, "Run");
     configParam(BPMClock::RESET_SWITCH , 0.0f, 1.0f, 0.0f, "Reset");
+
+		//New in V2, config switches and ports info without displaying values
+		//inputs
+		configInput(RUN_CV, "Run CV");
+		configInput(RESET_INPUT, "Reset CV");
+		//Outputs
+		configOutput(BEAT_OUT, "Beat");
+		configOutput(EIGHTHS_OUT, "Eights");
+		configOutput(SIXTEENTHS_OUT, "Sixteenths");
+		configOutput(BAR_OUT, "Bar");
+		configOutput(RESET_OUTPUT, "Reset");
+		configOutput(RUN_OUTPUT, "Run");
+
   }
 
   void process(const ProcessArgs &args) override {

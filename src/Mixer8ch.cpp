@@ -124,17 +124,68 @@ struct Mixer8ch : Module {
 		configParam(Mixer8ch::CH6_PARAM, 0.0f, 1.0f, 0.8f, "CH 6 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer8ch::CH7_PARAM, 0.0f, 1.0f, 0.8f, "CH 7 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer8ch::CH8_PARAM, 0.0f, 1.0f, 0.8f, "CH 8 Gain", "%", 0.0f,100.0f);
-		configParam(Mixer8ch::CH1MUTE , 0.0f, 1.0f, 0.0f, "CH 1 Mute");
-		configParam(Mixer8ch::CH2MUTE , 0.0f, 1.0f, 0.0f, "CH 2 Mute");
-		configParam(Mixer8ch::CH3MUTE , 0.0f, 1.0f, 0.0f, "CH 3 Mute");
-		configParam(Mixer8ch::CH4MUTE , 0.0f, 1.0f, 0.0f, "CH 4 Mute");
-		configParam(Mixer8ch::CH5MUTE , 0.0f, 1.0f, 0.0f, "CH 5 Mute");
-		configParam(Mixer8ch::CH6MUTE , 0.0f, 1.0f, 0.0f, "CH 6 Mute");
-		configParam(Mixer8ch::CH7MUTE , 0.0f, 1.0f, 0.0f, "CH 7 Mute");
-		configParam(Mixer8ch::CH8MUTE , 0.0f, 1.0f, 0.0f, "CH 8 Mute");
-		configParam(Mixer8ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain");
-		configParam(Mixer8ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f, "Mix Mute");
-		//reset();
+		configParam(Mixer8ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain", "%", 0.0f,100.0f);
+
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(CH1MUTE, "CH 1 Mute");
+		configButton(CH2MUTE, "CH 2 Mute");
+		configButton(CH3MUTE, "CH 3 Mute");
+		configButton(CH4MUTE, "CH 4 Mute");
+		configButton(CH5MUTE, "CH 5 Mute");
+		configButton(CH6MUTE, "CH 6 Mute");
+		configButton(CH7MUTE, "CH 7 Mute");
+		configButton(CH8MUTE, "CH 8 Mute");
+
+		configButton(MASTER_MUTE, "Mix Mute");
+
+		//new V2, port labels
+
+		//inputs
+		configInput(MIX_CV_INPUT, "Mix CV");
+		configInput(LINK_L, "Mix Left Audio");
+		configInput(LINK_R, "Mix Right Audio");
+
+		configInput(CH1_INPUT, "CH 1 Audio");
+		configInput(CH2_INPUT, "CH 2 Audio");
+		configInput(CH3_INPUT, "CH 3 Audio");
+		configInput(CH4_INPUT, "CH 4 Audio");
+		configInput(CH5_INPUT, "CH 5 Audio");
+		configInput(CH6_INPUT, "CH 6 Audio");
+		configInput(CH7_INPUT, "CH 7 Audio");
+		configInput(CH8_INPUT, "CH 8 Audio");
+
+		configInput(CH1_CV_INPUT, "CH 1 Gain Mod CV");
+		configInput(CH2_CV_INPUT, "CH 2 Gain Mod CV");
+		configInput(CH3_CV_INPUT, "CH 3 Gain Mod CV");
+		configInput(CH4_CV_INPUT, "CH 4 Gain Mod CV");
+		configInput(CH5_CV_INPUT, "CH 5 Gain Mod CV");
+		configInput(CH6_CV_INPUT, "CH 6 Gain Mod CV");
+		configInput(CH7_CV_INPUT, "CH 7 Gain Mod CV");
+		configInput(CH8_CV_INPUT, "CH 8 Gain Mod CV");
+
+		configInput(CH1_CV_PAN_INPUT, "CH 1 Pan Mod CV");
+		configInput(CH2_CV_PAN_INPUT, "CH 2 Pan Mod CV");
+		configInput(CH3_CV_PAN_INPUT, "CH 3 Pan Mod CV");
+		configInput(CH4_CV_PAN_INPUT, "CH 4 Pan Mod CV");
+		configInput(CH5_CV_PAN_INPUT, "CH 5 Pan Mod CV");
+		configInput(CH6_CV_PAN_INPUT, "CH 6 Pan Mod CV");
+		configInput(CH7_CV_PAN_INPUT, "CH 7 Pan Mod CV");
+		configInput(CH8_CV_PAN_INPUT, "CH 8 Pan Mod CV");
+
+		//Outputs
+		configOutput(MIX_OUTPUTL, "Left Audio");
+		configOutput(MIX_OUTPUTR, "Right Audio");
+
+		configOutput(CH1_OUTPUT, "CH 1 Audio");
+		configOutput(CH2_OUTPUT, "CH 2 Audio");
+		configOutput(CH3_OUTPUT, "CH 3 Audio");
+		configOutput(CH4_OUTPUT, "CH 4 Audio");
+		configOutput(CH5_OUTPUT, "CH 5 Audio");
+		configOutput(CH6_OUTPUT, "CH 6 Audio");
+		configOutput(CH7_OUTPUT, "CH 7 Audio");
+		configOutput(CH8_OUTPUT, "CH 8 Audio");
+
 	}
 
 	dsp::SchmittTrigger ch1mute;

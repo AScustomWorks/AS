@@ -32,6 +32,13 @@ struct StereoVUmeter : Module {
 
 	StereoVUmeter() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+
+		configInput(INPUT_LEFT, "Audio Left");
+		configInput(INPUT_RIGHT, "Audio Right");
+		//Outputs
+		configOutput(OUT_LEFT, "Audio Left");
+		configOutput(OUT_RIGHT, "Audio Left");	
+
 	}
 
 	dsp::VuMeter vuBar;

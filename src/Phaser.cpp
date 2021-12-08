@@ -147,7 +147,22 @@ struct PhaserFx : Module{
 		configParam(PhaserFx::RATE_PARAM, 0.0f, 1.0f, 0.0f, "Rate", "%", 0.0f, 100.0f);
 		configParam(PhaserFx::FBK_PARAM, 0.0f, 0.95f, 0.0f, "Feedback", "%", 0.0f, 100.0f);
 		configParam(PhaserFx::DEPTH_PARAM, 0.0f, 1.0f, 0.0f, "Depth", "%", 0.0f, 100.0f);
-		configParam(PhaserFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
+
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		//new V2, port labels
+		//Inputs
+		configInput(RATE_CV_INPUT, "Rate CV");
+		configInput(FEEDBACK_CV_INPUT, "Feedback CV");
+		configInput(DEPTH_CV_INPUT, "Depth CV");
+		configInput(INPUT, "Audio");
+		
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(OUT, "Audio");
+
+
 	}
 
 	void process(const ProcessArgs &args) override;

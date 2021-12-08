@@ -57,9 +57,18 @@ struct TriggersMKII: Module {
     TriggersMKII() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
         configParam(TriggersMKII::LABEL_PARAM_1, 0.0, 36.0, 0.0, "CH 1 Label");
-        configParam(TriggersMKII::TRIGGER_SWITCH_1, 0.0, 1.0, 0.0, "CH 1 Trigger");
         configParam(TriggersMKII::LABEL_PARAM_2, 0.0, 36.0, 0.0, "CH 2 Label");
-        configParam(TriggersMKII::MOMENTARY_SWITCH_2, 0.0, 1.0, 0.0, "CH 2 Trigger");
+
+        configButton(TRIGGER_SWITCH_1, "Momentary Trigger 1");
+        configButton(MOMENTARY_SWITCH_2, "Momentary Trigger 2");
+
+		configInput(CV_TRIG_INPUT_1, "CV external trigger 1");
+		configInput(CV_TRIG_INPUT_2, "CV external trigger 2");
+		//Outputs
+		configOutput(TRIGGER_OUT1, "Trigger 1");
+		configOutput(MOMENTARY_OUT2, "Trigger 2");
+
+
     }
 
     void process(const ProcessArgs &args) override {

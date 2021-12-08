@@ -83,18 +83,13 @@ struct TriLFO : Module {
 		//
 		FM1_PARAM,
 		FM2_PARAM,
-		PW_PARAM,
-		PWM_PARAM,
 		//
 		NUM_PARAMS
 	};
 	enum InputIds {
-		FM1_INPUT,
-		FM2_INPUT,
 		RESET1_INPUT,
 		RESET2_INPUT,
 		RESET3_INPUT,		
-		PW_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -129,22 +124,41 @@ struct TriLFO : Module {
 	TriLFO() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(TriLFO::FREQ1_PARAM, -8.0f, 10.0f, -1.0f, "CH 1 Frequency", " Hz", 2, 1);
-		configParam(TriLFO::OFFSET1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Offset");
-		configParam(TriLFO::INVERT1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Invert");
 		configParam(TriLFO::FREQ2_PARAM, -8.0f, 10.0f, -1.0f, "CH 2 Frequency", " Hz", 2, 1);
-		configParam(TriLFO::OFFSET2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Offset");
-		configParam(TriLFO::INVERT2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Invert");
 		configParam(TriLFO::FREQ3_PARAM, -8.0f, 10.0f, -1.0f, "CH 3 Frequency", " Hz", 2, 1);
-		configParam(TriLFO::OFFSET3_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Offset");
-		configParam(TriLFO::INVERT3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Invert");	
+
+		//New in V2, config switches and ports info without displaying values
+		configSwitch(OFFSET1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Offset", {"Bipolar", "Uniolar"});
+		configSwitch(OFFSET2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Offset", {"Bipolar", "Uniolar"});
+		configSwitch(OFFSET3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Offset", {"Bipolar", "Uniolar"});
+		configSwitch(INVERT1_PARAM,  0.0f, 1.0f, 1.0f, "CH 1 Invert", {"180º", "0º"});
+		configSwitch(INVERT2_PARAM,  0.0f, 1.0f, 1.0f, "CH 2 Invert", {"180º", "0º"});
+		configSwitch(INVERT3_PARAM,  0.0f, 1.0f, 1.0f, "CH 2 Invert", {"180º", "0º"});
+		//inputs
+		configInput(RESET1_INPUT, "CH 1 Reset CV");
+		configInput(RESET2_INPUT, "CH 2 Reset CV");
+		configInput(RESET3_INPUT, "CH 3 Reset CV");
+		//Outputs
+		configOutput(SIN1_OUTPUT, "Sine 1");
+		configOutput(TRI1_OUTPUT, "Triangle 1");
+		configOutput(SAW1_OUTPUT, "Saw 1");
+		configOutput(SQR1_OUTPUT, "Square 1");	
+		configOutput(SIN2_OUTPUT, "Sine 2");
+		configOutput(TRI2_OUTPUT, "Triangle 2");
+		configOutput(SAW2_OUTPUT, "Saw 2");
+		configOutput(SQR2_OUTPUT, "Square 2");
+		configOutput(SIN3_OUTPUT, "Sine 3");
+		configOutput(TRI3_OUTPUT, "Triangle 3");
+		configOutput(SAW3_OUTPUT, "Saw 3");
+		configOutput(SQR3_OUTPUT, "Square 3");		
+
 	}
 
 	float pw_param = 0.5f;
 
 	void process(const ProcessArgs &args) override {
 		//LFO1
-		oscillator1.setPitch(params[FREQ1_PARAM].getValue() + params[FM1_PARAM].getValue() * inputs[FM1_INPUT].getVoltage() + params[FM2_PARAM].getValue() * inputs[FM2_INPUT].getVoltage());
-		//oscillator1.setPulseWidth(params[PW_PARAM].getValue() + params[PWM_PARAM].getValue() * inputs[PW_INPUT].getVoltage() / 10.0);
+		oscillator1.setPitch(params[FREQ1_PARAM].getValue());
 		oscillator1.setPulseWidth(pw_param);
 		oscillator1.offset = (params[OFFSET1_PARAM].getValue() > 0.0f);
 		oscillator1.invert = (params[INVERT1_PARAM].getValue() <= 0.0f);
@@ -159,8 +173,7 @@ struct TriLFO : Module {
 		lights[PHASE1_POS_LIGHT].setSmoothBrightness(fmaxf(0.0f, oscillator1.light()), args.sampleTime);
 		lights[PHASE1_NEG_LIGHT].setSmoothBrightness(fmaxf(0.0f, -oscillator1.light()), args.sampleTime);
 		//LFO2
-		oscillator2.setPitch(params[FREQ2_PARAM].getValue() + params[FM1_PARAM].getValue() * inputs[FM1_INPUT].getVoltage() + params[FM2_PARAM].getValue() * inputs[FM2_INPUT].getVoltage());
-		//oscillator2.setPulseWidth(params[PW_PARAM].getValue() + params[PWM_PARAM].getValue() * inputs[PW_INPUT].getVoltage() / 10.0);
+		oscillator2.setPitch(params[FREQ2_PARAM].getValue());
 		oscillator2.setPulseWidth(pw_param);
 		oscillator2.offset = (params[OFFSET2_PARAM].getValue() > 0.0f);
 		oscillator2.invert = (params[INVERT2_PARAM].getValue() <= 0.0f);
@@ -175,8 +188,7 @@ struct TriLFO : Module {
 		lights[PHASE2_POS_LIGHT].setSmoothBrightness(fmaxf(0.0f, oscillator2.light()), args.sampleTime);
 		lights[PHASE2_NEG_LIGHT].setSmoothBrightness(fmaxf(0.0f, -oscillator2.light()), args.sampleTime);
 		//LFO3
-		oscillator3.setPitch(params[FREQ3_PARAM].getValue() + params[FM1_PARAM].getValue() * inputs[FM1_INPUT].getVoltage() + params[FM2_PARAM].getValue() * inputs[FM2_INPUT].getVoltage());
-		//oscillator3.setPulseWidth(params[PW_PARAM].getValue() + params[PWM_PARAM].getValue() * inputs[PW_INPUT].getVoltage() / 10.0);
+		oscillator3.setPitch(params[FREQ3_PARAM].getValue());
 		oscillator3.setPulseWidth(pw_param);
 		oscillator3.offset = (params[OFFSET3_PARAM].getValue() > 0.0f);
 		oscillator3.invert = (params[INVERT3_PARAM].getValue() <= 0.0f);

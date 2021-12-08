@@ -51,13 +51,13 @@ struct TriggersMKIII: Module {
         configButton(TRIGGER_SWITCH_1, "Momentary Trigger 1");
         configButton(TRIGGER_SWITCH_2, "Momentary Trigger 2");
 
-		configInput(CV_TRIG_INPUT_1_1, "CV external trigger");
-		configInput(CV_TRIG_INPUT_1_2, "CV external trigger");
-        configInput(CV_TRIG_INPUT_2_1, "CV external trigger");
-		configInput(CV_TRIG_INPUT_2_2, "CV external trigger");
+		configInput(CV_TRIG_INPUT_1_1, "CV external trigger 1");
+		configInput(CV_TRIG_INPUT_1_2, "CV external trigger 1");
+        configInput(CV_TRIG_INPUT_2_1, "CV external trigger 2");
+		configInput(CV_TRIG_INPUT_2_2, "CV external trigger 2");
 		//Outputs
-		configOutput(TRIGGER_OUT1, "Trigger");
-		configOutput(TRIGGER_OUT2, "Trigger");
+		configOutput(TRIGGER_OUT1, "Trigger 1");
+		configOutput(TRIGGER_OUT2, "Trigger 2");
 
 
     }

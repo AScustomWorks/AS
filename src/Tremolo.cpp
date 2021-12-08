@@ -74,6 +74,7 @@ struct TremoloFx : Module{
 		FREQ_CV_INPUT,
 		BLEND_CV_INPUT,
 		BYPASS_CV_INPUT,
+		RESET_CV_INPUT,
 		NUM_INPUTS
 	};
 	enum OutputIds {
@@ -114,7 +115,23 @@ struct TremoloFx : Module{
 		configParam(TremoloFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f, "Shape", "%", 0.0f, 100.0f);
 		configParam(TremoloFx::FREQ_PARAM, 0.0f, 1.0f, 0.5f, "Speed", "%", 0.0f, 100.0f);
 		configParam(TremoloFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend", "%", 0.0f, 100.0f);
-		configParam(TremoloFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
+
+		//New in V2, config switches info without displaying values
+		configSwitch(INVERT_PARAM, 0.0f, 1.0f, 0.0f, "Shape Phase Invert", {"ˆ", "ˇ"});
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		//new V2, port labels
+		//Inputs
+		configInput(WAVE_CV_INPUT, "Wave CV");
+		configInput(FREQ_CV_INPUT, "Speed CV");
+		configInput(BLEND_CV_INPUT, "Blend CV");
+		configInput(RESET_CV_INPUT, "Reset");
+		configInput(SIGNAL_INPUT, "Audio");
+
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(SIGNAL_OUTPUT, "Audio");
+
 	}
 
 	void resetFades(){
@@ -142,6 +159,7 @@ struct TremoloFx : Module{
 		oscillator.invert = (params[INVERT_PARAM].getValue() <= 0.0f);
 		oscillator.setPulseWidth(0.5f);
 		oscillator.step(1.0f / args.sampleRate);
+		oscillator.setReset(inputs[RESET_CV_INPUT].getVoltage());
 
 		float wave = clamp( params[WAVE_PARAM].getValue() + inputs[WAVE_CV_INPUT].getVoltage(), 0.0f, 1.0f );
 		float interp = crossfade(oscillator.sin(), oscillator.tri(), wave);
@@ -228,8 +246,12 @@ struct TremoloFxWidget : ModuleWidget {
 		addChild(createLight<SmallLight<YellowRedLight>>(Vec(39, 122), module, TremoloFx::PHASE_POS_LIGHT));
 		addChild(createLight<SmallLight<YellowLight>>(Vec(39, 187), module, TremoloFx::BLEND_LIGHT));
 		//BYPASS SWITCH
-		addParam(createParam<LEDBezel>(Vec(55, 260), module, TremoloFx::BYPASS_SWITCH ));
-		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, TremoloFx::BYPASS_LED));
+/* 		addParam(createParam<LEDBezel>(Vec(55, 260), module, TremoloFx::BYPASS_SWITCH));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(57.2, 262), module, TremoloFx::BYPASS_LED)); */
+
+		addParam(createParam<LEDBezel>(Vec(61, 260), module, TremoloFx::BYPASS_SWITCH ));
+		addChild(createLight<LEDBezelLight<RedLight>>(Vec(63.2, 262.2), module, TremoloFx::BYPASS_LED));
+
 		//INS/OUTS
 		addInput(createInput<as_PJ301MPort>(Vec(10, 310), module, TremoloFx::SIGNAL_INPUT));
 		addOutput(createOutput<as_PJ301MPortGold>(Vec(55, 310), module, TremoloFx::SIGNAL_OUTPUT));
@@ -239,7 +261,10 @@ struct TremoloFxWidget : ModuleWidget {
 		addInput(createInput<as_PJ301MPort>(Vec(10, 197), module, TremoloFx::BLEND_CV_INPUT));
 
 		//BYPASS CV INPUT
-		addInput(createInput<as_PJ301MPort>(Vec(10, 259), module, TremoloFx::BYPASS_CV_INPUT));
+		//addInput(createInput<as_PJ301MPort>(Vec(10, 259), module, TremoloFx::BYPASS_CV_INPUT));
+		addInput(createInput<as_PJ301MPort>(Vec(33.5, 259), module, TremoloFx::BYPASS_CV_INPUT));
+		//RESET CV
+		addInput(createInput<as_PJ301MPort>(Vec(6, 259), module, TremoloFx::RESET_CV_INPUT));
 	
 	}
 };

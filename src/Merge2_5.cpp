@@ -29,6 +29,25 @@ struct Merge2_5 : Module {
 
 	Merge2_5() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
+		
+		//new V2, port labels
+		//inputs
+		configInput(INPUT11, "Left A CV");
+		configInput(INPUT12, "Left B CV");
+		configInput(INPUT13, "Left C CV");
+		configInput(INPUT14, "Left D CV");
+		configInput(INPUT15, "Left E CV");
+
+		configInput(INPUT21, "Right A CV");
+		configInput(INPUT22, "Right B CV");
+		configInput(INPUT23, "Right C CV");
+		configInput(INPUT24, "Right D CV");
+		configInput(INPUT25, "Right E CV");
+
+		//Outputs
+		configOutput(OUTPUT1, "Left CV SUM");
+		configOutput(OUTPUT2, "Right CV SUM");
+
 	}
 
 	void process(const ProcessArgs &args) override{

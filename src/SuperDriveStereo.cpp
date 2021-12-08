@@ -79,8 +79,23 @@ struct SuperDriveStereoFx : Module{
 		configParam(SuperDriveStereoFx::DRIVE_PARAM, 0.0f, 1.0f, 0.0f, "Drive", "%", 0.0f, 100.0f);
 		configParam(SuperDriveStereoFx::TONE_PARAM, 0.0f, 1.0f, 0.5f, "Tone", "%", 0.0f, 100.0f);
 		configParam(SuperDriveStereoFx::OUTPUT_GAIN_PARAM, 0.0f, 1.0f, 0.5f, "Gain", "%", 0.0f, 100.0f);
-		configParam(SuperDriveStereoFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
-				
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		//new V2, port labels
+		//Inputs
+		configInput(DRIVE_CV_INPUT, "Drive CV");
+		configInput(GAIN_CV_INPUT, "Gain CV");
+		configInput(TONE_CV_INPUT, "Tone CV");
+		configInput(SIGNAL_INPUT_L, "Left audio");
+		configInput(SIGNAL_INPUT_R, "Right audio");
+
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(SIGNAL_OUTPUT_L, "Left audio");
+		configOutput(SIGNAL_OUTPUT_R, "Right audio");
+
+		
 	}
 
 	void resetFades(){

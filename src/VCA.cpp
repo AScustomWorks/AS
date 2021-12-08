@@ -31,16 +31,36 @@ struct VCA : Module {
 	float v2= 0.0f;
 	const float expBase = 50.0f;
 
+	bool env1_mode_cv;
+	bool env2_mode_cv;
+
 	VCA() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
 		configParam(VCA::LEVEL1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain", "%", 0.0f, 100.0f);
 		configParam(VCA::LEVEL2_PARAM, 0.0f, 1.0f, 0.5f, "CH 2 Gain", "%", 0.0f, 100.0f);
-		configParam(VCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");
-		configParam(VCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");	
+
+		//New in V2, config switches and ports info without displaying values
+		configSwitch(MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Response", {"Exponential", "Linear"});
+		configSwitch(MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response", {"Exponential", "Linear"});
+		//inputs
+		configInput(ENV1_INPUT, "CH 1 Response CV");
+		configInput(ENV2_INPUT, "CH 2 Response CV");
+		configInput(IN1_INPUT, "CH 1");
+		configInput(IN2_INPUT, "CH 2");
+		//Outputs
+		configOutput(OUT1_OUTPUT, "CH 1");
+		configOutput(OUT2_OUTPUT, "CH 2");
+
 	}
 
 	void process(const ProcessArgs &args) override { 
 		//VCA 1
+
+		if(inputs[ENV1_INPUT].getVoltage()){
+			env1_mode_cv =! env1_mode_cv;
+			params[MODE1_PARAM].setValue(env1_mode_cv);
+		}
+
 		v1 = inputs[IN1_INPUT].getVoltage() * params[LEVEL1_PARAM].getValue();
 		if(inputs[ENV1_INPUT].isConnected()){
 			if(params[MODE1_PARAM].getValue()==1){
@@ -51,6 +71,12 @@ struct VCA : Module {
 		}
 		outputs[OUT1_OUTPUT].setVoltage(v1);
 		//VCA 2
+
+		if(inputs[ENV2_INPUT].getVoltage()){
+			env2_mode_cv =! env2_mode_cv;
+			params[MODE2_PARAM].setValue(env2_mode_cv);
+		}
+
 		v2 = inputs[IN2_INPUT].getVoltage() * params[LEVEL2_PARAM].getValue();
 		if(inputs[ENV2_INPUT].isConnected()){
 			if(params[MODE2_PARAM].getValue()){

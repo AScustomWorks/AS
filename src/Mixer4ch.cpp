@@ -82,13 +82,45 @@ struct Mixer4ch : Module {
 		configParam(Mixer4ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer4ch::CH3_PARAM, 0.0f, 1.0f, 0.8f, "CH 3 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer4ch::CH4_PARAM, 0.0f, 1.0f, 0.8f, "CH 4 Gain", "%", 0.0f,100.0f);
-		configParam(Mixer4ch::CH1MUTE , 0.0f, 1.0f, 0.0f, "CH 1 Mute");
-		configParam(Mixer4ch::CH2MUTE , 0.0f, 1.0f, 0.0f, "CH 2 Mute");
-		configParam(Mixer4ch::CH3MUTE , 0.0f, 1.0f, 0.0f, "CH 3 Mute");
-		configParam(Mixer4ch::CH4MUTE , 0.0f, 1.0f, 0.0f, "CH 4 Mute");
 		configParam(Mixer4ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain", "%", 0.0f,100.0f);
-		configParam(Mixer4ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f, "Mix Mute");
-		//reset();
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(CH1MUTE, "CH 1 Mute");
+		configButton(CH2MUTE, "CH 2 Mute");
+		configButton(CH3MUTE, "CH 3 Mute");
+		configButton(CH4MUTE, "CH 4 Mute");
+		configButton(MASTER_MUTE, "Mix Mute");
+
+		//new V2, port labels
+		//inputs
+		configInput(MIX_CV_INPUT, "Mix CV");
+		configInput(LINK_L, "Mix Left Audio");
+		configInput(LINK_R, "Mix Right Audio");
+
+		configInput(CH1_INPUT, "CH 1 Audio");
+		configInput(CH2_INPUT, "CH 2 Audio");
+		configInput(CH3_INPUT, "CH 3 Audio");
+		configInput(CH4_INPUT, "CH 4 Audio");
+
+		configInput(CH1_CV_INPUT, "CH 1 Gain Mod CV");
+		configInput(CH2_CV_INPUT, "CH 2 Gain Mod CV");
+		configInput(CH3_CV_INPUT, "CH 3 Gain Mod CV");
+		configInput(CH4_CV_INPUT, "CH 4 Gain Mod CV");
+
+		configInput(CH1_CV_PAN_INPUT, "CH 1 Pan Mod CV");
+		configInput(CH2_CV_PAN_INPUT, "CH 2 Pan Mod CV");
+		configInput(CH3_CV_PAN_INPUT, "CH 3 Pan Mod CV");
+		configInput(CH4_CV_PAN_INPUT, "CH 4 Pan Mod CV");
+
+		//Outputs
+		configOutput(MIX_OUTPUTL, "Left Audio");
+		configOutput(MIX_OUTPUTR, "Right Audio");
+
+		configOutput(CH1_OUTPUT, "CH 1 Audio");
+		configOutput(CH2_OUTPUT, "CH 2 Audio");
+		configOutput(CH3_OUTPUT, "CH 3 Audio");
+		configOutput(CH4_OUTPUT, "CH 4 Audio");
+
 	}
 
 	dsp::SchmittTrigger ch1mute;

@@ -29,6 +29,11 @@ struct MonoVUmeter : Module {
 
 	MonoVUmeter() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+
+		configInput(INPUT, "Audio");
+		//Outputs
+		configOutput(OUT, "Audio");	
+
 	}
 
 	dsp::VuMeter vuBar;

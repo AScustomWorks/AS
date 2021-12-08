@@ -79,7 +79,24 @@ struct DelayPlusFx : Module {
 		configParam(DelayPlusFx::FEEDBACK_PARAM, 0.0f, 1.0f, 0.5f, "Feedback", "%", 0.0f, 100.0f);
 		configParam(DelayPlusFx::COLOR_PARAM, 0.0f, 1.0f, 0.5f, "Color", "%", 0.0f, 100.0f);
 		configParam(DelayPlusFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix", "%", 0.0f, 100.0f);
-		configParam(DelayPlusFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
+		
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+
+		//new V2, port labels
+		//Inputs
+		configInput(TIME_INPUT, "Time  CV");
+		configInput(FEEDBACK_INPUT, "Feedback CV");
+		configInput(COLOR_INPUT, "Color CV");
+		configInput(COLOR_RETURN, "Color Return");
+		configInput(IN_INPUT, "Audio");
+
+		configInput(MIX_INPUT, "Mix CV");
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(COLOR_SEND, "Color Send");
+		configOutput(OUT_OUTPUT, "Audio");
+
 	}
 
 

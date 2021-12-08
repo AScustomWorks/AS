@@ -59,7 +59,20 @@ struct ReverbFx : Module{
 		configParam(ReverbFx::DECAY_PARAM, 0.0f, 1.0f, 0.5f, "Decay", "%", 0.0f, 100.0f);
 		configParam(ReverbFx::DAMP_PARAM, 0.0f, 1.0f, 0.0f, "Damp", "%", 0.0f, 100.0f);
 		configParam(ReverbFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend", "%", 0.0f, 100.0f);
-		configParam(ReverbFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		//new V2, port labels
+		//Inputs
+		configInput(DECAY_CV_INPUT, "Decay CV");
+		configInput(DAMP_CV_INPUT, "Damp CV");
+		configInput(BLEND_CV_INPUT, "Blend CV");
+		configInput(SIGNAL_INPUT, "Audio");
+
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(SIGNAL_OUTPUT, "Audio");
+
 
 		float gSampleRate = APP->engine->getSampleRate();
 		reverb.init(gSampleRate);

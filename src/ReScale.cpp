@@ -38,6 +38,16 @@ struct ReScale: Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
         configParam(ReScale::CONVERT_PARAM, 1.0f, 4.0f, 1.0f, "Convert Mode");
 
+		//new V2, port labels
+		//inputs
+		configInput(INPUT_0, "-5V/5V CV");
+		configInput(INPUT_1, "0V/5V CV");
+		configInput(INPUT_2, "0V/10V CV");
+		configInput(INPUT_3, "1V/OCTAVE CV");
+		//Outputs
+		configOutput(OUTPUT, "CV");
+
+
     }
 
     void process(const ProcessArgs &args) override {

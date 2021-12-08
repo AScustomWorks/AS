@@ -118,11 +118,30 @@ struct TremoloStereoFx : Module{
 
 	TremoloStereoFx() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(TremoloStereoFx::INVERT_PARAM, 0.0f, 1.0f, 1.0f, "Shape Phase Invert");
 		configParam(TremoloStereoFx::WAVE_PARAM, 0.0f, 1.0f, 0.5f, "Shape", "%", 0.0f, 100.0f);
 		configParam(TremoloStereoFx::FREQ_PARAM, 0.0f, 1.0f, 0.5f, "Speed", "%", 0.0f, 100.0f);
 		configParam(TremoloStereoFx::BLEND_PARAM, 0.0f, 1.0f, 0.5f, "Blend", "%", 0.0f, 100.0f);
-		configParam(TremoloStereoFx::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");
+
+		//New in V2, config switches info without displaying values
+		configSwitch(INVERT_PARAM, 0.0f, 1.0f, 0.0f, "Shape Phase Invert", {"ˆ", "ˇ"});
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		//new V2, port labels
+		//Inputs
+		configInput(WAVE_CV_INPUT, "Wave CV");
+		configInput(FREQ_CV_INPUT, "Speed CV");
+		configInput(BLEND_CV_INPUT, "Blend CV");
+
+		configInput(RESET_CV_INPUT, "Reset");
+		configInput(SIGNAL_INPUT_L, "Left audio");
+		configInput(SIGNAL_INPUT_R, "Right audio");
+
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(SIGNAL_OUTPUT_L, "Left audio");
+		configOutput(SIGNAL_OUTPUT_R, "Right audio");
+
 	}
 
 	void resetFades(){

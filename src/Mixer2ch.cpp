@@ -62,10 +62,36 @@ struct Mixer2ch : Module {
 		configParam(Mixer2ch::CH2_PAN_PARAM, -1.0f, 1.0f, 0.0f, "CH 2 Pan");
 		configParam(Mixer2ch::CH1_PARAM, 0.0f, 1.0f, 0.8f, "CH 1 Gain", "%", 0.0f,100.0f);
 		configParam(Mixer2ch::CH2_PARAM, 0.0f, 1.0f, 0.8f, "CH 2 Gain", "%", 0.0f,100.0f);
-		configParam(Mixer2ch::CH1MUTE , 0.0f, 1.0f, 0.0f, "CH 1 Mute");
-		configParam(Mixer2ch::CH2MUTE , 0.0f, 1.0f, 0.0f, "CH 2 Mute");
 		configParam(Mixer2ch::MIX_PARAM, 0.0f, 1.0f, 0.8f, "Mix Gain", "%", 0.0f,100.0f);
-		configParam(Mixer2ch::MASTER_MUTE , 0.0f, 1.0f, 0.0f, "Mix Mute");
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(CH1MUTE, "CH 1 Mute");
+		configButton(CH2MUTE, "CH 2 Mute");
+		configButton(MASTER_MUTE, "Mix Mute");
+
+		//new V2, port labels
+
+		//inputs
+		configInput(MIX_CV_INPUT, "Mix CV");
+		configInput(LINK_L, "Mix Left Audio");
+		configInput(LINK_R, "Mix Right Audio");
+
+		configInput(CH1_INPUT, "CH 1 Audio");
+		configInput(CH2_INPUT, "CH 2 Audio");
+
+		configInput(CH1_CV_INPUT, "CH 1 Gain Mod CV");
+		configInput(CH2_CV_INPUT, "CH 2 Gain Mod CV");
+
+		configInput(CH1_CV_PAN_INPUT, "CH 1 Pan Mod CV");
+		configInput(CH2_CV_PAN_INPUT, "CH 2 Pan Mod CV");
+
+		//Outputs
+		configOutput(MIX_OUTPUTL, "Left Audio");
+		configOutput(MIX_OUTPUTR, "Right Audio");
+
+		configOutput(CH1_OUTPUT, "CH 1 Audio");
+		configOutput(CH2_OUTPUT, "CH 2 Audio");
+
 	}
 
 	dsp::SchmittTrigger ch1mute;

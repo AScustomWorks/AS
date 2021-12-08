@@ -50,22 +50,54 @@ struct QuadVCA : Module {
 	float v4= 0.0f;
 	const float expBase = 50.0f;
 
+	bool env1_mode_cv;
+	bool env2_mode_cv;
+	bool env3_mode_cv;
+	bool env4_mode_cv;
+
+
 	QuadVCA() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(QuadVCA::GAIN1_PARAM, 0.0f, 1.0f, 0.5f, "CH 1 Gain", "%", 0.0f, 100.0f);
 		configParam(QuadVCA::GAIN2_PARAM, 0.0f, 1.0f, 0.5f, "CH 2 Gain", "%", 0.0f, 100.0f);
 		configParam(QuadVCA::GAIN3_PARAM, 0.0f, 1.0f, 0.5f, "CH 3 Gain", "%", 0.0f, 100.0f);
 		configParam(QuadVCA::GAIN4_PARAM, 0.0f, 1.0f, 0.5f, "CH 4 Gain", "%", 0.0f, 100.0f);
-		configParam(QuadVCA::MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Response");
-		configParam(QuadVCA::MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response");
-		configParam(QuadVCA::MODE3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Response");
-		configParam(QuadVCA::MODE4_PARAM, 0.0f, 1.0f, 1.0f, "CH 4 Response");
+
+		//New in V2, config switches and ports info without displaying values
+		configSwitch(MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Response", {"Exponential", "Linear"});
+		configSwitch(MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response", {"Exponential", "Linear"});
+		configSwitch(MODE3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Response", {"Exponential", "Linear"});
+		configSwitch(MODE4_PARAM, 0.0f, 1.0f, 1.0f, "CH 4 Response", {"Exponential", "Linear"});
+		//inputs
+		configInput(GAIN1_CV_INPUT, "CH 1 Response CV");
+		configInput(GAIN2_CV_INPUT, "CH 2 Response CV");
+		configInput(GAIN3_CV_INPUT, "CH 3 Response CV");
+		configInput(GAIN4_CV_INPUT, "CH 4 Response CV");
+		configInput(IN1_INPUT, "CH 1");
+		configInput(IN2_INPUT, "CH 2");
+		configInput(IN3_INPUT, "CH 3");
+		configInput(IN4_INPUT, "CH 4");
+		//Outputs
+		configOutput(OUT1_OUTPUT, "CH 1");
+		configOutput(OUT2_OUTPUT, "CH 2");
+		configOutput(OUT3_OUTPUT, "CH 3");
+		configOutput(OUT4_OUTPUT, "CH 4");
+
+
+
+
+
 	}
 
 	void process(const ProcessArgs &args) override {
 		//QuadVCA 1
 		float out = 0.0;
 		v1 = inputs[IN1_INPUT].getVoltage() * params[GAIN1_PARAM].getValue();
+
+		if(inputs[GAIN1_CV_INPUT].getVoltage()){
+			env1_mode_cv =! env1_mode_cv;
+			params[MODE1_PARAM].setValue(env1_mode_cv);
+		}
 		if(inputs[GAIN1_CV_INPUT].isConnected()){
 			if(params[MODE1_PARAM].getValue()==1){
 				v1 *= clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
@@ -81,6 +113,11 @@ struct QuadVCA : Module {
 		}
 		//QuadVCA 2
 		v2 = inputs[IN2_INPUT].getVoltage() * params[GAIN2_PARAM].getValue();
+
+		if(inputs[GAIN2_CV_INPUT].getVoltage()){
+			env2_mode_cv =! env2_mode_cv;
+			params[MODE2_PARAM].setValue(env2_mode_cv);
+		}
 		if(inputs[GAIN2_CV_INPUT].isConnected()){
 			if(params[MODE2_PARAM].getValue()){
 				v2 *= clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
@@ -96,6 +133,10 @@ struct QuadVCA : Module {
 		}
 		//QuadVCA 3
 		v3 = inputs[IN3_INPUT].getVoltage() * params[GAIN3_PARAM].getValue();
+		if(inputs[GAIN3_CV_INPUT].getVoltage()){
+			env3_mode_cv =! env3_mode_cv;
+			params[MODE3_PARAM].setValue(env3_mode_cv);
+		}		
 		if(inputs[GAIN3_CV_INPUT].isConnected()){
 			if(params[MODE3_PARAM].getValue()){
 				v3 *= clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
@@ -111,6 +152,10 @@ struct QuadVCA : Module {
 		}
 		//QuadVCA 4
 		v4 = inputs[IN4_INPUT].getVoltage() * params[GAIN4_PARAM].getValue();
+		if(inputs[GAIN4_CV_INPUT].getVoltage()){
+			env4_mode_cv =! env4_mode_cv;
+			params[MODE4_PARAM].setValue(env4_mode_cv);
+		}
 		if(inputs[GAIN4_CV_INPUT].isConnected()){
 			if(params[MODE4_PARAM].getValue()){
 				v4 *= clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);

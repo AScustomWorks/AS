@@ -7,6 +7,8 @@ AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria , All rights reserved.
 Panel graphics in res/ are © 2017
 Derivative works may not use in any way the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps, etc.).
 
+*** If you want to pay for a licence to use the graphics on any derivative work (excluding the AS Logo/Monogram), contact me directly at ascustomworks@gmail.com ***
+
 ### Releases
 
 AS is compatible with VCV Rack 2.0.X. releases, (see previous releases for 1.0.X souce files, 0.6.X and 0.5.X. binaries and source files).  You can download old V0.6.X and below Mac, Win and Linux binary files and source on the [Release Page](https://github.com/AScustomWorks/as/releases)
@@ -20,7 +22,12 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
-### V 2.0.1 TriggersMKIII and DelayPlus Stereo updates
+### V 2.0.2 TriggersMKIII and DelayPlus Stereo updates
+
+Updated component grahpics to V2 look, readme.md and licence
+
+
+### V 2.0.2 TriggersMKIII and DelayPlus Stereo updates
 
 New look for the black and gray knobs
 

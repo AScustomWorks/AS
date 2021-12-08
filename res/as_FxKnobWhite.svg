@@ -1,21 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
   <defs>
-    <linearGradient id="linear-gradient" x1="678.88" y1="-22.43" x2="687.83" y2="-22.43" gradientTransform="translate(688.83 -4.43) rotate(180)" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#bdbdab" stop-opacity="0.8"/>
+    <linearGradient id="linear-gradient" x1="-29.42" y1="-23.57" x2="-20.6" y2="-23.57" gradientTransform="translate(-19.85 -5.55) rotate(180)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#b3b3a3"/>
+      <stop offset="0.22" stop-color="#bfbfad" stop-opacity="0.71"/>
+      <stop offset="0.48" stop-color="#cbcbb8" stop-opacity="0.41"/>
+      <stop offset="0.71" stop-color="#d4d4c0" stop-opacity="0.19"/>
+      <stop offset="0.89" stop-color="#d9d9c5" stop-opacity="0.05"/>
       <stop offset="1" stop-color="#dbdbc7" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="linear-gradient-2" x1="-28.02" y1="18" x2="-19.08" y2="18" gradientTransform="translate(54.08)" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient-2" x1="-267.21" y1="-23.57" x2="-258.39" y2="-23.57" gradientTransform="matrix(1, 0, 0, -1, 293.64, -5.55)" xlink:href="#linear-gradient"/>
   </defs>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Layer_9" data-name="Layer 9">
       <g>
-        <circle cx="18" cy="18" r="18" style="fill: #f0efe4;fill-opacity: 0.01"/>
+        <circle cx="18" cy="18" r="18" style="fill: #0f0f0f;opacity: 0.01"/>
         <g>
-          <path d="M10.43,3.64V32.41a17.9,17.9,0,0,0,15.14,0V3.64a17.9,17.9,0,0,0-15.14,0Z" style="fill: #f0efe4;opacity: 0.9"/>
-          <path d="M4.5,28.19c.31.4.63.78,1,1.15s.73.74,1.11,1.09.68.59,1,.86a15.11,15.11,0,0,0,1.36,1c.31.2.64.39,1,.57V3.17c-.33.18-.66.37-1,.57a15.11,15.11,0,0,0-1.36,1c-.36.27-.7.56-1,.86s-.75.71-1.11,1.09-.66.75-1,1.15a16.58,16.58,0,0,0,0,20.38Z" style="fill: url(#linear-gradient)"/>
-          <path d="M31.5,7.81c-.31-.4-.63-.78-1-1.15s-.73-.74-1.11-1.09-.68-.59-1-.86a15.11,15.11,0,0,0-1.36-1c-.31-.2-.64-.39-1-.57V32.83c.33-.18.66-.37,1-.57a15.11,15.11,0,0,0,1.36-1c.36-.27.7-.56,1-.86s.75-.71,1.11-1.09.66-.75,1-1.15a16.58,16.58,0,0,0,0-20.38Z" style="fill: url(#linear-gradient-2)"/>
-          <path d="M25.57,2.68A17.86,17.86,0,0,0,18,1h0a17.86,17.86,0,0,0-7.57,1.68c-.33.15-.65.32-1,.49V32.83c.32.17.64.34,1,.49a17.9,17.9,0,0,0,15.14,0c.33-.15.65-.32,1-.49V3.17C26.22,3,25.9,2.83,25.57,2.68Zm0,29.73a17.9,17.9,0,0,1-15.14,0V3.64a17.9,17.9,0,0,1,15.14,0Z" style="fill: #e0e1e0"/>
-          <rect id="rect2716" x="17.44" y="1" width="1.11" height="13.13" style="fill: #1a252d"/>
+          <path d="M25.47,2.45a17.31,17.31,0,0,0-14.92,0l-1,.5V33.05c.32.18.64.34,1,.5a17.22,17.22,0,0,0,14.92,0l1-.5V3C26.11,2.78,25.79,2.6,25.47,2.45Zm0,30.14a17.31,17.31,0,0,1-14.92,0V3.43a17.26,17.26,0,0,1,14.92,0Z" style="fill: #fff"/>
+          <path d="M10.55,3.43V32.61a17.31,17.31,0,0,0,14.92,0V3.42a17.26,17.26,0,0,0-14.92,0Z" style="fill: #f0efe4"/>
+          <rect id="rect2716-2" x="17.37" y="0.75" width="1.28" height="13.32" style="fill: #1a252d"/>
+          <path d="M4.2,28.35q.45.6,1,1.17c.35.38.71.75,1.09,1.1s.67.6,1,.88.88.67,1.34,1,.63.4,1,.58V3c-.33.18-.65.37-1,.58s-.91.63-1.34,1-.69.57-1,.88-.74.72-1.09,1.1-.66.76-1,1.17a17.21,17.21,0,0,0,0,20.67Z" style="fill: url(#linear-gradient)"/>
+          <path d="M31.8,28.35q-.45.6-1,1.17c-.35.38-.71.75-1.09,1.1s-.67.6-1,.88-.88.67-1.34,1-.63.4-1,.58V3c.33.18.65.37,1,.58s.91.63,1.34,1,.69.57,1,.88.74.72,1.09,1.1.66.76,1,1.17a17.21,17.21,0,0,1,0,20.67Z" style="fill: url(#linear-gradient-2)"/>
         </g>
       </g>
     </g>

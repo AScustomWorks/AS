@@ -30,8 +30,7 @@ struct LaunchGate : Module {
 	};
 	enum OutputIds {
 		OUTPUT_1,
-    OUTPUT_2,
-    OUTPUT_3,    
+    OUTPUT_2,   
 		NUM_OUTPUTS
 	};
     enum LightIds {
@@ -65,10 +64,25 @@ struct LaunchGate : Module {
 
     LaunchGate() {
 		  config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-      configParam(LaunchGate::RST_BUTTON1 , 0.0f, 1.0f, 0.0f, "CH 1 Reset");
       configParam(LaunchGate::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f, "CH 1 Count");
-      configParam(LaunchGate::RST_BUTTON2 , 0.0f, 1.0f, 0.0f, "CH 2 Reset");
       configParam(LaunchGate::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f, "CH 2 Count");
+
+      //New in V2, config switches info without displaying values
+      configButton(RST_BUTTON1, "CH 1 Reset");
+      configButton(RST_BUTTON2, "CH 2 Reset");
+      //new V2, port labels
+
+      //Inputs
+      configInput(INPUT_1, "CH 1");
+      configInput(INPUT_2, "CH 2");
+      configInput(CLK_IN_1, "CH 1 Clock");
+      configInput(CLK_IN_2, "CH 2 Clock");
+      configInput(RESET_IN_1, "CH 1 Reset");
+      configInput(RESET_IN_2, "CH 2 Reset");
+      //Outputs
+      configOutput(OUTPUT_1, "CH 1");
+      configOutput(OUTPUT_2, "CH 2");
+
     }
 
   void onReset() override {

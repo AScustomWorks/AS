@@ -79,19 +79,43 @@ struct SEQ16 : Module {
 	SEQ16() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(SEQ16::CLOCK_PARAM, -2.0f, 6.0f, 1.0f, "Clock Tempo", "BPM", 2.f, 60.f);
-		configParam(SEQ16::RUN_PARAM , 0.0f, 1.0f, 0.0f, "Run Switch");
-		configParam(SEQ16::RESET_PARAM , 0.0f, 1.0f, 0.0f, "Reset Switch");
-		configParam(SEQ16::TRIGGER_PARAM , 0.0f, 1.0f, 0.0f, "Manual Step Edit Trigger");
-		configParam(SEQ16::PREV_STEP, 0.0f, 1.0f, 0.0f, "Previous Step");
-		configParam(SEQ16::NEXT_STEP, 0.0f, 1.0f, 0.0f, "Next Step");
-		configParam(SEQ16::GATE_MODE_PARAM, 0.0f, 2.0f, 0.0f, "Trigger Mode Switch");
 		configParam(SEQ16::STEPS_PARAM, 1.0f, 16.0f, 16.0f, "Step Length");
+
 		for (int i = 0; i < 16; i++) {		
 			configParam(SEQ16::ROW1_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value", " V");
 			configParam(SEQ16::ROW2_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value", " V");
 			configParam(SEQ16::ROW3_PARAM + i, 0.0f, 10.0f, 0.0f, "Step Value", " V");
 			configParam(SEQ16::GATE_PARAM + i, 0.0f, 1.0f, 0.0f, "Step Gate", " V");
 		}
+
+
+		//New in V2, config switches info without displaying values
+		configSwitch(GATE_MODE_PARAM,0.0f, 2.0f, 0.0f, "Trigger Mode", {"Trigger", "Retrigger", "Continuous"});
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(RUN_PARAM, "Run");
+		configButton(RESET_PARAM, "Reset");
+		configButton(TRIGGER_PARAM, "Manual Trigger (Step edit)");
+		configButton(PREV_STEP, "Previous Step");
+		configButton(NEXT_STEP, "Next Step");
+		//new V2, port labels
+		//Inputs
+		configInput(CLOCK_INPUT, "Clock Mod CV");
+		configInput(EXT_CLOCK_INPUT, "External Clock");
+		configInput(RESET_INPUT, "External reset");
+		configInput(STEPS_INPUT, "Steps Mod CV");
+
+		//Outputs
+		for (int i = 0; i < 16; i++) {		
+			configOutput(GATE_OUTPUT + i, string::f("Step %d gate", i + 1));
+		}
+		configOutput(ROW1_OUTPUT, "Row 1 CV");
+		configOutput(ROW2_OUTPUT, "Row 2 CV");
+		configOutput(ROW3_OUTPUT, "Row 3 CV");
+		configOutput(GATES_OUTPUT, "Gates");	
+
+
+
 	}
 
 	void onReset() override {
@@ -111,6 +135,14 @@ struct SEQ16 : Module {
 		stepIndex = index+1;
 		seq_gate_mode = params[GATE_MODE_PARAM].getValue();
 
+
+/* 		if(inputs[STEPS_INPUT].isConnected()){
+			//cv mod for steps length not working properly, fix it
+			steps_ext_cv =! steps_ext_cv;
+			float steps_sum_value = params[STEPS_PARAM].getValue();
+			params[STEPS_PARAM].setValue(clamp(round(params[STEPS_PARAM].getValue() + inputs[STEPS_INPUT].getVoltage()), 1.0f, 16.0f));
+		}
+ */
 		// Run
 		if (runningTrigger.process(params[RUN_PARAM].getValue())) {
 			running = !running;
@@ -148,6 +180,7 @@ struct SEQ16 : Module {
 
 		if (nextStep) {
 			// Advance step
+			//todo fix cv mod for seq steps length
 			int numSteps = clamp(round(params[STEPS_PARAM].getValue() + inputs[STEPS_INPUT].getVoltage()), 1.0f, 16.0f);
 			index += 1;
 			if (index >= numSteps) {

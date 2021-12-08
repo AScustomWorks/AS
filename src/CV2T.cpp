@@ -64,10 +64,28 @@ struct Cv2T : Module {
 
 	Cv2T() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-		configParam(Cv2T::TRIG_SWITCH_1 , 0.0f, 1.0f, 0.0f, "CH 1 Trigger");
+/* 		configParam(Cv2T::TRIG_SWITCH_1 , 0.0f, 1.0f, 0.0f, "CH 1 Trigger");
 		configParam(Cv2T::TRIG_SWITCH_2 , 0.0f, 1.0f, 0.0f, "CH 2 Trigger");
 		configParam(Cv2T::TRIG_SWITCH_3 , 0.0f, 1.0f, 0.0f, "CH 3 Trigger");
-		configParam(Cv2T::TRIG_SWITCH_4 , 0.0f, 1.0f, 0.0f, "CH 4 Trigger");
+		configParam(Cv2T::TRIG_SWITCH_4 , 0.0f, 1.0f, 0.0f, "CH 4 Trigger"); */
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(TRIG_SWITCH_1, "Port 1 Trigger");
+		configButton(TRIG_SWITCH_2, "Port 2 Trigger");
+		configButton(TRIG_SWITCH_3, "Port 3 Trigger");
+		configButton(TRIG_SWITCH_4, "Port 4 Trigger");
+
+		//new V2, port labels
+		//inputs
+		configInput(CV_IN_1, "Port 1 CV");
+		configInput(CV_IN_2, "Port 2 CV");
+		configInput(CV_IN_3, "Port 3 CV");
+		configInput(CV_IN_4, "Port 4 CV");
+		//Outputs
+		configOutput(TRIG_OUT_1, "Port 1 Trigger");
+		configOutput(TRIG_OUT_2, "Port 2 Trigger");
+		configOutput(TRIG_OUT_3, "Port 3 Trigger");
+		configOutput(TRIG_OUT_4, "Port 4 Trigger");
 	}
 
 	void process(const ProcessArgs &args) override {

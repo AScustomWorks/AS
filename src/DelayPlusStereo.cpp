@@ -134,8 +134,8 @@ struct DelayPlusStereoFx : Module {
 		configParam(DelayPlusStereoFx::MIX_PARAM, 0.0f, 1.0f, 0.5f, "Mix", "%", 0.0f, 100.0f);
 
 		//New in V2, config switches info without displaying values
-		configSwitch(COLOR_LINK_PARAM, 0, 1, 0, "Link Color", {"Link", "Unlink"});
-		configSwitch(FBK_LINK_PARAM, 0, 1, 0, "Link Feedback", {"Link", "Unlink"});
+		configSwitch(COLOR_LINK_PARAM, 0, 1, 0, "Link Color", {"Unink", "Link"});
+		configSwitch(FBK_LINK_PARAM, 0, 1, 0, "Link Feedback", {"Unink", "Link"});
 
 		//New in V2, config temporary buttons info without displaying values
 		configButton(BYPASS_SWITCH, "Bypass");

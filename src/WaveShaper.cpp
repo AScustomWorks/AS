@@ -51,8 +51,23 @@ struct WaveShaper : Module {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 		configParam(WaveShaper::SHAPE_PARAM, -1.0f, 1.0f, 0.0f, "Shape", "%", 0.0f, 100.0f);
 		configParam(WaveShaper::SCALE_PARAM, -1.0f, 1.0f, 0.0f, "Scale", "%", 0.0f, 100.0f);
-		configParam(WaveShaper::RANGE_PARAM, 0.0f, 1.0f, 0.0f, "Range");
-		configParam(WaveShaper::BYPASS_SWITCH , 0.0f, 1.0f, 0.0f, "Bypass");	
+		//New in V2, config switches info without displaying values
+		configSwitch(RANGE_PARAM, 0.0f, 1.0f, 0.0f, "Range", {"-/+ 10V", "-/+ 5V"});
+
+		//New in V2, config temporary buttons info without displaying values
+		configButton(BYPASS_SWITCH, "Bypass");
+		//new V2, port labels
+		//Inputs
+		configInput(SCALE_CV_INPUT, "Scale CV");
+		configInput(SHAPE_CV_INPUT, "Shape CV");
+		configInput(WAVE_MOD_INPUT, "Wave Mod CV");
+		configInput(RANGE_CV_INPUT, "Range CV");
+		configInput(INPUT, "Audio");
+
+		configInput(BYPASS_CV_INPUT, "Bypass CV");
+		//Outputs
+		configOutput(OUTPUT, "Audio");
+	
 	}
 
 	void resetFades(){

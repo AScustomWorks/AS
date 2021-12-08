@@ -48,6 +48,14 @@ struct TriggersMKI: Module {
         configParam(TriggersMKI::VOLTAGE_PARAM, -10.0f, 10.0f, 0.0f, "Volts", " V");
         configParam(TriggersMKI::RUN_SWITCH, 0.0, 1.0, 0.0, "Latch Switch");
         configParam(TriggersMKI::MOMENTARY_SWITCH, 0.0, 1.0, 0.0, "Momentary Switch");
+
+        configButton(RUN_SWITCH, "Latch Switch");
+        configButton(MOMENTARY_SWITCH, "Momentary Trigger");
+
+		configInput(CV_RUN_INPUT, "CV external trigger");
+		//Outputs
+		configOutput(TRIGGER_OUT, "Trigger");
+
     }
 
     void process(const ProcessArgs &args) override{

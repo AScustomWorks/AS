@@ -72,12 +72,28 @@ struct Steps : Module {
 
   Steps() {
     config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-    configParam(Steps::RST_BUTTON1 , 0.0f, 1.0f, 0.0f, "CH 1 Reset");
     configParam(Steps::COUNT_NUM_PARAM_1, 1.0f, 64.0f, 1.0f, "CH 1 Count");
-    configParam(Steps::RST_BUTTON2 , 0.0f, 1.0f, 0.0f, "CH 2 Reset");
     configParam(Steps::COUNT_NUM_PARAM_2, 1.0f, 64.0f, 1.0f, "CH 2 Count");
-    configParam(Steps::RST_BUTTON3 , 0.0f, 1.0f, 0.0f, "CH 3 Reset");
     configParam(Steps::COUNT_NUM_PARAM_3, 1.0f, 64.0f, 1.0f, "CH 3 Count");
+
+      //New in V2, config switches info without displaying values
+      configButton(RST_BUTTON1, "CH 1 Reset");
+      configButton(RST_BUTTON2, "CH 2 Reset");
+      configButton(RST_BUTTON3, "CH 3 Reset");
+      //new V2, port labels
+
+      //Inputs
+      configInput(CLK_IN_1, "CH 1 Clock");
+      configInput(CLK_IN_2, "CH 2 Clock");
+      configInput(CLK_IN_3, "CH 3 Clock");
+      configInput(RESET_IN_1, "CH 1 Reset");
+      configInput(RESET_IN_2, "CH 2 Reset");
+      configInput(RESET_IN_3, "CH 3 Reset");
+      //Outputs
+      configOutput(OUTPUT_1, "CH 1");
+      configOutput(OUTPUT_2, "CH 2");
+      configOutput(OUTPUT_3, "CH 3");
+
   }
 
   void process(const ProcessArgs &args) override {

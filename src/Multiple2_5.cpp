@@ -29,6 +29,23 @@ struct Multiple2_5 : Module {
 
 	Multiple2_5() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS);
+		//new V2, port labels
+		//inputs
+		configInput(INPUT1, "Left CV Multiply");
+		configInput(INPUT2, "Right CV Multiply");
+		//Outputs
+		configOutput(OUT11, "Left A CV");
+		configOutput(OUT12, "Left B CV");
+		configOutput(OUT13, "Left C CV");
+		configOutput(OUT14, "Left D CV");
+		configOutput(OUT15, "Left E CV");
+
+		configOutput(OUT21, "Right A CV");
+		configOutput(OUT22, "Right B CV");
+		configOutput(OUT23, "Right C CV");
+		configOutput(OUT24, "Right D CV");
+		configOutput(OUT25, "Right E CV");
+
 	}
 
 	void process(const ProcessArgs &args) override {
@@ -60,53 +77,7 @@ struct Multiple2_5 : Module {
 			outputs[OUT24].setVoltage(IN2);
 			outputs[OUT25].setVoltage(IN2);
 		}
-		/*
-		outputs[OUT21].setVoltage(IN2);
-		outputs[OUT22].setVoltage(IN2);
-		outputs[OUT23].setVoltage(IN2);
-		outputs[OUT24].setVoltage(IN2);
-		outputs[OUT25].setVoltage(IN2);
-		*/
-		//Is it necessary to check for active outputs in this case?
-		/*
-		if (outputs[OUT11].isConnected()) {
-			outputs[OUT11].setVoltage(IN1);
-		}
-		
-		if (outputs[OUT12].isConnected()) {
-			outputs[OUT12].setVoltage(IN1);
-		}
 
-		if (outputs[OUT13].isConnected()) {
-			outputs[OUT13].value= IN1;
-		}
-
-		if (outputs[OUT14].isConnected()) {
-			outputs[OUT14].setVoltage(IN1);
-		}
-		if (outputs[OUT15].isConnected()) {
-			outputs[OUT15].setVoltage(IN1);
-		}
-
-		if (outputs[OUT21].isConnected()) {
-			outputs[OUT21].setVoltage(IN2);
-		}
-
-		if (outputs[OUT22].isConnected()) {
-			outputs[OUT22].setVoltage(IN2);
-		}
-
-		if (outputs[OUT23].isConnected()) {
-			outputs[OUT23].setVoltage(IN2);
-		}
-
-		if (outputs[OUT24].isConnected()) {
-			outputs[OUT24].setVoltage(IN2);
-		}
-		if (outputs[OUT25].isConnected()) {
-			outputs[OUT25].setVoltage(IN2);
-		}
-		*/
 	}
 };
 

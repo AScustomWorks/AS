@@ -49,9 +49,23 @@ struct Flow: Module {
 
     Flow() {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-        configParam(Flow::MODE_PARAM, 0.0f, 1.0f, 1.0f, "LED Mode: Regular/Inverted");
-        configParam(Flow::SWITCH_1, 0.0, 1.0, 0.0, "CH 1 Switch");
-        configParam(Flow::SWITCH_2, 0.0, 1.0, 0.0, "CH 2 Switch");
+
+		//New in V2, config switches info without displaying values
+		configSwitch(MODE_PARAM, 0.0f, 1.0f, 1.0f, "LED Mode", {"Inverted", "Regular"});
+        configButton(SWITCH_1, "Switch 1");
+        configButton(SWITCH_2, "Switch 2");
+		//new V2, port labels
+		//Inputs
+		configInput(INPUT_1, "CH 1");
+		configInput(INPUT_2, "CH 2");
+        configInput(RESET_1, "CH 1 Reset");
+        configInput(RESET_2, "CH 2 Reset");
+        configInput(CV_TRIG_INPUT_1, "CH1 Trigger CV");
+        configInput(CV_TRIG_INPUT_2, "CH2 Trigger CV");
+		//Outputs
+		configOutput(OUTPUT_1, "CH 1");
+		configOutput(OUTPUT_2, "CH 2");
+
     }
 
     void process(const ProcessArgs &args) override {
@@ -153,7 +167,7 @@ struct FlowWidget : ModuleWidget {
         addChild(createWidget<as_HexScrew>(Vec(RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
         addChild(createWidget<as_HexScrew>(Vec(box.size.x - 2 * RACK_GRID_WIDTH, RACK_GRID_HEIGHT - RACK_GRID_WIDTH)));
 
-        //OLD/NEW SWITCH FROM 40-250 TO 30-300
+        //LED Mode: Regular/Inverted
         addParam(createParam<as_CKSS>(Vec(67, 23), module, Flow::MODE_PARAM));
 
         static const float led_offset = 6.0;//3.3;

@@ -6,6 +6,8 @@ Panel graphics in res/ are (c) 2017
 
 Derivative works may not use the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps,etc.).
 
+*** If you want to pay for a licence to use the graphics on any derivative work (excluding the AS Logo/Monogram), contact me directly at ascustomworks@gmail.com ***
+
 ### AS Modules License ###
 MIT License
 

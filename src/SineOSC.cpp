@@ -36,6 +36,14 @@ struct SineOsc : Module {
 		configParam(SineOsc::FREQ_PARAM, -3.0f, 3.0f, 0.0f, "Value", " V");
 		configParam(SineOsc::BASE_PARAM, 0.0f, 1.0f, 1.0f, "Base Frequency: A - C");
 
+		//New in V2, config switches info without displaying values
+		configSwitch(BASE_PARAM, 0.0f, 1.0f, 1.0f, "Base Frequency (Note)", {"C", "A"});
+		//new V2, port labels
+		//Inputs
+		configInput(FREQ_CV, "1 V/octave pitch");
+		//Outputs
+		configOutput(OSC_OUTPUT, "Wave");
+
 	}
 	void process(const ProcessArgs &args) override;
 };

@@ -46,6 +46,18 @@ struct ADSR : Module {
 		configParam(ADSR::SUSTAIN_PARAM, 0.0f, 1.0f, 0.5f, "Sustain", "%", 0.0f, 100.0f);
 		configParam(ADSR::RELEASE_PARAM, 0.0f, 1.0f, 0.5f, "Release", "%", 0.0f, 100.0f);
 
+		//new V2, port labels
+		//inputs
+		configInput(TRIG_INPUT, "Retrigger");
+		configInput(GATE_INPUT, "Gate");
+		configInput(ATTACK_INPUT, "Attack CV");
+		configInput(SUSTAIN_INPUT, "Sustain CV");
+		configInput(DECAY_INPUT, "Decay CV");
+		configInput(RELEASE_INPUT, "Release CV");
+
+		//Outputs
+		configOutput(ENVELOPE_OUTPUT, "Envelope");
+
 	}
 	void process(const ProcessArgs &args) override {
 		float attack = clamp(params[ATTACK_PARAM].getValue() + inputs[ATTACK_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);

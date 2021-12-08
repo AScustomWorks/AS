@@ -37,6 +37,19 @@ struct AtNuVrTr : Module {
 		configParam(AtNuVrTr::OFFSET1_PARAM, -10.0f, 10.0f, 0.0f, "CH 1 offset", " V");
 		configParam(AtNuVrTr::ATEN2_PARAM, -1.0f, 1.0f, 0.0f, "CH 2 gain");
 		configParam(AtNuVrTr::OFFSET2_PARAM, -10.0f, 10.0f, 0.0f, "CH 2 offset", " V");
+
+		//new V2, port labels
+		//inputs
+		configInput(CV_ATEN_1, "Gain Mod CV 1");
+		configInput(CV_OFFSET_1, "Offset CV 1");
+		configInput(IN1_INPUT, "CV 1");
+
+		configInput(CV_ATEN_2, "Gain Mod CV 2");
+		configInput(CV_OFFSET_2, "Offset CV 2");
+		configInput(IN2_INPUT, "CV 2");
+		//Outputs
+		configOutput(OUT1_OUTPUT, "CV 1");
+		configOutput(OUT2_OUTPUT, "CV 2");
 		
 	}
 	

@@ -170,7 +170,26 @@ struct BPMCalc : Module {
   
 	BPMCalc() {
 		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
-    configParam(BPMCalc::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo", " BPM", 0.0f);
+      configParam(BPMCalc::TEMPO_PARAM, 30.0f, 300.0f, 120.0f, "Tempo", " BPM", 0.0f);
+      configInput(CLOCK_INPUT, "Clock");
+      //Outputs
+      configOutput(MS_OUTPUT +0, "NOTE: 1");
+      configOutput(MS_OUTPUT +1, "NOTE: ·1/2");
+      configOutput(MS_OUTPUT +2, "NOTE: 1/2");
+      configOutput(MS_OUTPUT +3, "NOTE: t1/2");
+      configOutput(MS_OUTPUT +4, "NOTE: ·1/4");
+      configOutput(MS_OUTPUT +5, "NOTE: 1/4");
+      configOutput(MS_OUTPUT +6, "NOTE: t1/4");
+      configOutput(MS_OUTPUT +7, "NOTE: ·1/8");
+      configOutput(MS_OUTPUT +8, "NOTE: 1/8");
+      configOutput(MS_OUTPUT +9, "NOTE: t1/8");
+      configOutput(MS_OUTPUT +10, "NOTE: ·1/16");
+      configOutput(MS_OUTPUT +11, "NOTE: 1/16");
+      configOutput(MS_OUTPUT +12, "NOTE: t1/16");
+      configOutput(MS_OUTPUT +13, "NOTE: ·1/32");
+      configOutput(MS_OUTPUT +14, "NOTE: 1/32");
+      configOutput(MS_OUTPUT +15, "NOTE: t1/32");
+
     }
 
   void onReset() override {
