@@ -69,10 +69,10 @@ struct QuadVCA : Module {
 		configSwitch(MODE3_PARAM, 0.0f, 1.0f, 1.0f, "CH 3 Response", {"Exponential", "Linear"});
 		configSwitch(MODE4_PARAM, 0.0f, 1.0f, 1.0f, "CH 4 Response", {"Exponential", "Linear"});
 		//inputs
-		configInput(GAIN1_CV_INPUT, "CH 1 Response CV");
-		configInput(GAIN2_CV_INPUT, "CH 2 Response CV");
-		configInput(GAIN3_CV_INPUT, "CH 3 Response CV");
-		configInput(GAIN4_CV_INPUT, "CH 4 Response CV");
+		configInput(GAIN1_CV_INPUT, "CH 1 Gain CV");
+		configInput(GAIN2_CV_INPUT, "CH 2 Gain CV");
+		configInput(GAIN3_CV_INPUT, "CH 3 Gain CV");
+		configInput(GAIN4_CV_INPUT, "CH 4 Gain CV");
 		configInput(IN1_INPUT, "CH 1");
 		configInput(IN2_INPUT, "CH 2");
 		configInput(IN3_INPUT, "CH 3");
@@ -92,19 +92,15 @@ struct QuadVCA : Module {
 	void process(const ProcessArgs &args) override {
 		//QuadVCA 1
 		float out = 0.0;
-		v1 = inputs[IN1_INPUT].getVoltage() * params[GAIN1_PARAM].getValue();
 
-		if(inputs[GAIN1_CV_INPUT].getVoltage()){
-			env1_mode_cv =! env1_mode_cv;
-			params[MODE1_PARAM].setValue(env1_mode_cv);
-		}
-		if(inputs[GAIN1_CV_INPUT].isConnected()){
+		v1 = inputs[IN1_INPUT].getVoltage() * params[GAIN1_PARAM].getValue();
+		//if(inputs[GAIN1_CV_INPUT].isConnected()){
 			if(params[MODE1_PARAM].getValue()==1){
 				v1 *= clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v1 *= rescale(powf(expBase, clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		}
+		//}
 		out+=v1;
 		lights[GAIN1_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT1_OUTPUT].isConnected()) {
@@ -113,18 +109,13 @@ struct QuadVCA : Module {
 		}
 		//QuadVCA 2
 		v2 = inputs[IN2_INPUT].getVoltage() * params[GAIN2_PARAM].getValue();
-
-		if(inputs[GAIN2_CV_INPUT].getVoltage()){
-			env2_mode_cv =! env2_mode_cv;
-			params[MODE2_PARAM].setValue(env2_mode_cv);
-		}
-		if(inputs[GAIN2_CV_INPUT].isConnected()){
+		//if(inputs[GAIN2_CV_INPUT].isConnected()){
 			if(params[MODE2_PARAM].getValue()){
 				v2 *= clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v2 *= rescale(powf(expBase, clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		}
+		//}
 		out+=v2;
 		lights[GAIN2_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT2_OUTPUT].isConnected()) {
@@ -132,18 +123,15 @@ struct QuadVCA : Module {
 				out = 0.0f;
 		}
 		//QuadVCA 3
-		v3 = inputs[IN3_INPUT].getVoltage() * params[GAIN3_PARAM].getValue();
-		if(inputs[GAIN3_CV_INPUT].getVoltage()){
-			env3_mode_cv =! env3_mode_cv;
-			params[MODE3_PARAM].setValue(env3_mode_cv);
-		}		
-		if(inputs[GAIN3_CV_INPUT].isConnected()){
+
+		v3 = inputs[IN3_INPUT].getVoltage() * params[GAIN3_PARAM].getValue();	
+		//if(inputs[GAIN3_CV_INPUT].isConnected()){
 			if(params[MODE3_PARAM].getValue()){
 				v3 *= clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v3 *= rescale(powf(expBase, clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		}
+		//}
 		out+=v3;
 		lights[GAIN3_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT3_OUTPUT].isConnected()) {
@@ -151,18 +139,15 @@ struct QuadVCA : Module {
 				out = 0.0f;
 		}
 		//QuadVCA 4
+
 		v4 = inputs[IN4_INPUT].getVoltage() * params[GAIN4_PARAM].getValue();
-		if(inputs[GAIN4_CV_INPUT].getVoltage()){
-			env4_mode_cv =! env4_mode_cv;
-			params[MODE4_PARAM].setValue(env4_mode_cv);
-		}
-		if(inputs[GAIN4_CV_INPUT].isConnected()){
+		//if(inputs[GAIN4_CV_INPUT].isConnected()){
 			if(params[MODE4_PARAM].getValue()){
 				v4 *= clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v4 *= rescale(powf(expBase, clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		}
+		//}
 		out+=v4;
 		lights[GAIN4_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT4_OUTPUT].isConnected()) {

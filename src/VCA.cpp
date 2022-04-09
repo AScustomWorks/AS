@@ -43,8 +43,8 @@ struct VCA : Module {
 		configSwitch(MODE1_PARAM, 0.0f, 1.0f, 1.0f, "CH 1 Response", {"Exponential", "Linear"});
 		configSwitch(MODE2_PARAM, 0.0f, 1.0f, 1.0f, "CH 2 Response", {"Exponential", "Linear"});
 		//inputs
-		configInput(ENV1_INPUT, "CH 1 Response CV");
-		configInput(ENV2_INPUT, "CH 2 Response CV");
+		configInput(ENV1_INPUT, "CH 1 Gain CV");
+		configInput(ENV2_INPUT, "CH 2 Gain CV");
 		configInput(IN1_INPUT, "CH 1");
 		configInput(IN2_INPUT, "CH 2");
 		//Outputs
@@ -56,35 +56,26 @@ struct VCA : Module {
 	void process(const ProcessArgs &args) override { 
 		//VCA 1
 
-		if(inputs[ENV1_INPUT].getVoltage()){
-			env1_mode_cv =! env1_mode_cv;
-			params[MODE1_PARAM].setValue(env1_mode_cv);
-		}
-
-		v1 = inputs[IN1_INPUT].getVoltage() * params[LEVEL1_PARAM].getValue();
-		if(inputs[ENV1_INPUT].isConnected()){
+		v1 = inputs[IN1_INPUT].getVoltage() * params[LEVEL1_PARAM].getValue();	
+		//if(inputs[ENV1_INPUT].isConnected()){
 			if(params[MODE1_PARAM].getValue()==1){
 				v1 *= clamp(inputs[ENV1_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v1 *= rescale(powf(expBase, clamp(inputs[ENV1_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		}
+		//}
+
 		outputs[OUT1_OUTPUT].setVoltage(v1);
 		//VCA 2
 
-		if(inputs[ENV2_INPUT].getVoltage()){
-			env2_mode_cv =! env2_mode_cv;
-			params[MODE2_PARAM].setValue(env2_mode_cv);
-		}
-
 		v2 = inputs[IN2_INPUT].getVoltage() * params[LEVEL2_PARAM].getValue();
-		if(inputs[ENV2_INPUT].isConnected()){
+		//if(inputs[ENV2_INPUT].isConnected()){
 			if(params[MODE2_PARAM].getValue()){
 				v2 *= clamp(inputs[ENV2_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v2 *= rescale(powf(expBase, clamp(inputs[ENV2_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		}
+		//} 
 		outputs[OUT2_OUTPUT].setVoltage(v2);
 	}
 
