@@ -22,6 +22,10 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 
 # AS modules
 
+### V 2.0.4
+
+Reverted back part of the code for the VCA and QUADVCA modules, all should be fine now (thanks to circadiansound for finding the bug)
+
 ### V 2.0.3
 
 Removed some leftover extra code on VCA and QUADVCA modules that caused wrong behavior when using the CV Level ports (thanks to circadiansound for finding the bug)

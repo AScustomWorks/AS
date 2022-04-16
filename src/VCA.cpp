@@ -55,27 +55,26 @@ struct VCA : Module {
 
 	void process(const ProcessArgs &args) override { 
 		//VCA 1
-
 		v1 = inputs[IN1_INPUT].getVoltage() * params[LEVEL1_PARAM].getValue();	
-		//if(inputs[ENV1_INPUT].isConnected()){
+		if(inputs[ENV1_INPUT].isConnected()){
 			if(params[MODE1_PARAM].getValue()==1){
 				v1 *= clamp(inputs[ENV1_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v1 *= rescale(powf(expBase, clamp(inputs[ENV1_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		//}
+		}
 
 		outputs[OUT1_OUTPUT].setVoltage(v1);
 		//VCA 2
 
 		v2 = inputs[IN2_INPUT].getVoltage() * params[LEVEL2_PARAM].getValue();
-		//if(inputs[ENV2_INPUT].isConnected()){
+		if(inputs[ENV2_INPUT].isConnected()){
 			if(params[MODE2_PARAM].getValue()){
 				v2 *= clamp(inputs[ENV2_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v2 *= rescale(powf(expBase, clamp(inputs[ENV2_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		//} 
+		} 
 		outputs[OUT2_OUTPUT].setVoltage(v2);
 	}
 

@@ -94,13 +94,13 @@ struct QuadVCA : Module {
 		float out = 0.0;
 
 		v1 = inputs[IN1_INPUT].getVoltage() * params[GAIN1_PARAM].getValue();
-		//if(inputs[GAIN1_CV_INPUT].isConnected()){
+		if(inputs[GAIN1_CV_INPUT].isConnected()){
 			if(params[MODE1_PARAM].getValue()==1){
 				v1 *= clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v1 *= rescale(powf(expBase, clamp(inputs[GAIN1_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		//}
+		}
 		out+=v1;
 		lights[GAIN1_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT1_OUTPUT].isConnected()) {
@@ -109,13 +109,13 @@ struct QuadVCA : Module {
 		}
 		//QuadVCA 2
 		v2 = inputs[IN2_INPUT].getVoltage() * params[GAIN2_PARAM].getValue();
-		//if(inputs[GAIN2_CV_INPUT].isConnected()){
+		if(inputs[GAIN2_CV_INPUT].isConnected()){
 			if(params[MODE2_PARAM].getValue()){
 				v2 *= clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v2 *= rescale(powf(expBase, clamp(inputs[GAIN2_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		//}
+		}
 		out+=v2;
 		lights[GAIN2_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT2_OUTPUT].isConnected()) {
@@ -125,13 +125,13 @@ struct QuadVCA : Module {
 		//QuadVCA 3
 
 		v3 = inputs[IN3_INPUT].getVoltage() * params[GAIN3_PARAM].getValue();	
-		//if(inputs[GAIN3_CV_INPUT].isConnected()){
+		if(inputs[GAIN3_CV_INPUT].isConnected()){
 			if(params[MODE3_PARAM].getValue()){
 				v3 *= clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v3 *= rescale(powf(expBase, clamp(inputs[GAIN3_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		//}
+		}
 		out+=v3;
 		lights[GAIN3_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT3_OUTPUT].isConnected()) {
@@ -141,13 +141,13 @@ struct QuadVCA : Module {
 		//QuadVCA 4
 
 		v4 = inputs[IN4_INPUT].getVoltage() * params[GAIN4_PARAM].getValue();
-		//if(inputs[GAIN4_CV_INPUT].isConnected()){
+		if(inputs[GAIN4_CV_INPUT].isConnected()){
 			if(params[MODE4_PARAM].getValue()){
 				v4 *= clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f);
 			}else{
 				v4 *= rescale(powf(expBase, clamp(inputs[GAIN4_CV_INPUT].getVoltage() / 10.0f, 0.0f, 1.0f)), 1.0f, expBase, 0.0f, 1.0f);
 			}
-		//}
+		}
 		out+=v4;
 		lights[GAIN4_LIGHT].setSmoothBrightness(fmaxf(0.0f, out / 5.0f), args.sampleTime);
 		if (outputs[OUT4_OUTPUT].isConnected()) {
