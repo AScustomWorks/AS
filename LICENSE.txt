@@ -1,12 +1,14 @@
 ### AS ###
 
-AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria , All rights reserved.
+AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria, All rights reserved.
 
-Panel graphics in res/ are (c) 2017
+Panel graphics including custom component graphics (knobs, switches, screws, caps, etc.) in res/ are now licensed CC BY-NC-ND 4.0, which states:
 
-Derivative works may not use the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps,etc.).
-
-*** If you want to pay for a licence to use the graphics on any derivative work (excluding the AS Logo/Monogram), contact me directly at ascustomworks@gmail.com ***
+Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+NonCommercial — You may not use the material for commercial purposes.
+NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.
+ 
+*** If you want to pay for a license to use the graphics on a commercial and/or derivative capacity (excluding the AS Logo/Monogram), contact me directly at ascustomworks@gmail.com ***
 
 ### AS Modules License ###
 MIT License

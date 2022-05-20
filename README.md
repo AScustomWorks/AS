@@ -3,11 +3,15 @@
 
 AS is a collection of modules for [VCV Rack](https://vcvrack.com/) by Alfredo Santamaria, Need a custom work?, you can find me at [Hakken.com.mx](http://www.hakken.com.mx/).
 
-AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria , All rights reserved.
-Panel graphics in res/ are © 2017
-Derivative works may not use in any way the AS logo or panel graphics including custom component graphics (knobs, switches, screws, caps, etc.).
+AS Logo/Monogram Copyright (c) 2017 Alfredo Santamaria, All rights reserved.
 
-*** If you want to pay for a licence to use the graphics on any derivative work (excluding the AS Logo/Monogram), contact me directly at ascustomworks@gmail.com ***
+Panel graphics including custom component graphics (knobs, switches, screws, caps, etc.) in res/ are now licensed CC BY-NC-ND 4.0, which states:
+
+Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+NonCommercial — You may not use the material for commercial purposes.
+NoDerivatives — If you remix, transform, or build upon the material, you may not distribute the modified material.
+ 
+*** If you want to pay for a license to use the graphics on a commercial and/or derivative capacity (excluding the AS Logo/Monogram), contact me directly at ascustomworks@gmail.com ***
 
 ### Releases
 
@@ -21,6 +25,11 @@ Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20
 ![AS](https://github.com/AScustomWorks/AS/blob/V2/AS-V2.jpg)
 
 # AS modules
+
+### V 2.0.5
+
+Bump to fix the links to the changelog and update the graphics licence to CC BY-NC-ND 4.0
+
 
 ### V 2.0.4
 
