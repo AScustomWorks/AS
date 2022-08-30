@@ -20,11 +20,16 @@ AS is compatible with VCV Rack 2.0.X. releases, (see previous releases for 1.0.X
 If you enjoy those modules you can support the development by making a donation, it will be appreciated!. Here's the link: [DONATE](https://www.paypal.me/frederius/)
 
 Or just buy my paid plugins AS Drums n Filters & AS Seqs n Tools and get even more modules and fun.
-Buy them on the [VCV plugin library](https://vcvrack.com/plugins.html#Alfredo%20Santamaria)
+Buy them on the [VCV plugin library](https://library.vcvrack.com/?page=1&limit=50&query=&tag=&sort=creationTimestamp&brand=AS&license=premium)
 
 ![AS](https://github.com/AScustomWorks/AS/blob/V2/AS-V2.jpg)
 
 # AS modules
+
+### V 2.0.6
+
+Fixed ReScale input 0/5v to output 0/10v range on setting #4
+Fixed link to paid plugins on readme.md
 
 ### V 2.0.5
 

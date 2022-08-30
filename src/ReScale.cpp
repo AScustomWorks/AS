@@ -55,7 +55,7 @@ struct ReScale: Module {
         selection = params[CONVERT_PARAM].getValue();
 
         if(inputs[INPUT_0].isConnected()){
-
+            //-5v/5v
             input_value = clamp(inputs[INPUT_0].getVoltage(), -5.0f,5.0f);
             if(selection==1){
                 rescaled_value = input_value;
@@ -67,8 +67,8 @@ struct ReScale: Module {
                 rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
             }
 
-        }else if(inputs[INPUT_1].isConnected()){
-
+        }else if(inputs[INPUT_1].isConnected()){//
+            //0v/5v
             input_value = clamp(inputs[INPUT_1].getVoltage(), 0.0f, 5.0f);
             if(selection==1){
                 rescaled_value = rescale(input_value, 0.0f, 5.0f, -5.0f, 5.0f);
@@ -77,11 +77,11 @@ struct ReScale: Module {
             }else if(selection==3){
                 rescaled_value = rescale(input_value, 0.0f, 5.0f, -10.0f, 10.0f);
             }else if(selection==4){
-                rescaled_value = rescale(input_value, -5.0f, 5.0f, 0.0f, 10.0f);
+                rescaled_value = rescale(input_value, 0.0f, 5.0f, 0.0f, 10.0f);
             }
 
         }else if(inputs[INPUT_2].isConnected()){
-            
+            //0v/10v
             input_value = clamp(inputs[INPUT_2].getVoltage(), 0.0f, 10.0f);
             if(selection==1){
                 rescaled_value = rescale(input_value, 0.0f, 10.0f, -5.0f, 5.0f);
@@ -94,7 +94,7 @@ struct ReScale: Module {
             }
 
         }else if(inputs[INPUT_3].isConnected()){
-            
+            //1V/OCT (only works with signal from input 4)
             input_value = inputs[INPUT_3].getVoltage();
             if(selection==1){
                 rescaled_value = input_value;
