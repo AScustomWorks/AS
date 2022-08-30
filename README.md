@@ -29,6 +29,7 @@ Buy them on the [VCV plugin library](https://library.vcvrack.com/?page=1&limit=5
 ### V 2.0.6
 
 Fixed ReScale input 0/5v to output 0/10v range on setting #4
+
 Fixed link to paid plugins on readme.md
 
 ### V 2.0.5
