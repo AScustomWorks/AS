@@ -73,13 +73,16 @@ void revmodel::init(const float sampleRate)
 
 	feedback_allpass = 0.5;
 
-	setwet(initialwet);
-	setroomsize(initialroom);
-	setdry(initialdry);
-	setdamp(initialdamp);
-	setwidth(initialwidth);
-	setmode(initialmode);
+	// safely initialize all values first
+	wet = initialwet * scalewet;
+	roomsize = (initialroom * scaleroom) + offsetroom;
+	dry = initialdry * scaledry;
+	damp = initialdamp * scaledamp * sqrt(conversion);
+	width = initialwidth;
+	mode = initialmode;
 
+	// now we can call update after all values are initialized
+	update();
 
 	// Buffer will be full of rubbish - so we MUST mute them
 	mute();
