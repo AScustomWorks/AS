@@ -21,12 +21,12 @@ public:
 
 	~allpass()
 	{
-		if (buffer) delete buffer;
+		if (buffer) delete[] buffer;
 	};
 
         void    makebuffer(float *buf, int size)
         {
-		if (buffer) delete buffer;
+		if (buffer) delete[] buffer;
                 buffer = new float[size];
                 bufsize = size;
 		bufidx = 0;
@@ -34,7 +34,7 @@ public:
 
         void    deletebuffer()
         {
-                if(buffer) delete buffer;
+                if(buffer) delete[] buffer;
                 bufsize = 0;
         };
 
