@@ -161,8 +161,10 @@ struct PhaserFx : Module{
 		configInput(BYPASS_CV_INPUT, "Bypass CV");
 		//Outputs
 		configOutput(OUT, "Audio");
+	}
 
-
+	~PhaserFx() override {
+		delete pha;
 	}
 
 	void process(const ProcessArgs &args) override;
